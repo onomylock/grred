@@ -17,7 +17,7 @@ namespace GrRed
         Vector Center { get; }
         double Angle { get; }
         Vector Scale { get; } //для шаблона
-        (double l,double t,double r,double b) Gabarit { get; }
+        (double l, double t, double r, double b) Gabarit { get; }
         IFigure Move(Vector delta);
         IFigure Reflection(Vector axe);
         IFigure Rotate(Vector delta);
@@ -44,7 +44,7 @@ namespace GrRed
         {
             switch (name)
             {
-//                case "Circle": return new Circle();
+                //                case "Circle": return new Circle();
             }
 
             return null;

@@ -1,0 +1,14 @@
+include:
+  - template: 'Workflows/Branch-Pipelines.gitlab-ci.yml'
+
+image: mcr.microsoft.com/dotnet/sdk:6.0
+stages:
+  - lint
+
+format:
+  stage: lint
+  script:
+    - export PATH="$PATH:/root/.dotnet/tools"
+    - dotnet tool install -g dotnet-format
+    - dotnet-format --check GrRed.sln 
+
