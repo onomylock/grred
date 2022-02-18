@@ -22,4 +22,12 @@
       <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Geometry\" />
+    <Folder Include="IO\" />
+    <Folder Include="Logic\" />
+    <Folder Include="GUI\" />
+    <Folder Include="test\" />
+  </ItemGroup>
+
 </Project>
