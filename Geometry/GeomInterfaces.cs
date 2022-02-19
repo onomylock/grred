@@ -12,6 +12,12 @@ namespace GrRed.Geometry
     {
         readonly public double X;
         readonly public double Y;
+
+        public Vector(double x, double y)
+        {
+            X = x;
+            Y = y;
+        }
     }
     public interface IFigure
     {

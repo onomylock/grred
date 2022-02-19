@@ -2,7 +2,34 @@
 {
     class Circle : IFigure
     {
-        public string TypeName => throw new NotImplementedException();
+
+        // Ваня делал отсюда
+        private readonly string _TypeName;
+        private readonly Vector _Center = new Vector(0, 0);
+        private readonly double _Angle;
+        private readonly Vector _Scale = new Vector(1.0, 1.0);//для шаблона
+        private readonly (double l, double t, double r, double b) _Gabarit;
+
+        public Circle()
+        {
+            _TypeName = "Circle";
+            _Angle = 0;
+            //Gabarit = хз чё
+        }
+
+        public string TypeName => _TypeName;
+        public double Angle => _Angle;
+        public Vector Center => _Center;
+        public Vector Scale => _Scale;
+
+        // До сюда. В Triangle.cs, Square.cs и в Circle.cs
+
+
+
+
+
+
+        /*public string TypeName => throw new NotImplementedException();
 
         public Vector Center => throw new NotImplementedException();
 
@@ -10,7 +37,7 @@
 
         public Vector Scale => throw new NotImplementedException();
 
-        public (double l, double t, double r, double b) Gabarit => throw new NotImplementedException();
+        public (double l, double t, double r, double b) Gabarit => throw new NotImplementedException();*/
 
         public void Draw(IGraphic graphic)
         {
