@@ -18,6 +18,13 @@ namespace GrRed.Geometry
             X = x;
             Y = y;
         }
+
+        public static Vector operator +(Vector a, Vector b) 
+            => new Vector(a.X + b.X, a.Y + b.Y);
+
+        public static Vector operator -(Vector a, Vector b) 
+            => new Vector(a.X - b.X, a.Y - b.Y);
+        //Добавить перегрузки если нужно
     }
     public interface IFigure
     {
@@ -45,8 +52,17 @@ namespace GrRed.Geometry
         void FillPolyArc(IEnumerable<Vector> lines);// каждые 3 точки -- дуга окружности
     }
 
-    public static class GenerateFigure
+    public static class Main
     {
+
+        Main()
+        {
+            FigureFactory factory = GetFactory("Circle");
+            //IFigure fig  = factory.GetFigure();
+            //IGraphic graphic = factory.GetGraphic();
+            
+        };
+        
         public static FigureFactory GetFactory(string name)
         {
             return name switch

@@ -1,23 +1,21 @@
 ﻿using GrRed.Geometry.Domain;
+using GrRed.Geometry.Graphic;
 
 namespace GrRed.Geometry.Factory
 {
     public class SquareFactory : FigureFactory
     {
-        //Сюда вводить эти переменные, задать их и заполнить конструктор
-        public SquareFactory()
+        private Square square;
+        public override IFigure GetFigure(string TypeName, double Angle, Vector Center, Vector Scale, (double l, double t, double r, double b) Gabarit)
         {
-
+            square = new(TypeName, Angle, Center, Scale, Gabarit){};
+            return square;
         }
 
-        public override IFigure GetFigure()
+        public override IGraphic GetGraphic()
         {
-            //Придумать что мы будем передавать в конструктор объекта круга
-            Square square = new()
-            {
-
-            };
-            return square;
+            SquareGraphic squareGraphic = new(square){};
+            return squareGraphic;
         }
     }
 }

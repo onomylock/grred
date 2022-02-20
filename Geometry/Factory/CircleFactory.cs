@@ -1,23 +1,20 @@
 ﻿using GrRed.Geometry.Domain;
+using GrRed.Geometry.Graphic;
 
 namespace GrRed.Geometry.Factory
 {
     public class CircleFactory : FigureFactory
     {
-        //Сюда вводить эти переменные, задать их и заполнить конструктор
-        public CircleFactory()
+        private Circle circle;
+        public override IFigure GetFigure(string TypeName, double Angle, Vector Center, Vector Scale, (double l, double t, double r, double b) Gabarit)
         {
-
-        }
-
-        public override IFigure GetFigure()
-        {
-            //Придумать что мы будем передавать в конструктор объекта круга
-            Circle circle = new()
-            {
-
-            };
+            circle = new(TypeName, Angle, Center, Scale, Gabarit){};
             return circle;
+        }
+        public override IGraphic GetGraphic()
+        {
+            CircleGraphic circleGraphic = new(circle){};
+            return circleGraphic;
         }
     }
 }

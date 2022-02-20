@@ -1,23 +1,21 @@
 ﻿using GrRed.Geometry.Domain;
+using GrRed.Geometry.Graphic;
 
 namespace GrRed.Geometry.Factory
 {
     class TriangleFactory : FigureFactory
     {
-        //Сюда вводить эти переменные, задать их и заполнить конструктор
-        public TriangleFactory()
+        private Triangle triangle; 
+        public override IFigure GetFigure(string TypeName, double Angle, Vector Center, Vector Scale, (double l, double t, double r, double b) Gabarit)
         {
-
+            triangle = new(TypeName, Angle, Center, Scale, Gabarit){};
+            return triangle;
         }
 
-        public override IFigure GetFigure()
+        public override IGraphic GetGraphic()
         {
-            //Придумать что мы будем передавать в конструктор объекта круга
-            Triangle triangle = new()
-            {
-
-            };
-            return triangle;
+            TriangleGraphic triangleGraphic = new(triangle){};
+            return triangleGraphic;
         }
     }
 }

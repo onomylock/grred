@@ -5,29 +5,26 @@
 
         // Ваня делал отсюда
         private readonly string _TypeName;
-        private readonly Vector _Center = new Vector(0, 0);
+        private readonly Vector _Center;
         private readonly double _Angle;
-        private readonly Vector _Scale = new Vector(1.0, 1.0);//для шаблона
+        private readonly Vector _Scale;//для шаблона
         private readonly (double l, double t, double r, double b) _Gabarit;
 
-        public Circle()
+        public Circle(string TypeName, double Angle, Vector Center, Vector Scale, (double l, double t, double r, double b) Gabarit)
         {
-            _TypeName = "Circle";
-            _Angle = 0;
-            //Gabarit = хз чё
+            _TypeName = TypeName;
+            _Angle = Angle;
+            _Center = Center;
+            _Scale = Scale;
+            _Gabarit = Gabarit;
         }
 
-        public string TypeName => _TypeName;
-        public double Angle => _Angle;
-        public Vector Center => _Center;
-        public Vector Scale => _Scale;
+        //public string TypeName => _TypeName;
+        //public double Angle => _Angle;
+        //public Vector Center => _Center;
+        //public Vector Scale => _Scale;
 
         // До сюда. В Triangle.cs, Square.cs и в Circle.cs
-
-
-
-
-
 
         /*public string TypeName => throw new NotImplementedException();
 
