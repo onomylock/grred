@@ -1,4 +1,6 @@
-﻿namespace GrRed.Geometry.Graphic
+﻿using System.Collections.Generic;
+
+namespace GrRed.Geometry.Graphic
 {
     class TriangleGraphic : IGraphic
     {

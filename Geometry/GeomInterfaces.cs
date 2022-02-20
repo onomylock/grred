@@ -52,7 +52,7 @@ namespace GrRed.Geometry
         void FillPolyArc(IEnumerable<Vector> lines);// каждые 3 точки -- дуга окружности
     }
 
-    public static class Main
+    public class Main
     {
 
         Main()

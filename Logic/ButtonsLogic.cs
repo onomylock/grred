@@ -8,6 +8,7 @@ namespace GrRed.Logic
 {
     class ButtonsLogic
     {
+        private FigureFabric fabric;
         private void Button_Click_Action(object obj, EventArgs e)
         {
             switch (action)
@@ -23,6 +24,36 @@ namespace GrRed.Logic
             }
         }
 
+
+        private void Button_Click_CreateFigure(object obj, EventArgs e)
+        {
+            switch (loupe)
+            {
+                case zoom_in:
+                    break;
+
+                case zoom_out:
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        private void Button_Click_Loupe(object obj, EventArgs e)
+        {
+            switch (loupe)
+            {
+                case zoom_in:
+                    break;
+
+                case zoom_out:
+                    break;
+
+                default:
+                    break;
+            }
+        }
 
         private void Button_Click_Loupe(object obj, EventArgs e)
         {
