@@ -4,25 +4,38 @@
     {
 
         // Ваня делал отсюда
-        private readonly string TypeName;
-        private readonly Vector Center;
-        private readonly double Angle;
-        private readonly Vector Scale;//для шаблона
+        private readonly string _TypeName;
+        private readonly Vector _Center = new Vector(0, 0); // тоже для шаблона (для первой перегрузки конструктора)
+        private readonly double _Angle;
+        private readonly Vector _Scale = new Vector(1.0, 1.0); // для шаблона (для первой перегрузки конструктора)
         private readonly (double l, double t, double r, double b) _Gabarit;
 
-        public Circle(string TypeName, double Angle, Vector Center, Vector Scale, (double l, double t, double r, double b) Gabarit)
+
+        // Перегрузка конструктора, когда создаём фигуру новую-новую
+        public Circle()
         {
-            this.TypeName = TypeName;
-            this.Angle = Angle;
-            this.Center = Center;
-            this.Scale = Scale;
-            this.Gabarit = Gabarit;
+            _TypeName = "Circle";
+            _Angle = 0;
+            _Gabarit = (1.0, 1.0, 1.0, 1.0);
         }
 
-        //public string TypeName => _TypeName;
-        //public double Angle => _Angle;
-        //public Vector Center => _Center;
-        //public Vector Scale => _Scale;
+
+        // Перегрузка конструктора, когда создаём новую фигуру, являющуюся изменением старой
+        public Circle(double _Angle, Vector _Center, Vector _Scale, (double l, double t, double r, double b) _Gabarit)
+        {
+            _TypeName = "Circle";
+            this._Center = _Center;
+            this._Angle = _Angle;
+            this._Scale = _Scale;
+            this._Gabarit = _Gabarit;
+        }
+
+
+        public string TypeName => _TypeName;
+        public double Angle => _Angle;
+        public Vector Center => _Center;
+        public Vector Scale => _Scale;
+        public (double l, double t, double r, double b) Gabarit => _Gabarit;
 
         // До сюда. В Triangle.cs, Square.cs и в Circle.cs
 
@@ -58,7 +71,8 @@
 
         public IFigure Reflection(Vector axe)
         {
-            throw new NotImplementedException();
+            Circle circle = new Circle();
+            return circle;
         }
 
         public IFigure Rotate(Vector delta)
