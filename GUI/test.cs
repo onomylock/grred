@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GrRed.GUI
 {
-    class test
+    class Test
     {
     }
 }
