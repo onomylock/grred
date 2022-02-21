@@ -22,4 +22,8 @@
       <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\TestNewProject\TestNewProject.vcxproj" />
+  </ItemGroup>
+
 </Project>
