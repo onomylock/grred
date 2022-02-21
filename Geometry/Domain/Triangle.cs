@@ -3,38 +3,46 @@
     class Triangle : IFigure
     {
 
-        // Ваня делал отсюда
-        private readonly string TypeName;
-        private readonly Vector Center;
-        private readonly double Angle;
-        private readonly Vector Scale;//для шаблона
-        private readonly (double l, double t, double r, double b) _Gabarit;
+        private readonly string _TypeName;
+        private readonly Vector _Center = new Vector(0, 0); // тоже для шаблона (для первой перегрузки конструктора)
+        private readonly double _Angle;
+        private readonly Vector _Scale = new Vector(1.0, 1.0); // для шаблона (для первой перегрузки конструктора)
+        private readonly (double l, double t, double r, double b) _Gabarit; // договоримся, что x0, y0, x1, y1 соответственно
 
-        public Triangle(string TypeName, double Angle, Vector Center, Vector Scale, (double l, double t, double r, double b) Gabarit)
+
+        // Перегрузка №0 конструктора, когда создаём фигуру новую-новую
+        public Triangle()
         {
-            this.TypeName = TypeName;
-            this.Angle = Angle;
-            this.Center = Center;
-            this.Scale = Scale;
-            this.Gabarit = Gabarit;
+            _TypeName = "Triangle";
+            _Angle = 0;
+            _Gabarit = (-1.0, -1.0, 1.0, 1.0); // габариты от круга и квадрата, надо поменять под треугольник
         }
 
-        //public string TypeName => _TypeName;
-        //public double Angle => _Angle;
-        //public Vector Center => _Center;
-        //public Vector Scale => _Scale;
+        // Перегрузка №1 конструктора, когда создаём новую фигуру, являющуюся изменением старой
+        public Triangle(Vector _Center, (double l, double t, double r, double b) _Gabarit)
+        {
+            _TypeName = "Triangle";
+            _Angle = 0;
+            this._Center = _Center;
+            this._Gabarit = _Gabarit;
+        }
 
-        // До сюда. В Triangle.cs, Square.cs и в Circle.cs
+        // Перегрузка №2 конструктора, когда создаём новую фигуру, являющуюся изменением старой
+        public Triangle(double _Angle, Vector _Center, Vector _Scale, (double l, double t, double r, double b) _Gabarit)
+        {
+            _TypeName = "Triangle";
+            this._Center = _Center;
+            this._Angle = _Angle;
+            this._Scale = _Scale;
+            this._Gabarit = _Gabarit;
+        }
 
-        /*public string TypeName => throw new NotImplementedException();
+        public string TypeName => _TypeName;
+        public double Angle => _Angle;
+        public Vector Center => _Center;
+        public Vector Scale => _Scale;
+        public (double l, double t, double r, double b) Gabarit => _Gabarit;
 
-        public Vector Center => throw new NotImplementedException();
-
-        public double Angle => throw new NotImplementedException();
-
-        public Vector Scale => throw new NotImplementedException();
-
-        public (double l, double t, double r, double b) Gabarit => throw new NotImplementedException();*/
 
         public void Draw(IGraphic graphic)
         {
