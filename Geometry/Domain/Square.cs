@@ -4,19 +4,19 @@
     {
 
         // Ваня делал отсюда
-        private readonly string _TypeName;
-        private readonly Vector _Center;
-        private readonly double _Angle;
-        private readonly Vector _Scale;//для шаблона
+        private readonly string TypeName;
+        private readonly Vector Center;
+        private readonly double Angle;
+        private readonly Vector Scale;//для шаблона
         private readonly (double l, double t, double r, double b) _Gabarit;
 
         public Square(string TypeName, double Angle, Vector Center, Vector Scale, (double l, double t, double r, double b) Gabarit)
         {
-            _TypeName = TypeName;
-            _Angle = Angle;
-            _Center = Center;
-            _Scale = Scale;
-            _Gabarit = Gabarit;
+            this.TypeName = TypeName;
+            this.Angle = Angle;
+            this.Center = Center;
+            this.Scale = Scale;
+            this.Gabarit = Gabarit;
         }
 
         //public string TypeName => _TypeName;

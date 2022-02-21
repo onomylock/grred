@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace GrRed.Geometry.Graphic
+﻿namespace GrRed.Geometry.Graphic
 {
     class SquareGraphic : IGraphic
     {

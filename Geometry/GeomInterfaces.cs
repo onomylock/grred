@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GrRed.Geometry.Factory;
 using GrRed.Geometry.Domain;
+using GrRed.Geometry.Graphic;
 
 namespace GrRed.Geometry
 {
