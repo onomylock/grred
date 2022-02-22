@@ -1,4 +1,6 @@
-﻿namespace GrRed.Geometry.Domain
+﻿using System;
+
+namespace GrRed.Geometry.Domain
 {
     class Circle : IFigure
     {
@@ -46,16 +48,19 @@
 
         public bool IsIn(Vector p, double eps)
         {
-            // Проверяем x^2 + y^2 +- eps <= R^2
+            // Проверяем (x-x0)^2/a^2 + (y-y0)^2/b^2 +- eps <= 1
 
-            if (p.X * p.X + p.Y * p.Y + eps <= (_Gabarit.r - _Gabarit.l) * (_Gabarit.r - _Gabarit.l))
+            double AxisX = (_Gabarit.r - _Center.X) / Math.Cos(_Angle); // Полуоси
+            double AxisY = (_Gabarit.t - _Center.Y) / Math.Cos(_Angle); // повёрнутого эллипса
+
+            if (  Math.Pow((p.X - _Center.X ) * Math.Cos(_Angle) + (p.Y - _Center.Y) * Math.Sin(_Angle), 2) / (AxisX * AxisX) + Math.Pow((- p.X + _Center.X) * Math.Sin(_Angle) + (p.Y - _Center.Y) * Math.Cos(_Angle), 2) / (AxisY * AxisY) + eps <= 1.0  )
                 return true;
-            else if (p.X * p.X + p.Y * p.Y - eps <= (_Gabarit.r - _Gabarit.l) * (_Gabarit.r - _Gabarit.l))
+            else if (  Math.Pow((p.X - _Center.X) * Math.Cos(_Angle) + (p.Y - _Center.Y) * Math.Sin(_Angle), 2) / (AxisX * AxisX) + Math.Pow((-p.X + _Center.X) * Math.Sin(_Angle) + (p.Y - _Center.Y) * Math.Cos(_Angle), 2) / (AxisY * AxisY) - eps <= 1.0  )
                 return true;
             else
                 return false;
 
-            // Да, тут можно было бы два ифа в одной строке, но это нечитабельно было бы
+            // Да, тут можно было бы два ифа в одном ифе через ||, но это нечитабельно было бы
         }
 
         public IFigure Move(Vector delta)
