@@ -48,7 +48,7 @@ namespace GrRed.Geometry.Domain
 
         public bool IsIn(Vector p, double eps)
         {
-            // Проверяем (x-x0)^2/a^2 + (y-y0)^2/b^2 +- eps <= 1
+            // Проверяем (x-x0)^2/a^2 + (y-y0)^2/b^2 +- eps <= 1, но для повёрнутого эллипса (немного другая формула для более общего случая)
 
             double AxisX = (_Gabarit.r - _Center.X) / Math.Cos(_Angle); // Полуоси
             double AxisY = (_Gabarit.t - _Center.Y) / Math.Cos(_Angle); // повёрнутого эллипса
@@ -65,14 +65,32 @@ namespace GrRed.Geometry.Domain
 
         public IFigure Move(Vector delta)
         {
-            Vector deltaCenter = new Vector (_Center.X + delta.X, _Center.Y + delta.Y);
-            Circle circle = new Circle(deltaCenter, (_Gabarit.l + delta.X, _Gabarit.t + delta.Y, _Gabarit.r + delta.X, _Gabarit.b + delta.Y));
+            Vector deltaCenter = new (_Center.X + delta.X, _Center.Y + delta.Y);
+            Circle circle = new (_Angle, deltaCenter, _Scale, (_Gabarit.l + delta.X, _Gabarit.t + delta.Y, _Gabarit.r + delta.X, _Gabarit.b + delta.Y));
             return circle;
         }
 
-        public IFigure Reflection(Vector axe) // Отражение круга ничего не меняет, поэтому функция отражения круга возвращает отражаемый круг
+        public IFigure Reflection(Vector axe) // Vector axe - что-то странное. Лучше бы булевскую переменную,
+                                              // говорящую о горизонтальном или вертикальном отражении.
+                                              // А так буду пока проверять axe.X == 0 - верт. отраж.
         {
-            Circle circle = new Circle(_Angle, _Center, _Scale, _Gabarit);
+            (double l, double t, double r, double b) newGabarit = _Gabarit;
+            double newAngle;
+
+            if (axe.X == 0) // Вертикальное отражение
+            {
+                newGabarit.t = _Gabarit.b;
+                newGabarit.b = _Gabarit.t;
+                newAngle = 2.0 * Math.PI - 2.0 * _Angle;
+            }
+            else // Горизонтальное отражение
+            {
+                newGabarit.l = _Gabarit.r;
+                newGabarit.r = _Gabarit.l;
+                newAngle = Math.PI - 2.0 * _Angle;
+            }
+
+            Circle circle = new Circle(newAngle, _Center, _Scale, newGabarit);
             return circle;
         }
 
