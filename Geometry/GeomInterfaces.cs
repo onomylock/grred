@@ -54,16 +54,7 @@ namespace GrRed.Geometry
     }
 
     public static class Main
-    {
-
-        Main()
-        {
-            FigureFactory factory = GetFactory("Circle");
-            //IFigure fig  = factory.GetFigure();
-            //IGraphic graphic = factory.GetGraphic();
-            
-        };
-        
+    {   
         public static FigureFactory GetFactory(string name)
         {
             return name switch

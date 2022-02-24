@@ -12,29 +12,23 @@ namespace GrRed.Geometry.Domain
         private readonly (double l, double t, double r, double b) _Gabarit = new(0.0, 1.0, 2.0, 0.0);
 
 
-        public Circle() { } // Оказывается, пустой конструктор нужен, потому что иначе нельзя
-                            // будет создать, скажем, Circle mox = new Circle().
-                            // Это можно было бы делать без пустого конструктора,
-                            // если бы не было конструктора с параметрами ниже
-
+        public Circle() { } 
 
         // Перегрузка конструктора, когда создаём новую фигуру, являющуюся изменением старой
-        public Circle(double _Angle, Vector _Center, Vector _Scale, (double l, double t, double r, double b) _Gabarit)
-        { // Здесь черту у параметров конструктора решил не убирать, потому что опасаюсь, что могут возникнуть проблемы
-          // из-за того, что в интерфейсе они без черты
-            this._Center = _Center;
-            this._Angle = _Angle;
-            this._Scale = _Scale;
-            this._Gabarit = _Gabarit;
+        public Circle(string TypeName, double Angle, Vector Center, Vector Scale, (double l, double t, double r, double b) Gabarit)
+        {
+            _TypeName = TypeName;
+            _Center = Center;
+            _Angle = Angle;
+            _Scale = Scale;
+            _Gabarit = Gabarit;
         }
 
-
-        public string TypeName => _TypeName;       // Здесь я оставил public потому что иначе на третьей строке опять ругается
+        public string TypeName => _TypeName;       
         public double Angle => _Angle;
         public Vector Center => _Center;
         public Vector Scale => _Scale;
         public (double l, double t, double r, double b) Gabarit => _Gabarit;
-
 
         public void Draw(IGraphic graphic)
         {
@@ -50,12 +44,11 @@ namespace GrRed.Geometry.Domain
         {
             // Проверяем (x-x0)^2/a^2 + (y-y0)^2/b^2 +- eps <= 1, но для повёрнутого эллипса (немного другая формула для более общего случая)
 
-            double AxisX = (_Gabarit.r - _Center.X) / Math.Cos(_Angle); // Полуоси
-            double AxisY = (_Gabarit.t - _Center.Y) / Math.Cos(_Angle); // повёрнутого эллипса
+            double AxisX = (Gabarit.r - Center.X) / Math.Cos(Angle); // Полуоси
+            double AxisY = (Gabarit.t - Center.Y) / Math.Cos(Angle); // повёрнутого эллипса
+            double IsInCheck = Math.Pow((p.X - Center.X) * Math.Cos(Angle) + (p.Y - Center.Y) * Math.Sin(Angle), 2) / (AxisX * AxisX) + Math.Pow((-p.X + Center.X) * Math.Sin(Angle) + (p.Y - Center.Y) * Math.Cos(Angle), 2) / (AxisY * AxisY);
 
-            if (  Math.Pow((p.X - _Center.X ) * Math.Cos(_Angle) + (p.Y - _Center.Y) * Math.Sin(_Angle), 2) / (AxisX * AxisX) + Math.Pow((- p.X + _Center.X) * Math.Sin(_Angle) + (p.Y - _Center.Y) * Math.Cos(_Angle), 2) / (AxisY * AxisY) + eps <= 1.0  )
-                return true;
-            else if (  Math.Pow((p.X - _Center.X) * Math.Cos(_Angle) + (p.Y - _Center.Y) * Math.Sin(_Angle), 2) / (AxisX * AxisX) + Math.Pow((-p.X + _Center.X) * Math.Sin(_Angle) + (p.Y - _Center.Y) * Math.Cos(_Angle), 2) / (AxisY * AxisY) - eps <= 1.0  )
+            if (IsInCheck + eps <= 1.0 || IsInCheck - eps <= 1.0)
                 return true;
             else
                 return false;
@@ -65,8 +58,8 @@ namespace GrRed.Geometry.Domain
 
         public IFigure Move(Vector delta)
         {
-            Vector deltaCenter = new (_Center.X + delta.X, _Center.Y + delta.Y);
-            Circle circle = new (_Angle, deltaCenter, _Scale, (_Gabarit.l + delta.X, _Gabarit.t + delta.Y, _Gabarit.r + delta.X, _Gabarit.b + delta.Y));
+            Vector deltaCenter = Center + delta;
+            Circle circle = new (TypeName, Angle, deltaCenter, Scale, (Gabarit.l + delta.X, Gabarit.t + delta.Y, Gabarit.r + delta.X, Gabarit.b + delta.Y));
             return circle;
         }
 
@@ -79,24 +72,24 @@ namespace GrRed.Geometry.Domain
 
             if (axe.X == 0) // Вертикальное отражение
             {
-                newGabarit.t = _Gabarit.b;
-                newGabarit.b = _Gabarit.t;
-                newAngle = 2.0 * Math.PI - 2.0 * _Angle;
+                newGabarit.t = Gabarit.b;
+                newGabarit.b = Gabarit.t;
+                newAngle = 2.0 * Math.PI - 2.0 * Angle;
             }
             else // Горизонтальное отражение
             {
-                newGabarit.l = _Gabarit.r;
-                newGabarit.r = _Gabarit.l;
-                newAngle = Math.PI - 2.0 * _Angle;
+                newGabarit.l = Gabarit.r;
+                newGabarit.r = Gabarit.l;
+                newAngle = Math.PI - 2.0 * Angle;
             }
 
-            Circle circle = new Circle(newAngle, _Center, _Scale, newGabarit);
+            Circle circle = new Circle(TypeName, newAngle, Center, Scale, newGabarit);
             return circle;
         }
 
         public IFigure Rotate(Vector delta)   // Поворот круга ничего не меняет, поэтому функция поворота круга возвращает поворачиваемый круг
         {
-            Circle circle = new Circle(_Angle, _Center, _Scale, _Gabarit);
+            Circle circle = new Circle(TypeName, Angle, Center, Scale, Gabarit);
             return circle;
         }
 

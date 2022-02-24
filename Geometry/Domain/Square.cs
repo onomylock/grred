@@ -18,13 +18,13 @@
 
 
         // Перегрузка конструктора, когда создаём новую фигуру, являющуюся изменением старой
-        public Square(double _Angle, Vector _Center, Vector _Scale, (double l, double t, double r, double b) _Gabarit)
+        public Square(double Angle, Vector Center, Vector Scale, (double l, double t, double r, double b) Gabarit)
         { // Здесь черту у параметров конструктора решил не убирать, потому что опасаюсь, что могут возникнуть проблемы
           // из-за того, что в интерфейсе они без черты
-            this._Center = _Center;
-            this._Angle = _Angle;
-            this._Scale = _Scale;
-            this._Gabarit = _Gabarit;
+            _Center = Center;
+            _Angle = Angle;
+            _Scale = Scale;
+            _Gabarit = Gabarit;
         }
 
         public string TypeName => _TypeName;      // Здесь я оставил public потому что иначе на третьей строке опять ругается

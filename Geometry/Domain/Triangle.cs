@@ -3,7 +3,7 @@
     class Triangle : IFigure
     {
 
-        private readonly string _TypeName = "Triangle";
+         private readonly string _TypeName = "Triangle";
         private readonly Vector _Center = new (0, 0); // здесь центр пока непонятно какой на самом деле
         private readonly double _Angle = 0.0;
         private readonly Vector _Scale = new (1.0, 1.0); // здесь не уверен
@@ -17,13 +17,13 @@
                               // Перегрузка №0 конструктора, когда создаём фигуру новую-новую
                               // Перегрузка №0 конструктора, когда создаём фигуру новую-новую
                               // Перегрузка конструктора, когда создаём новую фигуру, являющуюся изменением старой
-        public Triangle(double _Angle, Vector _Center, Vector _Scale, (double l, double t, double r, double b) _Gabarit)
+        public Triangle(double Angle, Vector Center, Vector Scale, (double l, double t, double r, double b) Gabarit)
         { // Здесь черту у параметров конструктора решил не убирать, потому что опасаюсь, что могут возникнуть проблемы
           // из-за того, что в интерфейсе они без черты
-            this._Center = _Center;
-            this._Angle = _Angle;
-            this._Scale = _Scale;
-            this._Gabarit = _Gabarit;
+            _Center = Center;
+            _Angle = Angle;
+            _Scale = Scale;
+            _Gabarit = Gabarit;
         }
 
         public string TypeName => _TypeName; // Здесь я оставил public потому что иначе на третьей строке опять ругается
