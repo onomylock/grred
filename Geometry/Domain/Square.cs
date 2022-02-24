@@ -3,38 +3,36 @@
     class Square : IFigure
     {
 
-        // Ваня делал отсюда
-        private readonly string _TypeName;
-        private readonly Vector _Center;
-        private readonly double _Angle;
-        private readonly Vector _Scale;//для шаблона
-        private readonly (double l, double t, double r, double b) _Gabarit;
+        private readonly string _TypeName = "Square";
+        private readonly Vector _Center = new (1.0, 1.0);
+        private readonly double _Angle = 0.0;
+        private readonly Vector _Scale = new (1.0, 1.0);
+        private readonly (double l, double t, double r, double b) _Gabarit = new(0.0, 1.0, 2.0, 0.0);
 
-        public Square(string TypeName, double Angle, Vector Center, Vector Scale, (double l, double t, double r, double b) Gabarit)
-        {
-            _TypeName = TypeName;
-            _Angle = Angle;
-            _Center = Center;
-            _Scale = Scale;
-            _Gabarit = Gabarit;
+
+        public Square() { } // Оказывается, пустой конструктор нужен, потому что иначе нельзя
+                            // будет создать, скажем, Circle mox = new Circle().
+                            // Это можно было бы делать без пустого конструктора,
+                            // если бы не было конструктора с параметрами ниже
+                            // Перегрузка №0 конструктора, когда создаём фигуру новую-новую
+
+
+        // Перегрузка конструктора, когда создаём новую фигуру, являющуюся изменением старой
+        public Square(double _Angle, Vector _Center, Vector _Scale, (double l, double t, double r, double b) _Gabarit)
+        { // Здесь черту у параметров конструктора решил не убирать, потому что опасаюсь, что могут возникнуть проблемы
+          // из-за того, что в интерфейсе они без черты
+            this._Center = _Center;
+            this._Angle = _Angle;
+            this._Scale = _Scale;
+            this._Gabarit = _Gabarit;
         }
 
-        //public string TypeName => _TypeName;
-        //public double Angle => _Angle;
-        //public Vector Center => _Center;
-        //public Vector Scale => _Scale;
+        public string TypeName => _TypeName;      // Здесь я оставил public потому что иначе на третьей строке опять ругается
+        public double Angle => _Angle;
+        public Vector Center => _Center;
+        public Vector Scale => _Scale;
+        public (double l, double t, double r, double b) Gabarit => _Gabarit;
 
-        // До сюда. В Triangle.cs, Square.cs и в Circle.cs
-
-        /*public string TypeName => throw new NotImplementedException();
-
-        public Vector Center => throw new NotImplementedException();
-
-        public double Angle => throw new NotImplementedException();
-
-        public Vector Scale => throw new NotImplementedException();
-
-        public (double l, double t, double r, double b) Gabarit => throw new NotImplementedException();*/
 
         public void Draw(IGraphic graphic)
         {
