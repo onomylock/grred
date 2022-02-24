@@ -36,7 +36,7 @@ namespace GrRed.Geometry
         (double l, double t, double r, double b) Gabarit { get; } //Габариты фигуры
         IFigure Move(Vector delta); //Движение фигуры
         IFigure Reflection(Vector axe); //Отображение фигуры
-        IFigure Rotate(Vector delta);
+        IFigure Rotate(double delta, bool clockwise);
         IFigure SetScale(double sx, double dy);
         bool IsIn(Vector p, double eps); //Точка внутри фигуры
         IFigure Intersection(IFigure fig2);

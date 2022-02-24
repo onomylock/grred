@@ -87,9 +87,40 @@ namespace GrRed.Geometry.Domain
             return circle;
         }
 
-        public IFigure Rotate(Vector delta)   // Поворот круга ничего не меняет, поэтому функция поворота круга возвращает поворачиваемый круг
+        public IFigure Rotate(double delta, bool clockwise)
         {
-            Circle circle = new Circle(TypeName, Angle, Center, Scale, Gabarit);
+            (double l, double t, double r, double b) newGabarit = (0.0, 0.0, 0.0, 0.0);
+            if (_Gabarit.t > _Center.Y)
+            {
+                newGabarit.t = (_Gabarit.t - _Center.Y) * Math.Cos(_Angle) + _Center.Y;
+                newGabarit.b = - (_Center.Y - _Gabarit.b) * Math.Cos(_Angle) + _Center.Y;
+            }
+            else
+            {
+                newGabarit.b = (_Gabarit.b - _Center.Y) * Math.Cos(_Angle) + _Center.Y;
+                newGabarit.t = - (_Center.Y - _Gabarit.t) * Math.Cos(_Angle) + _Center.Y;
+            }
+
+            if (_Gabarit.r > _Center.X)
+            {
+                newGabarit.r = (_Gabarit.r - _Center.X) * Math.Cos(_Angle) + _Center.X;
+                newGabarit.l = - (_Center.X - _Gabarit.l) * Math.Cos(_Angle) + _Center.X;
+            }
+            else
+            {
+                newGabarit.l = (_Gabarit.l - _Center.X) * Math.Cos(_Angle) + _Center.X;
+                newGabarit.r = - (_Center.X - _Gabarit.r) * Math.Cos(_Angle) + _Center.X;
+            }
+
+            double newAngle;
+            if (!clockwise)
+                newAngle = _Angle + delta;
+            else
+                newAngle = _Angle - delta;
+            
+
+            Circle circle = new Circle(newAngle, _Center, _Scale, newGabarit);
+
             return circle;
         }
 
