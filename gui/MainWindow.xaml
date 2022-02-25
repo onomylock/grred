@@ -153,22 +153,13 @@
             </Grid>
 
             <StackPanel Name="Left_all_grid">
-            <Grid>
                 <Button x:Name="BackButton"  Click="BackButton_Click" Width="27
                         " Height="30" Background="{x:Null}" HorizontalAlignment="Left" Margin="0,-98,0,98" BorderThickness="0">
-                    <Grid>
                         <Image Source="Resources/icons8nazad.png" Height="30" Width="33" Margin="-11,0,-14,-2"/>
-                    </Grid>
                 </Button>
-            </Grid>
-
-            <Grid>
                 <Button x:Name="NextButton"  Click="NextButton_Click" Height="30" Width="29" Background="{x:Null}" Margin="23,-128,1,128" Grid.Column="1" BorderThickness="0">
-                    <Grid>
                         <Image Source="Resources/icons8vpered.png" Height="30" Width="33" Margin="-6,-11,-6,-13" Grid.Column="1"/>
-                    </Grid>
                 </Button>
-            </Grid>
 
             <StackPanel x:Name="Column111" Grid.Column="0">
                 <Button x:Name="Distance" Click="DistanceButton_Click" Height="30" Background="{x:Null}" BorderThickness="0" Margin="0,-125,35,125">

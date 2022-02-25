@@ -36,7 +36,7 @@ namespace GrRed.Geometry
         (double l, double t, double r, double b) Gabarit { get; } //Габариты фигуры
         IFigure Move(Vector delta); //Движение фигуры
         IFigure Reflection(Vector axe); //Отображение фигуры
-        IFigure Rotate(Vector delta);
+        IFigure Rotate(Vector center, double delta);
         IFigure SetScale(double sx, double dy);
         bool IsIn(Vector p, double eps); //Точка внутри фигуры
         IFigure Intersection(IFigure fig2);
@@ -55,15 +55,6 @@ namespace GrRed.Geometry
 
     public static class Main
     {
-
-        Main()
-        {
-            FigureFactory factory = GetFactory("Circle");
-            //IFigure fig  = factory.GetFigure();
-            //IGraphic graphic = factory.GetGraphic();
-            
-        };
-        
         public static FigureFactory GetFactory(string name)
         {
             return name switch
