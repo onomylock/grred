@@ -215,10 +215,6 @@
 
 
         <Grid x:Name="PaintingGrid" Grid.Column="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="71*"/>
-                <RowDefinition Height="221*"/>
-            </Grid.RowDefinitions>
 
         </Grid>
 
