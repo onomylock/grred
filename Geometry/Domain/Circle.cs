@@ -87,9 +87,64 @@ namespace GrRed.Geometry.Domain
             return circle;
         }
 
-        public IFigure SetScale(double sx, double dy)
+        public IFigure SetScale(double sx, double dy, bool a, bool b, bool scaleX)
         {
-            throw new NotImplementedException();
+            if(a && b && scaleX) // Тянем за право-верх: координата x Scale и обе коры центра одновременно увеличиваются/уменьшаются
+            {
+                Vector newCenter = new(Center.X + 0.5 * sx, Center.Y + 0.5 * dy);
+                Vector newScale = new(Scale.X + sx, Scale.Y);
+                Circle circle = new Circle(Angle, newCenter, newScale);
+                return circle;
+            }
+            else if(!a && b && scaleX) // Тянем за лево-верх: координата x Scale и y-координата центра одновременно увеличиваются, а x-координата центра уменьшается
+            {
+                Vector newCenter = new(Center.X - 0.5 * sx, Center.Y + 0.5 * dy);
+                Vector newScale = new(Scale.X + sx, Scale.Y);
+                Circle circle = new Circle(Angle, newCenter, newScale);
+                return circle;
+            }
+            else if (!a && !b && scaleX) // Тянем за лево-низ: координата x Scale увеличивается, а обе координаты центра одновременно уменьшаются
+            {
+                Vector newCenter = new(Center.X - 0.5 * sx, Center.Y - 0.5 * dy);
+                Vector newScale = new(Scale.X + sx, Scale.Y);
+                Circle circle = new Circle(Angle, newCenter, newScale);
+                return circle;
+            }
+            else if (a && !b && scaleX) // Тянем за лево-право: координата x Scale и x-координата центра одновременно увеличиваются, а y-координата центра уменьшается
+            {
+                Vector newCenter = new(Center.X + 0.5 * sx, Center.Y - 0.5 * dy);
+                Vector newScale = new(Scale.X + sx, Scale.Y);
+                Circle circle = new Circle(Angle, newCenter, newScale);
+                return circle;
+            }
+            else if (a && b && !scaleX) // Тянем за право-верх: координата y Scale и обе коры центра одновременно увеличиваются/уменьшаются
+            {
+                Vector newCenter = new(Center.X + 0.5 * sx, Center.Y + 0.5 * dy);
+                Vector newScale = new(Scale.X, Scale.Y + dy);
+                Circle circle = new Circle(Angle, newCenter, newScale);
+                return circle;
+            }
+            else if (!a && b && !scaleX) // Тянем за лево-верх: координата y Scale и y-координата центра одновременно увеличиваются, а x-координата центра уменьшается
+            {
+                Vector newCenter = new(Center.X - 0.5 * sx, Center.Y + 0.5 * dy);
+                Vector newScale = new(Scale.X, Scale.Y + dy);
+                Circle circle = new Circle(Angle, newCenter, newScale);
+                return circle;
+            }
+            else if (!a && !b && !scaleX) // Тянем за лево-низ: координата y Scale увеличивается, а обе координаты центра одновременно уменьшаются
+            {
+                Vector newCenter = new(Center.X - 0.5 * sx, Center.Y - 0.5 * dy);
+                Vector newScale = new(Scale.X, Scale.Y + dy);
+                Circle circle = new Circle(Angle, newCenter, newScale);
+                return circle;
+            }
+            else // Тянем за лево-право: координата y Scale и x-координата центра одновременно увеличиваются, а y-координата центра уменьшается
+            {
+                Vector newCenter = new(Center.X + 0.5 * sx, Center.Y - 0.5 * dy);
+                Vector newScale = new(Scale.X, Scale.Y + dy);
+                Circle circle = new Circle(Angle, newCenter, newScale);
+                return circle;
+            }
         }
 
         public IFigure Subtruct(IFigure fig2)

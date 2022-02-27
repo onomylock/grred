@@ -37,7 +37,7 @@ namespace GrRed
         IFigure Move(Vector delta); //Движение фигуры
         IFigure Reflection(bool axe); //Отображение фигуры
         IFigure Rotate(double delta);
-        IFigure SetScale(double sx, double dy);
+        IFigure SetScale(double sx, double dy, bool a, bool b, bool scaleX);
         bool IsIn(Vector p, double eps); //Точка внутри фигуры
         IFigure Intersection(IFigure fig2);
         IFigure Union(IFigure fig2);
