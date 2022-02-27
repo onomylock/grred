@@ -40,7 +40,7 @@ namespace GrRed.Geometry.Domain
         public bool IsIn(Vector p, double eps)
         {
             // Проверяем (x-x0)^2/a^2 + (y-y0)^2/b^2 +- eps <= 1, но для повёрнутого эллипса (немного другая формула для более общего случая)
-            double AxisX = Scale.X / Math.Cos(Angle); // Полуоси
+            double AxisX = Scale.X / Math.Cos(Angle); // Полуоси 
             double AxisY = Scale.Y / Math.Cos(Angle); // повёрнутого эллипса
             double IsInCheck = Math.Pow((p.X - Center.X) * Math.Cos(Angle) + (p.Y - Center.Y) * Math.Sin(Angle), 2) / (AxisX * AxisX) + Math.Pow((-p.X + Center.X) * Math.Sin(Angle) + (p.Y - Center.Y) * Math.Cos(Angle), 2) / (AxisY * AxisY);
 
@@ -63,14 +63,16 @@ namespace GrRed.Geometry.Domain
 
             if (axe) // Вертикальное отражение
             {
+                Vector newScale = new(Scale.X, -Scale.Y);
                 newAngle = Math.PI - 2.0 * Angle;
-                Circle circle = new Circle(newAngle, Center, Scale);
+                Circle circle = new Circle(newAngle, Center, newScale);
                 return circle;
             }
             else // Горизонтальное отражение
             {
+                Vector newScale = new(-Scale.X, Scale.Y);
                 newAngle = 2.0 * Math.PI - 2.0 * Angle;
-                Circle circle = new Circle(newAngle, Center, Scale);
+                Circle circle = new Circle(newAngle, Center, newScale);
                 return circle;
             }
         }
@@ -78,6 +80,7 @@ namespace GrRed.Geometry.Domain
         public IFigure Rotate(double delta)
         {
             double newAngle = Angle + delta;
+
             Vector newScale = new(Scale.X * Math.Cos(newAngle), Scale.Y * Math.Cos(newAngle));
 
             Circle circle = new Circle(newAngle, Center, newScale);
