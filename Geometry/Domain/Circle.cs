@@ -19,7 +19,7 @@ namespace GrRed.Geometry.Domain
 
         public string TypeName => "Circle";
         public double Angle => _Angle;
-        public Vector Center => Center;
+        public Vector Center => _Center;
         public Vector Scale => _Scale;
 
         public (double l, double t, double r, double b) Gabarit =>

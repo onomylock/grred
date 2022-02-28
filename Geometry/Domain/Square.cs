@@ -4,7 +4,6 @@ namespace GrRed.Geometry.Domain
 {
     class Square : IFigure
     {
-
         private readonly Vector _Center = new(1.0, 1.0);
         private readonly double _Angle = 0.0;
         private readonly Vector _Scale = new(1.0, 1.0);
@@ -39,7 +38,13 @@ namespace GrRed.Geometry.Domain
 
         public bool IsIn(Vector p, double eps)
         {
-            throw new NotImplementedException();
+            if (p.X + eps >= Gabarit.l && p.X + eps <= Gabarit.r && p.Y + eps <= Gabarit.t && p.Y + eps >= Gabarit.b)
+                if (p.X - eps >= Gabarit.l && p.X - eps <= Gabarit.r && p.Y - eps <= Gabarit.t && p.Y - eps >= Gabarit.b)
+                    return true;
+                else
+                    return false;
+            else
+                return false;
         }
 
         public IFigure Move(Vector delta)
