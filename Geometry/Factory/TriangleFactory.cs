@@ -6,8 +6,7 @@ namespace GrRed.Geometry.Factory
     {
         public override IFigure GetFigure(double Angle, Vector Center, Vector Scale)
         {
-            Triangle triangle = new(Angle, Center, Scale);
-            return triangle;
+            return new Triangle(Angle, Center, Scale);
         }
     }
 }

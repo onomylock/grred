@@ -2,12 +2,11 @@
 
 namespace GrRed.Geometry.Factory
 {
-    public class CircleFactory : FigureFactory
+    public class EllipseFactory : FigureFactory
     {
         public override IFigure GetFigure(double Angle, Vector Center, Vector Scale)
         {
-            Circle circle = new(Angle, Center, Scale);
-            return circle;
+            return new Ellipse(Angle, Center, Scale);
         }
     }
 }

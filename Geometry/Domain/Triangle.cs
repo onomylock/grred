@@ -57,9 +57,10 @@ namespace GrRed.Geometry.Domain
             throw new NotImplementedException();
         }
 
-        public IFigure SetScale(double sx, double dy)
+        public IFigure SetScale(double dx, double dy)
         {
-            throw new NotImplementedException();
+            Vector newScale = new(Scale.X + dx / 2, Scale.Y + dy / 2);
+            return new Triangle(Angle, Center, newScale);
         }
 
         public IFigure Subtruct(IFigure fig2)

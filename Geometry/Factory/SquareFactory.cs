@@ -6,8 +6,7 @@ namespace GrRed.Geometry.Factory
     {
         public override IFigure GetFigure(double Angle, Vector Center, Vector Scale)
         {
-            Square square = new(Angle, Center, Scale);
-            return square;
+            return new Square(Angle, Center, Scale);
         }
     }
 }
