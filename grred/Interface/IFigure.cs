@@ -4,25 +4,41 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using GrRed.Geometry.Factory;
+
 namespace GrRed
 {
     public readonly struct Vector
     {
         readonly public double X;
         readonly public double Y;
+
+        public Vector(double x, double y)
+        {
+            X = x;
+            Y = y;
+        }
+
+        public static Vector operator +(Vector a, Vector b)
+            => new Vector(a.X + b.X, a.Y + b.Y);
+
+        public static Vector operator -(Vector a, Vector b)
+            => new Vector(a.X - b.X, a.Y - b.Y);
+        //Добавить перегрузки если нужно
     }
+
     public interface IFigure
     {
         string TypeName { get; }
-        Vector Center { get; }
-        double Angle { get; }
+        Vector Center { get; } //Центр фигуры
+        double Angle { get; }  //Угол поворота
         Vector Scale { get; } //для шаблона
-        (double l, double t, double r, double b) Gabarit { get; }
-        IFigure Move(Vector delta);
-        IFigure Reflection(Vector axe);
-        IFigure Rotate(Vector delta);
-        IFigure SetScale(double sx, double dy);
-        bool IsIn(Vector p, double eps);
+        (double l, double t, double r, double b) Gabarit { get; } //Габариты фигуры
+        IFigure Move(Vector delta); //Движение фигуры
+        IFigure Reflection(bool axe); //Отображение фигуры
+        IFigure Rotate(double delta);
+        IFigure SetScale(double dx, double dy);
+        bool IsIn(Vector p, double eps); //Точка внутри фигуры
         IFigure Intersection(IFigure fig2);
         IFigure Union(IFigure fig2);
         IFigure Subtruct(IFigure fig2);
@@ -40,14 +56,15 @@ namespace GrRed
 
     public static class FigureFabric
     {
-        public static IFigure Create(string name)
+        public static FigureFactory GetFactory(string name)
         {
-            switch (name)
+            return name switch
             {
-                //                case "Circle": return new Circle();
-            }
-
-            return null;
+                "Ellipse" => new EllipseFactory(),
+                "Triangle" => new TriangleFactory(),
+                "Square" => new SquareFactory(),
+                _ => null,
+            };
         }
     }
 }
