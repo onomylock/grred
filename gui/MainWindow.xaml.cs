@@ -49,11 +49,6 @@ namespace gui
             MessageBox.Show("vpered");
         }
 
-        private void PrimitiveButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void PenButton_Click(object sender, RoutedEventArgs e)
         {
 
@@ -74,6 +69,13 @@ namespace gui
 
         }
 
+        private void PrimButton_Сlick(object sender, RoutedEventArgs e)
+        {
+            if (Leftgrid1.Visibility == Visibility.Hidden)
+                Leftgrid1.Visibility = Visibility.Visible;
+            else
+                Leftgrid1.Visibility = Visibility.Hidden;
+        }
         private void VerticallyButton_Click(object sender, RoutedEventArgs e)
         {
 
