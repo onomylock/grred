@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,18 +23,19 @@ namespace gui
         public MainWindow()
         {
             InitializeComponent();
-            IGraphic temp = new IGraphic();
+            RectangleGrafic rectangle = new RectangleGrafic();
             List<Vector> vector = new List<Vector>();
             //vector.Add(new Vector(50, 50));
             //vector.Add(new Vector(50, 100));
             //vector.Add(new Vector(100, 100));
             //vector.Add(new Vector(100, 50));
-            //temp.AddLines(vector, PaintingGrid);
+            //rectangle.AddLines(vector, PaintingGrid);
 
+            EllipseGrafic ellipse = new EllipseGrafic();
             vector.Add(new Vector(50, 50));
             vector.Add(new Vector(75, 60));
             vector.Add(new Vector(100, 50));
-            temp.AddPolyArc(vector, PaintingGrid);
+            ellipse.AddPolyArc(vector, PaintingGrid);
         }
 
         private void menu_click(object sender, RoutedEventArgs e)
