@@ -42,6 +42,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\GrRed\GrRed.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="Resources\activ_menu.png" />
     <Resource Include="Resources\angle.png" />
     <Resource Include="Resources\ContButton.png" />

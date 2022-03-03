@@ -6,8 +6,11 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
+using GrRed;
+
 namespace gui
-{
+{   
+    // Сделать ссылку на вектор и IGraphic в интерфейс
     public struct Vector
     {
         public double X;
@@ -25,7 +28,7 @@ namespace gui
         public void FillPolygon(Path path, Brush brush){}
     }
 
-    public class EllipseGrafic : IGgrafic
+    public class EllipseGrafic : IGraphic
     {
         public void AddPolyArc(List<Vector> lines, Grid grid)
         {
@@ -58,7 +61,7 @@ namespace gui
             path.Fill = brush;
         }
     }
-    public class TriangleGrafic : IGgrafic
+    public class TriangleGrafic : IGraphic
     {
         public void AddLines(List<Vector> lines, Grid grid)
         {
@@ -88,7 +91,7 @@ namespace gui
         }
 
     }
-    public class SquareGrafic : IGgrafic
+    public class SquareGrafic : IGraphic
     {
         public void AddLines(List<Vector> lines, Grid grid)
         {
