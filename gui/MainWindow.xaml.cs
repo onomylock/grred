@@ -23,6 +23,18 @@ namespace gui
         public MainWindow()
         {
             InitializeComponent();
+            IGraphic temp = new IGraphic();
+            List<Vector> vector = new List<Vector>();
+            //vector.Add(new Vector(50, 50));
+            //vector.Add(new Vector(50, 100));
+            //vector.Add(new Vector(100, 100));
+            //vector.Add(new Vector(100, 50));
+            //temp.AddLines(vector, PaintingGrid);
+
+            vector.Add(new Vector(50, 50));
+            vector.Add(new Vector(75, 60));
+            vector.Add(new Vector(100, 50));
+            temp.AddPolyArc(vector, PaintingGrid);
         }
 
         private void menu_click(object sender, RoutedEventArgs e)
