@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -18,29 +18,15 @@ namespace gui
             this.Y = Y;
         }
     }
-    public class IGraphic
+    public interface IGraphic
     {
-        public void AddLines(List<Vector> lines, Grid grid)
-        {
-            //так как каждая фигура у нас придставима как набор линий,
-            //то фигура будет выглядить следующим образом
-            PathGeometry pathGeom = new PathGeometry();
-            Path path = new Path();
-            PolyLineSegment polyLine = new PolyLineSegment(); //множество линий
-            PathFigure pathFig = new PathFigure();
+        public void AddLines(List<Vector> lines, Grid grid){}
+        public void AddPolyArc(List<Vector> lines, Grid grid){}
+        public void FillPolygon(Path path, Brush brush){}
+    }
 
-            pathFig.StartPoint = new Point(lines[0].X, lines[0].Y); //начальная точка
-            for (int i = 1; i < lines.Count(); i++)
-                polyLine.Points.Add(new Point(lines[i].X, lines[i].Y));
-            pathFig.Segments.Add(polyLine);
-            pathFig.IsClosed = true;
-            pathGeom.Figures.Add(pathFig);
-
-            path.Data = pathGeom;
-            path.Stroke = Brushes.Black; //контур
-
-            grid.Children.Add(path); //добавляем на сетку
-        }
+    public class EllipseGrafic : IGgrafic
+    {
         public void AddPolyArc(List<Vector> lines, Grid grid)
         {
             PathGeometry pathGeom = new PathGeometry();
@@ -66,9 +52,70 @@ namespace gui
 
             grid.Children.Add(path);
         }
+
         public void FillPolygon(Path path, Brush brush)
         {
             path.Fill = brush;
         }
+    }
+    public class TriangleGrafic : IGgrafic
+    {
+        public void AddLines(List<Vector> lines, Grid grid)
+        {
+            //так как каждая фигура у нас придставима как набор линий,
+            //то фигура будет выглядить следующим образом
+            PathGeometry pathGeom = new PathGeometry();
+            Path path = new Path();
+            PolyLineSegment polyLine = new PolyLineSegment(); //множество линий
+            PathFigure pathFig = new PathFigure();
+
+            pathFig.StartPoint = new Point(lines[0].X, lines[0].Y); //начальная точка
+            for (int i = 1; i <= 2; i++)
+                polyLine.Points.Add(new Point(lines[i].X, lines[i].Y));
+            pathFig.Segments.Add(polyLine);
+            pathFig.IsClosed = true;
+            pathGeom.Figures.Add(pathFig);
+
+            path.Data = pathGeom;
+            path.Stroke = Brushes.Black; //контур
+
+            grid.Children.Add(path); //добавляем на сетку
+        }
+
+        public void FillPolygon(Path path, Brush brush)
+        {
+            path.Fill = brush;
+        }
+
+    }
+    public class SquareGrafic : IGgrafic
+    {
+        public void AddLines(List<Vector> lines, Grid grid)
+        {
+            //так как каждая фигура у нас придставима как набор линий,
+            //то фигура будет выглядить следующим образом
+            PathGeometry pathGeom = new PathGeometry();
+            Path path = new Path();
+            PolyLineSegment polyLine = new PolyLineSegment(); //множество линий
+            PathFigure pathFig = new PathFigure();
+
+            pathFig.StartPoint = new Point(lines[0].X, lines[0].Y); //начальная точка
+            for (int i = 1; i <= 3; i++)
+                polyLine.Points.Add(new Point(lines[i].X, lines[i].Y));
+            pathFig.Segments.Add(polyLine);
+            pathFig.IsClosed = true;
+            pathGeom.Figures.Add(pathFig);
+
+            path.Data = pathGeom;
+            path.Stroke = Brushes.Black; //контур
+
+            grid.Children.Add(path); //добавляем на сетку
+        }
+
+        public void FillPolygon(Path path, Brush brush)
+        {
+            path.Fill = brush;
+        }
+
     }
 }
