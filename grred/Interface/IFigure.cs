@@ -6,11 +6,16 @@ using System.Threading.Tasks;
 
 using GrRed.Geometry.Factory;
 
+using System.Runtime.Serialization;
+
 namespace GrRed
 {
+    [DataContract]
     public readonly struct Vector
     {
+        [DataMember]
         readonly public double X;
+        [DataMember]
         readonly public double Y;
 
         public Vector(double x, double y)

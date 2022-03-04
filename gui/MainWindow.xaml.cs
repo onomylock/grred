@@ -23,7 +23,7 @@ namespace gui
         public MainWindow()
         {
             InitializeComponent();
-            RectangleGrafic rectangle = new RectangleGrafic();
+            //RectangleGrafic rectangle = new RectangleGrafic();
             List<Vector> vector = new List<Vector>();
             //vector.Add(new Vector(50, 50));
             //vector.Add(new Vector(50, 100));
