@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +23,19 @@ namespace gui
         public MainWindow()
         {
             InitializeComponent();
+            //RectangleGrafic rectangle = new RectangleGrafic();
+            List<Vector> vector = new List<Vector>();
+            //vector.Add(new Vector(50, 50));
+            //vector.Add(new Vector(50, 100));
+            //vector.Add(new Vector(100, 100));
+            //vector.Add(new Vector(100, 50));
+            //rectangle.AddLines(vector, PaintingGrid);
+
+            EllipseGrafic ellipse = new EllipseGrafic();
+            vector.Add(new Vector(50, 50));
+            vector.Add(new Vector(75, 60));
+            vector.Add(new Vector(100, 50));
+            ellipse.AddPolyArc(vector, PaintingGrid);
         }
 
         private void menu_click(object sender, RoutedEventArgs e)
@@ -49,11 +62,6 @@ namespace gui
             MessageBox.Show("vpered");
         }
 
-        private void PrimitiveButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void PenButton_Click(object sender, RoutedEventArgs e)
         {
 
@@ -74,6 +82,13 @@ namespace gui
 
         }
 
+        private void PrimButton_Сlick(object sender, RoutedEventArgs e)
+        {
+            if (Leftgrid1.Visibility == Visibility.Hidden)
+                Leftgrid1.Visibility = Visibility.Visible;
+            else
+                Leftgrid1.Visibility = Visibility.Hidden;
+        }
         private void VerticallyButton_Click(object sender, RoutedEventArgs e)
         {
 

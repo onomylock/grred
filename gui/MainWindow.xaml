@@ -153,24 +153,18 @@
             </Grid>
 
             <StackPanel Name="Left_all_grid">
-            <Grid>
                 <Button x:Name="BackButton"  Click="BackButton_Click" Width="27
                         " Height="30" Background="{x:Null}" HorizontalAlignment="Left" Margin="0,-98,0,98" BorderThickness="0">
-                    <Grid>
                         <Image Source="Resources/icons8nazad.png" Height="30" Width="33" Margin="-11,0,-14,-2"/>
-                    </Grid>
                 </Button>
-            </Grid>
-
-            <Grid>
-                <Button x:Name="NextButton"  Click="NextButton_Click" Height="30" Width="29" Background="{x:Null}" Margin="23,-128,1,128" Grid.Column="1" BorderThickness="0">
-                    <Grid>
-                        <Image Source="Resources/icons8vpered.png" Height="30" Width="33" Margin="-6,-11,-6,-13" Grid.Column="1"/>
-                    </Grid>
-                </Button>
-            </Grid>
-
-            <StackPanel x:Name="Column111" Grid.Column="0">
+                <Grid>
+                    <Button x:Name="NextButton"  Click="NextButton_Click" Height="30" Width="29" Background="{x:Null}" Margin="23,-128,-12,128" Grid.Column="1" BorderThickness="0">
+                        <Grid>
+                            <Image Source="Resources/icons8vpered.png" Height="30" Width="33" Margin="-6,-11,-6,-13" Grid.Column="1"/>
+                        </Grid>
+                    </Button>
+                </Grid>
+                <StackPanel x:Name="Column111" Grid.Column="0">
                 <Button x:Name="Distance" Click="DistanceButton_Click" Height="30" Background="{x:Null}" BorderThickness="0" Margin="0,-125,35,125">
                     <Image Source="Resources/ymen.png" Margin="-9,-1,-9,1"/>
                 </Button>
@@ -179,14 +173,6 @@
                 </Button>
             </StackPanel>
             
-            <Grid>
-                <Button x:Name="PrimitiveButton"  Click="PrimitiveButton_Click" Height="30" Background="{x:Null}" Margin="0,-155,0,155" BorderThickness="0">
-                    <Grid>
-                        <Image Source="Resources/pri.png"/>
-                    </Grid>
-                </Button>
-            </Grid>
-
             <Grid>
                 <Button x:Name="PenButton"  Click="PenButton_Click" Height="30" Background="{x:Null}" Margin="0,-156,0,156" BorderThickness="0">
                 <Grid>
@@ -202,6 +188,90 @@
             </Button>
             </Grid>
             </StackPanel>
+            <Grid Margin="0,-152,0,0">
+                <Border Name="CbmBorder1" Grid.Row="2" Height="27" Width="65" HorizontalAlignment="Left" VerticalAlignment="Top">
+                    <Grid>
+                        <Button Style="{StaticResource ComboboxButton}" Click="PrimButton_Сlick">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Height="25" Width="20" Margin="12,0,0,0">
+                                    <Image.Style>
+                                        <Style TargetType="{x:Type Image}">
+                                            <Setter Property="Source" Value="Resources/pri.png"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Path=IsMouseOver, ElementName=CbmBorder1}" Value="True">
+                                                    <Setter Property="Source" Value="Resources/pri.png"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, 
+                                                AncestorType={x:Type Button},AncestorLevel=1}, Path=IsPressed}" Value="True">
+                                                    <Setter Property="Source" Value="Resources/pri.png"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Image.Style>
+                                </Image>
+                                <Image Height="11" Width="11" Margin="3,0,5,0">
+                                    <Image.Style>
+                                        <Style TargetType="{x:Type Image}">
+                                            <Setter Property="Source" Value="Resources/strelka.png"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Path=IsMouseOver, ElementName=CbmBorder1}" Value="True">
+                                                    <Setter Property="Source" Value="Resources/strelka.png"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, 
+                                                AncestorType={x:Type Button},AncestorLevel=1}, Path=IsPressed}" Value="True">
+                                                    <Setter Property="Source" Value="Resources/strelka.png"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Image.Style>
+                                </Image>
+                            </StackPanel>
+                        </Button>
+                    </Grid>
+                </Border>
+
+                <Grid Name="Leftgrid1" Grid.Row="2" Height="80" Width="64" HorizontalAlignment="Left" VerticalAlignment="Top"
+                    Margin="1,28,0,0" Visibility="Hidden">
+                    <Polygon Fill="Black" StrokeThickness="2" Stroke="Black"
+                             Points="0,8,
+                             0,79,
+                             63,79,
+                             63,0,
+                             0,0
+                             "/>
+                    <Polygon Fill="White" StrokeThickness="1"
+                             Points="0,8,
+                             0,79,
+                             63,79,
+                             63,0,
+                             0,0" 
+                             Stroke="#FF40454E"/>
+                    <Grid Height="97" Width="61" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="1,1,0,0">
+                        <StackPanel Orientation="Vertical">
+                            <Button Style="{StaticResource  CmbBtm}">
+                                <Grid>
+                                    <Image Height="13" Source="Resources/icons8-линия-48.png"/>
+                                </Grid>
+                            </Button>
+                            <Button Style="{StaticResource  CmbBtm}">
+                                <Grid>
+                                    <Image Height="13" Source="Resources/icons8-треугольник-48.png"/>
+                                </Grid>
+                            </Button>
+                            <Button Style="{StaticResource  CmbBtm}">
+                                <Grid HorizontalAlignment="Right">
+                                    <Image Height="13" Source="Resources/pri.png"/>
+                                </Grid>
+                            </Button>
+                            <Button Style="{StaticResource  CmbBtm}">
+                                <Grid>
+                                    <Image Height="13" Source="Resources/icons8-неотмеченный-круг-60.png"/>
+                                </Grid>
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </Grid>
         </StackPanel>
 
 
@@ -224,10 +294,6 @@
 
 
         <Grid x:Name="PaintingGrid" Grid.Column="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="71*"/>
-                <RowDefinition Height="221*"/>
-            </Grid.RowDefinitions>
 
         </Grid>
 
