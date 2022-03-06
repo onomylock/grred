@@ -68,32 +68,21 @@ namespace GrRed.Geometry.Domain
 
             if (axe) // Вертикальное отражение
             {
-                Vector newScale = new(Scale.X, -Scale.Y);
                 newAngle = Math.PI - 2.0 * Angle;
-<<<<<<< HEAD:grred/Geometry/Domain/Ellipse.cs
-                return new Ellipse(newAngle, Center, Scale);
-=======
-                Circle circle = new Circle(newAngle, Center, newScale);
-                return circle;
->>>>>>> 8e69b85 (correct last changes):Geometry/Domain/Circle.cs
+                Vector newScale = new(Scale.X, -Scale.Y);
+                return new Ellipse(newAngle, Center, newScale);
             }
             else // Горизонтальное отражение
             {
-                Vector newScale = new(-Scale.X, Scale.Y);
                 newAngle = 2.0 * Math.PI - 2.0 * Angle;
-<<<<<<< HEAD:grred/Geometry/Domain/Ellipse.cs
-                return new Ellipse(newAngle, Center, Scale);
-=======
-                Circle circle = new Circle(newAngle, Center, newScale);
-                return circle;
->>>>>>> 8e69b85 (correct last changes):Geometry/Domain/Circle.cs
+                Vector newScale = new(-Scale.X, Scale.Y);
+                return new Ellipse(newAngle, Center, newScale);
             }
         }
 
         public IFigure Rotate(double delta)
         {
             double newAngle = Angle + delta;
-
             Vector newScale = new(Scale.X * Math.Cos(newAngle), Scale.Y * Math.Cos(newAngle));
             return new Ellipse(newAngle, Center, newScale);
         }
