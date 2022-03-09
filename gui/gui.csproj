@@ -1,0 +1,82 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <ApplicationIcon>icons8-paint-canvas-60.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\activ_menu.png" />
+    <None Remove="Resources\angle.png" />
+    <None Remove="Resources\ContButton.png" />
+    <None Remove="Resources\HorButton.png" />
+    <None Remove="Resources\icons8-заливка-64.ico" />
+    <None Remove="Resources\icons8-квадратный-спиннер-40.png" />
+    <None Remove="Resources\icons8-линия-48.png" />
+    <None Remove="Resources\icons8-ломаная-кривая-50.png" />
+    <None Remove="Resources\icons8-меню-50.ico" />
+    <None Remove="Resources\icons8-неотмеченный-круг-60.png" />
+    <None Remove="Resources\icons8-развернуть-24.png" />
+    <None Remove="Resources\icons8-развернуть-48.png" />
+    <None Remove="Resources\icons8-треугольник-48.png" />
+    <None Remove="Resources\icons8-шеврон-вправо-60.png" />
+    <None Remove="Resources\icons8karand.png" />
+    <None Remove="Resources\icons8nazad.png" />
+    <None Remove="Resources\icons8primitiv.png" />
+    <None Remove="Resources\icons8vpered.png" />
+    <None Remove="Resources\icons8zalivka.png" />
+    <None Remove="Resources\IntersectionButton.png" />
+    <None Remove="Resources\lypamin.png" />
+    <None Remove="Resources\lypaplus.png" />
+    <None Remove="Resources\neactiv_menu.png" />
+    <None Remove="Resources\PipButton.png" />
+    <None Remove="Resources\pri.png" />
+    <None Remove="Resources\pribliz.png" />
+    <None Remove="Resources\strelka.png" />
+    <None Remove="Resources\SubtractionButton.png" />
+    <None Remove="Resources\UnionButton.png" />
+    <None Remove="Resources\VertButton.png" />
+    <None Remove="Resources\ymen.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GrRed\GrRed.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\activ_menu.png" />
+    <Resource Include="Resources\angle.png" />
+    <Resource Include="Resources\ContButton.png" />
+    <Resource Include="Resources\HorButton.png" />
+    <Resource Include="Resources\icons8-заливка-64.ico" />
+    <Resource Include="Resources\icons8-квадратный-спиннер-40.png" />
+    <Resource Include="Resources\icons8-линия-48.png" />
+    <Resource Include="Resources\icons8-ломаная-кривая-50.png" />
+    <Resource Include="Resources\icons8-меню-50.ico" />
+    <Resource Include="Resources\icons8-неотмеченный-круг-60.png" />
+    <Resource Include="Resources\icons8-развернуть-24.png" />
+    <Resource Include="Resources\icons8-развернуть-48.png" />
+    <Resource Include="Resources\icons8-треугольник-48.png" />
+    <Resource Include="Resources\icons8-шеврон-вправо-60.png" />
+    <Resource Include="Resources\icons8karand.png" />
+    <Resource Include="Resources\icons8nazad.png" />
+    <Resource Include="Resources\icons8primitiv.png" />
+    <Resource Include="Resources\icons8vpered.png" />
+    <Resource Include="Resources\icons8zalivka.png" />
+    <Resource Include="Resources\lypamin.png" />
+    <Resource Include="Resources\lypaplus.png" />
+    <Resource Include="Resources\neactiv_menu.png" />
+    <Resource Include="Resources\PipButton.png" />
+    <Resource Include="Resources\pri.png" />
+    <Resource Include="Resources\pribliz.png" />
+    <Resource Include="Resources\strelka.png" />
+    <Resource Include="Resources\IntersectionButton.png" />
+    <Resource Include="Resources\SubtractionButton.png" />
+    <Resource Include="Resources\UnionButton.png" />
+    <Resource Include="Resources\VertButton.png" />
+    <Resource Include="Resources\ymen.png" />
+  </ItemGroup>
+
+</Project>
