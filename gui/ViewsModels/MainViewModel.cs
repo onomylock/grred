@@ -26,6 +26,32 @@ namespace gui.ViewsModels
                 PropertyChanged(this, new PropertyChangedEventArgs(prop));
         }
 
+        private ActionCommand figurePanelCommand;
+        //public ActionCommand FigurePanelCommand
+        //{
+        //    get
+        //    {
+        //        return figurePanelCommand ??
+        //          (figurePanelCommand = new ActionCommand(obj =>
+        //          {
+        //              Phone phone = new Phone();
+        //              Phones.Insert(0, phone);
+        //              SelectedPhone = phone;
+        //          }));
+        //    }
+        //}
+
+
+        //     if (Leftgrid.Visibility == Visibility.Hidden)
+        //{
+        //    Leftgrid.Visibility = Visibility.Visible;
+        //    Left_all_grid.Visibility = Visibility.Hidden;
+        //}
+        //else
+        //{
+        //    Leftgrid.Visibility = Visibility.Hidden;
+        //    Left_all_grid.Visibility = Visibility.Visible;
+        //}
 
 
 
