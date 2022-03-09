@@ -1,7 +1,11 @@
 ﻿using System;
 
+using Newtonsoft.Json;
+using System.Runtime.Serialization;
+
 namespace GrRed.Geometry.Domain
 {
+    [DataContract]
     class Square : IFigure
     {
         private readonly Vector _Center = new(1.0, 1.0);
@@ -10,6 +14,7 @@ namespace GrRed.Geometry.Domain
 
         public Square() { }
 
+        [JsonConstructor]
         public Square(double Angle, Vector Center, Vector Scale)
         {
             _Center = Center;
@@ -18,8 +23,11 @@ namespace GrRed.Geometry.Domain
         }
 
         public string TypeName => "Square";
+        [DataMember]
         public double Angle => _Angle;
+        [DataMember]
         public Vector Center => _Center;
+        [DataMember]
         public Vector Scale => _Scale;
 
         public (double l, double t, double r, double b) Gabarit =>
