@@ -111,23 +111,23 @@
                         </Button>
                     </Border>
 
-                    <Grid Name="Leftgrid" Grid.Row="2" Height="100" Width="64" HorizontalAlignment="Left" VerticalAlignment="Top"
+                    <Grid Name="Leftgrid" Grid.Row="2" Height="100" Width="67" HorizontalAlignment="Left" VerticalAlignment="Top"
                     Margin="1,28,0,0" Visibility="Hidden">
                     <Polygon Fill="Black" StrokeThickness="2" Stroke="Black"
                              Points="0,8,
                              0,99,
-                             63,99,
-                             63,0,
+                             67,99,
+                             67,0,
                              0,0
                              "/>
                     <Polygon Fill="White" StrokeThickness="1"
                              Points="0,8,
                              0,99,
-                             63,99,
-                             63,0,
+                             67,99,
+                             67,0,
                              0,0" 
                              Stroke="#FF40454E"/>
-                    <Grid Height="97" Width="61" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="1,1,0,0">
+                    <Grid Height="97" Width="67" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="1,1,0,0">
                         <StackPanel Orientation="Vertical">
                             <Button Style="{StaticResource  CmbBtm}">
                                 <TextBlock Text="Создать"></TextBlock>
@@ -154,38 +154,24 @@
 
             <StackPanel Name="Left_all_grid">
                 <Button x:Name="BackButton"  Click="BackButton_Click" Width="30" Height="30" Background="{x:Null}" HorizontalAlignment="Left" Margin="5,-98,0,98" BorderThickness="0">
-                        <Image Source="Resources/icons8nazad.png" Height="30" Width="30" Margin="-11,0,-14,-2"/>
+                    <Image Source="Resources/icons8nazad.png" Height="30" Width="30" Margin="-11,0,-14,-2"/>
                 </Button>
-                <Grid>
-                    <Button x:Name="NextButton"  Click="NextButton_Click" Height="30" Width="30" Background="{x:Null}" Margin="18,-128,-12,128" Grid.Column="1" BorderThickness="0">
-                        <Grid>
-                            <Image Source="Resources/icons8vpered.png" Height="30" Width="30" Margin="-6,-11,-6,-13" Grid.Column="1"/>
-                        </Grid>
-                    </Button>
-                </Grid>
-                <StackPanel x:Name="Column111" Grid.Column="0">
+                <Button x:Name="NextButton"  Click="NextButton_Click" Height="30" Width="30" Background="{x:Null}" Margin="18,-128,-12,128" Grid.Column="1" BorderThickness="0">
+                    <Image Source="Resources/icons8vpered.png" Height="30" Width="30" Margin="-6,-11,-6,-13" Grid.Column="1"/>
+                </Button>
                 <Button x:Name="Distance" Click="DistanceButton_Click" Height="30" Width="30" Background="{x:Null}" BorderThickness="0" Margin="5,-125,35,125">
                     <Image Source="Resources/ymen.png" Margin="-9,-1,-9,1"/>
                 </Button>
                 <Button x:Name="Approximation"  Click="ApproximationButton_Click" Height="30" Width="30" Background="{x:Null}" BorderThickness="0" Margin="32,-156,0,156">
                         <Image Source="Resources/pribliz.png" Width="30" />
-                    </Button>
-            </StackPanel>
-            
-            <Grid>
+                 </Button>
                 <Button x:Name="PenButton"  Click="PenButton_Click" Height="30" Width="30" Background="{x:Null}" Margin="0,-156,0,156" BorderThickness="0">
-                <Grid>
-                            <Image Source="Resources/icons8karand.png" Width="27" Margin="-12,0,-13,0"/>
-                </Grid>
-            </Button>
-            </Grid>
-            <Grid>
-                <Button x:Name="FillButton"  Click="FillButton_Click" Height="30" Width="30" Background="{x:Null}" Margin="0,-157,0,157" BorderThickness="0">
-                <Grid>
-                            <Image Source="Resources/icons8zalivka.png" Width="30" Margin="-12,0,-12,0"/>
-                </Grid>
-            </Button>
-            </Grid>
+                        <Image Source="Resources/icons8karand.png" Width="27" Margin="-12,0,-13,0"/>
+                </Button>
+                 <Button x:Name="FillButton"  Click="FillButton_Click" Height="30" Width="30" Background="{x:Null}" Margin="0,-157,0,157" BorderThickness="0">
+                    <Image Source="Resources/icons8zalivka.png" Width="30" Margin="-12,0,-12,0"/>
+                </Button>
+           
             </StackPanel>
             <Grid Margin="0,-152,0,0">
                 <Border Name="CbmBorder1" Grid.Row="2" Height="27" Width="65" HorizontalAlignment="Left" VerticalAlignment="Top">
@@ -229,43 +215,35 @@
                     </Grid>
                 </Border>
 
-                <Grid Name="Leftgrid1" Grid.Row="2" Height="80" Width="64" HorizontalAlignment="Left" VerticalAlignment="Top"
+                <Grid Name="Leftgrid1" Grid.Row="2" Height="80" Width="67" HorizontalAlignment="Left" VerticalAlignment="Top"
                     Margin="1,28,0,0" Visibility="Hidden">
                     <Polygon Fill="Black" StrokeThickness="2" Stroke="Black"
                              Points="0,8,
                              0,79,
-                             63,79,
-                             63,0,
+                             66,79,
+                             66,0,
                              0,0
                              "/>
                     <Polygon Fill="White" StrokeThickness="1"
                              Points="0,8,
                              0,79,
-                             63,79,
-                             63,0,
+                             66,79,
+                             66,0,
                              0,0" 
                              Stroke="#FF40454E"/>
-                    <Grid Height="97" Width="61" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="1,1,0,0">
+                    <Grid Height="77" Width="67" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="1,1,0,0">
                         <StackPanel Orientation="Vertical">
                             <Button Style="{StaticResource  CmbBtm}">
-                                <Grid>
-                                    <Image Height="25" Source="Resources/icons8-линия-48.png"/>
-                                </Grid>
+                                <Image Height="18" Source="Resources/icons8-линия-48.png"/>
                             </Button>
                             <Button Style="{StaticResource  CmbBtm}">
-                                <Grid>
-                                    <Image Height="25" Source="Resources/icons8-треугольник-48.png"/>
-                                </Grid>
+                                <Image Height="18" Source="Resources/icons8-треугольник-48.png"/>
                             </Button>
                             <Button Style="{StaticResource  CmbBtm}">
-                                <Grid HorizontalAlignment="Right">
-                                    <Image Height="25" Source="Resources/pri.png"/>
-                                </Grid>
+                                <Image Height="18" Source="Resources/pri.png"/>
                             </Button>
                             <Button Style="{StaticResource  CmbBtm}">
-                                <Grid>
-                                    <Image Height="25" Source="Resources/icons8-неотмеченный-круг-60.png"/>
-                                </Grid>
+                                <Image Height="18" Source="Resources/icons8-неотмеченный-круг-60.png"/>
                             </Button>
                         </StackPanel>
                     </Grid>
