@@ -73,7 +73,7 @@
         <StackPanel x:Name="ToolBar" Grid.Column="0" Background="#688AE8">
             <Grid>
                 <Border Name="CbmBorder" Grid.Row="2" Height="27" Width="65" HorizontalAlignment="Left" VerticalAlignment="Top">
-                    <Button Style="{StaticResource ComboboxButton}">
+                    <Button Style="{StaticResource ComboboxButton}" Click="menu_click">
                         <StackPanel Orientation="Horizontal">
                             <Image Height="25" Width="20" Margin="12,0,0,0">
                                 <Image.Style>
@@ -191,7 +191,7 @@
             <Grid Margin="0,-152,0,0">
                 <Border Name="CbmBorder1" Grid.Row="2" Height="27" Width="65" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <Grid>
-                        <Button Style="{StaticResource ComboboxButton}" Name="PrimButton_Сlick">
+                        <Button Style="{StaticResource ComboboxButton}" Click="PrimButton_Сlick">
                             <StackPanel Orientation="Horizontal">
                                 <Image Height="25" Width="20" Margin="12,0,0,0">
                                     <Image.Style>
