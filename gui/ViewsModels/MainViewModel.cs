@@ -15,10 +15,11 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace gui.ViewsModels
+namespace gui
 {
-    class MainViewModel : INotifyPropertyChanged
+    public class MainViewModel : INotifyPropertyChanged
     {
+     
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string prop = "")
         {
@@ -26,20 +27,20 @@ namespace gui.ViewsModels
                 PropertyChanged(this, new PropertyChangedEventArgs(prop));
         }
 
-        private ActionCommand figurePanelCommand;
-        //public ActionCommand FigurePanelCommand
-        //{
-        //    get
-        //    {
-        //        return figurePanelCommand ??
-        //          (figurePanelCommand = new ActionCommand(obj =>
-        //          {
-        //              Phone phone = new Phone();
-        //              Phones.Insert(0, phone);
-        //              SelectedPhone = phone;
-        //          }));
-        //    }
-        //}
+        private ICommand chooseLine = null;
+        public ICommand ChooseLine
+        {
+            get
+            {
+                chooseLine = new ActionCommand(ShowMessage, param => true);
+                return chooseLine;
+            }
+        }
+
+        public void ShowMessage(object obj)
+        {
+            MessageBox.Show("XYU");
+        }
 
 
         //     if (Leftgrid.Visibility == Visibility.Hidden)

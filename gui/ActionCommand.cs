@@ -5,31 +5,107 @@ using System.Windows.Input;
 
 namespace gui
 {
-    public class ActionCommand : Interface.ICommand
+    //public class ActionCommand : ICommand
+    //{
+    //    private Action<object> execute;
+    //    private Func<object, bool> canExecute;
+
+    //    public event EventHandler CanExecuteChanged
+    //    {
+    //        add { CommandManager.RequerySuggested += value; }
+    //        remove { CommandManager.RequerySuggested -= value; }
+    //    }
+
+    //    public ActionCommand(Action<object> execute, Func<object, bool> canExecute = null)
+    //    {
+    //        this.execute = execute;
+    //        this.canExecute = canExecute;
+    //    }
+
+    //    public bool CanExecute(object parameter)
+    //    {
+    //        return true;
+    //    }
+
+    //    public void Execute(object parameter)
+    //    {
+    //        this.execute(parameter);
+    //    }
+    //}
+
+    public class ActionCommand : ICommand
     {
         private Action<object> execute;
-        private Func<object, bool> canExecute;
 
-        public event EventHandler CanExecuteChanged
+        private Predicate<object> canExecute;
+
+        private event EventHandler CanExecuteChangedInternal;
+
+        public ActionCommand(Action<object> execute)
+            : this(execute, DefaultCanExecute)
         {
-            add { CommandManager.RequerySuggested += value; }
-            remove { CommandManager.RequerySuggested -= value; }
         }
 
-        public ActionCommand(Action<object> execute, Func<object, bool> canExecute = null)
+        public ActionCommand(Action<object> execute, Predicate<object> canExecute)
         {
+            if (execute == null)
+            {
+                throw new ArgumentNullException("execute");
+            }
+
+            if (canExecute == null)
+            {
+                throw new ArgumentNullException("canExecute");
+            }
+
             this.execute = execute;
             this.canExecute = canExecute;
         }
 
+        public event EventHandler CanExecuteChanged
+        {
+            add
+            {
+                CommandManager.RequerySuggested += value;
+                this.CanExecuteChangedInternal += value;
+            }
+
+            remove
+            {
+                CommandManager.RequerySuggested -= value;
+                this.CanExecuteChangedInternal -= value;
+            }
+        }
+
         public bool CanExecute(object parameter)
         {
-            return this.canExecute == null || this.canExecute(parameter);
+            return this.canExecute != null && this.canExecute(parameter);
         }
 
         public void Execute(object parameter)
         {
             this.execute(parameter);
+        }
+
+        public void OnCanExecuteChanged()
+        {
+            EventHandler handler = this.CanExecuteChangedInternal;
+            if (handler != null)
+            {
+                //DispatcherHelper.BeginInvokeOnUIThread(() => handler.Invoke(this, EventArgs.Empty));
+                handler.Invoke(this, EventArgs.Empty);
+            }
+        }
+
+        public void Destroy()
+        {
+            this.canExecute = _ => false;
+            this.execute = _ => { return; };
+        }
+
+        private static bool DefaultCanExecute(object parameter)
+        {
+            return true;
         }
     }
 }

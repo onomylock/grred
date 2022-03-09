@@ -1,5 +1,3 @@
-using gui.ViewsModels;
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +23,7 @@ namespace gui
         public MainWindow()
         {
             InitializeComponent();
-            //DataContext = new MainViewModel();
+            DataContext = new MainViewModel();
         }
 
 

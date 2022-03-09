@@ -1,4 +1,5 @@
-﻿<Window x:Class="gui.MainWindow"
+﻿
+    <Window x:Class="gui.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -6,7 +7,9 @@
         xmlns:local="clr-namespace:gui"
         mc:Ignorable="d"
         Title="Графический редактор" Height="600" Width="800" ResizeMode="NoResize">
-
+    <Window.DataContext>
+        <local:MainViewModel/>
+    </Window.DataContext>
     <Window.Resources>
         <Style x:Key="ComboboxButton" TargetType="Button">
             <Setter Property="OverridesDefaultStyle" Value="True"></Setter>
@@ -248,7 +251,7 @@
                              Stroke="#FF40454E"/>
                     <Grid Height="97" Width="61" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="1,1,0,0">
                         <StackPanel Orientation="Vertical">
-                            <Button Style="{StaticResource  CmbBtm}">
+                            <Button Command="{Binding ChooseLine}" Style="{StaticResource  CmbBtm}">
                                 <Grid>
                                     <Image Height="13" Source="../Resources/icons8-линия-48.png"/>
                                 </Grid>
