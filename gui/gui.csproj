@@ -65,6 +65,7 @@
     <Resource Include="Resources\icons8primitiv.png" />
     <Resource Include="Resources\icons8vpered.png" />
     <Resource Include="Resources\icons8zalivka.png" />
+    <Resource Include="Resources\IntersectionButton.png" />
     <Resource Include="Resources\lypamin.png" />
     <Resource Include="Resources\lypaplus.png" />
     <Resource Include="Resources\neactiv_menu.png" />
@@ -72,7 +73,6 @@
     <Resource Include="Resources\pri.png" />
     <Resource Include="Resources\pribliz.png" />
     <Resource Include="Resources\strelka.png" />
-    <Resource Include="Resources\IntersectionButton.png" />
     <Resource Include="Resources\SubtractionButton.png" />
     <Resource Include="Resources\UnionButton.png" />
     <Resource Include="Resources\VertButton.png" />
