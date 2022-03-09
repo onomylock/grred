@@ -38,11 +38,32 @@ namespace GrRed.Geometry.Domain
 
         public bool IsIn(Vector p, double eps)
         {
-            if (p.X + eps >= Gabarit.l && p.X + eps <= Gabarit.r && p.Y + eps <= Gabarit.t && p.Y + eps >= Gabarit.b)
-                if (p.X - eps >= Gabarit.l && p.X - eps <= Gabarit.r && p.Y - eps <= Gabarit.t && p.Y - eps >= Gabarit.b)
-                    return true;
-                else
-                    return false;
+            double side_A;
+            double side_B;
+
+            if (Math.Abs(Math.PI + Angle) % 2.0 * Math.PI <= eps) // Случай, когда угол кратен пи
+            {
+                side_B = Scale.X;
+                side_A = Scale.Y;
+            }
+            else if (Math.Abs(Angle) % 2.0 * Math.PI <= eps) // Случай, когда угол кратен 2пи (0, в частности)
+            {
+                side_A = Scale.X;
+                side_B = Scale.Y;
+            }
+            else                                          // Любой другой случай
+            {
+                side_B = Math.Sqrt(  Math.Pow((Gabarit.r - Gabarit.l), 2) + Math.Pow((Gabarit.t - Gabarit.b), 2)  );
+                side_A = Math.Sqrt(  (4.0 * Scale.Y * Scale.Y) / (Math.Sin(Angle) * Math.Sin(Angle)) - side_B * side_B  );
+            }
+
+            double A_bigger_2 = Math.Abs(side_A) / 2.0;
+            double B_bigger_2 = Math.Abs(side_B) / 2.0;
+
+            double IsInCheck = Math.Abs((p.X - Center.X) * Math.Cos(Math.PI / 4.0 + Angle) / A_bigger_2 + (p.Y - Center.Y) * Math.Sin(Math.PI / 4.0 + Angle) / B_bigger_2) + Math.Abs((p.X - Center.X) * Math.Sin(Math.PI / 4.0 + Angle) / (-A_bigger_2) + (p.Y - Center.Y) * Math.Cos(Math.PI / 4.0 + Angle) / B_bigger_2);
+
+            if (IsInCheck + eps <= Math.Sqrt(2.0) || IsInCheck - eps <= Math.Sqrt(2.0))
+                return true;
             else
                 return false;
         }
