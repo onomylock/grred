@@ -127,6 +127,9 @@
   <data name="angle1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\angle.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="ArrowToDown" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\icons8-развернуть-48.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="ContButton" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ContButton.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -156,9 +159,6 @@
   </data>
   <data name="icons8-развернуть-24" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons8-развернуть-24.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="icons8-развернуть-48" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\icons8-развернуть-48.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="icons8-треугольник-48" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons8-треугольник-48.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>

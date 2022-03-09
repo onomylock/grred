@@ -261,5 +261,10 @@ namespace gui
         {
             ColorContourButton.Background = Brushes.Pink;
         }
+
+        private void ArrowToDownButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
