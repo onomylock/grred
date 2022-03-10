@@ -21,7 +21,7 @@ namespace gui
 {
     public partial class MainViewModel : INotifyPropertyChanged
     {
-        
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         private List<IFigure> figureList = new List<IFigure>();
@@ -39,7 +39,7 @@ namespace gui
         private ICommand mouseDown = null;
         private ICommand selectField = null;
 
-        
+
 
         public MainViewModel() { }
         public MainViewModel(InkCanvas canvas)
@@ -57,8 +57,10 @@ namespace gui
         {
             get
             {
-                createLineCommand = new ActionCommand(createLine, param => true);
-                actionCommands.Push(createLineCommand);
+                createLineCommand = new ActionCommand(obj =>
+                {
+                    actionCommands.Push(createLineCommand);
+                }, param => true);
                 return createLineCommand;
             }
         }
@@ -79,7 +81,6 @@ namespace gui
             get
             {
                 createRectangleCommand = new ActionCommand(createRectangle, param => true);
-                actionCommands.Push(createRectangleCommand);
                 return createRectangleCommand;
             }
         }
@@ -106,7 +107,7 @@ namespace gui
             }
         }
 
-    
+
         public ICommand MouseDown
         {
             get
@@ -128,7 +129,7 @@ namespace gui
 
 
 
-        private void createLine(object obj)
+        private void createLine()
         {
             Path path = new Path();
             LineGrafic lineGrafic = new LineGrafic(paintingCanvas, path);
@@ -171,7 +172,7 @@ namespace gui
             {
                 penIsActive = true;
                 paintingCanvas.EditingMode = InkCanvasEditingMode.Ink;
-            } 
+            }
             else
             {
                 penIsActive = false;
@@ -182,8 +183,31 @@ namespace gui
 
         private void mouseDownHandler(object obj)
         {
-            MessageBox.Show("Privet");
-        }
-    }
+            ICommand choosen = actionCommands.Peek();
+            Point position = Mouse.GetPosition(paintingCanvas);
+            GrRed.Vector mousePos = new GrRed.Vector(position.X, position.Y);
 
+            if (choosen == createLineCommand)
+            {
+                MessageBox.Show("Line");
+                createLine();
+            }
+            else if (choosen == createRectangleCommand)
+            {
+                MessageBox.Show("Triangle");
+                createTriangle(null);
+            }
+            else if (choosen == createRectangleCommand)
+            {
+                MessageBox.Show("Rect");
+                createRectangle(null);
+            }
+            else if (choosen == createEllipseCommand)
+            {
+                MessageBox.Show("Ellipse");
+                createEllipse(null);
+            }
+        }
+
+    }
 }
