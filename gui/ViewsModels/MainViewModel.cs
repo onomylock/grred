@@ -27,12 +27,14 @@ namespace gui
         private List<IFigure> figureList = new List<IFigure>();
         private List<IFigure> selectedFigures = new List<IFigure>();
         private Stack<ICommand> actionCommands = new Stack<ICommand>();
-        private Canvas paintingCanvas;
+        private InkCanvas paintingCanvas;
         private GrRed.Vector startPoint;
+
+        private bool penIsActive = false;
 
 
         public MainViewModel() { }
-        public MainViewModel(Canvas canvas)
+        public MainViewModel(InkCanvas canvas)
         {
             this.paintingCanvas = canvas;
         }
@@ -112,6 +114,19 @@ namespace gui
             }
         }
 
+
+        private ICommand selectField = null;
+        public ICommand SelectField
+        {
+            get
+            {
+                selectField = new ActionCommand(mouseDownHandler, param => true);
+                return selectField;
+            }
+        }
+
+
+
         private void createLine(object obj)
         {
             Path path = new Path();
@@ -169,13 +184,22 @@ namespace gui
 
         private void activatePen(object obj)
         {
-
+            if (!penIsActive)
+            {
+                penIsActive = true;
+                paintingCanvas.EditingMode = InkCanvasEditingMode.Ink;
+            } 
+            else
+            {
+                penIsActive = false;
+                paintingCanvas.EditingMode = InkCanvasEditingMode.None;
+            }
         }
 
 
         private void mouseDownHandler(object obj)
         {
-            MessageBox.Show("Xyu");
+            MessageBox.Show("Privet");
         }
     }
 

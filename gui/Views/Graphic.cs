@@ -11,9 +11,9 @@ namespace gui
 {
     public class EllipseGrafic : IGraphic
     {
-        private readonly Canvas canvas;
+        private readonly InkCanvas canvas;
         private readonly Path path;
-        public EllipseGrafic(Canvas canvas, Path path)
+        public EllipseGrafic(InkCanvas canvas, Path path)
         {
             this.canvas = canvas;
             this.path = path;
@@ -50,9 +50,9 @@ namespace gui
     }
     public class TriangleGrafic : IGraphic
     {
-        private readonly Canvas canvas;
+        private readonly InkCanvas canvas;
         private readonly Path path;
-        public TriangleGrafic(Canvas canvas, Path path)
+        public TriangleGrafic(InkCanvas canvas, Path path)
         {
             this.canvas = canvas;
             this.path = path;
@@ -86,9 +86,9 @@ namespace gui
 
     public class LineGrafic : IGraphic
     {
-        private readonly Canvas canvas;
+        private readonly InkCanvas canvas;
         private readonly Path path;
-        public LineGrafic(Canvas canvas, Path path)
+        public LineGrafic(InkCanvas canvas, Path path)
         {
             this.canvas = canvas;
             this.path = path;
@@ -119,9 +119,9 @@ namespace gui
 
     public class RectangleGrafic : IGraphic
     {
-        private readonly Canvas canvas;
+        private readonly InkCanvas canvas;
         private readonly Path path;
-        public RectangleGrafic(Canvas canvas, Path path)
+        public RectangleGrafic(InkCanvas canvas, Path path)
         {
             this.canvas = canvas;
             this.path = path;

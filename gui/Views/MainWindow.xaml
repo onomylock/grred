@@ -259,14 +259,14 @@
 
 
 
-        <Canvas  x:Name="PaintingCanvas" Grid.Column="1" Background="LightCyan">
+        <InkCanvas EditingMode="None"  x:Name="PaintingCanvas" Grid.Column="1" Background="LightCyan">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseDown">
                     <i:InvokeCommandAction
                             Command="{Binding MouseDown}"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
-        </Canvas>
+        </InkCanvas>
 
 
 
