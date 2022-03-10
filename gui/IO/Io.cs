@@ -9,6 +9,9 @@ using System.IO;
 using System.Windows.Media.Imaging;
 using Newtonsoft.Json;
 
+using iTextSharp;
+using iTextSharp.text.pdf;
+
 
 using GrRed;
 
@@ -60,6 +63,42 @@ namespace GrRed.IO
             {
                 encoder.Save(file);
             }
+        }
+
+        private void CanvasToPDF(Canvas canvas)
+        {
+            Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
+            dlg.FileName = "Canvas"; 
+            dlg.DefaultExt = ".pdf"; 
+            dlg.Filter = "Text documents (.pdf)|*.pdf"; 
+            Nullable<bool> result = dlg.ShowDialog();
+
+            if (result == true)
+            {
+                RenderTargetBitmap renderBitmap = new RenderTargetBitmap((int)canvas.ActualWidth, (int)canvas.ActualHeight + 125, 96d, 96d, PixelFormats.Pbgra32);
+                renderBitmap.Render(canvas);
+
+                PngBitmapEncoder encoder = new PngBitmapEncoder();
+                encoder.Frames.Add(BitmapFrame.Create(renderBitmap));
+
+                byte[] bytes;
+                using (MemoryStream stream = new MemoryStream())
+                {
+                    encoder.Save(stream);
+                    bytes = stream.ToArray();
+                }
+
+                var document = new iTextSharp.text.Document(new iTextSharp.text.Rectangle((float)canvas.ActualWidth, (float)canvas.ActualHeight), 0, 0, 0, 0);
+                iTextSharp.text.Image image = iTextSharp.text.Image.GetInstance(bytes);
+                image.SetAbsolutePosition(0, 0);
+
+                FileStream file = File.Create(dlg.FileName);
+                PdfWriter.GetInstance(document, file);
+                document.Open();
+                document.Add(image);
+                document.Close();
+            }
+
         }
     }
 }
