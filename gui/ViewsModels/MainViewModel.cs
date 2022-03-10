@@ -14,32 +14,51 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using GrRed;
+using GrRed.Geometry.Factory;
 
 namespace gui
 {
     public class MainViewModel : INotifyPropertyChanged
     {
-     
+        
         public event PropertyChangedEventHandler PropertyChanged;
+
+        private List<IFigure> figureList;
+        private Stack<ICommand> actionCommands;
         public void OnPropertyChanged([CallerMemberName] string prop = "")
         {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(prop));
         }
 
-        private ICommand chooseLine = null;
-        public ICommand ChooseLine
+        private ICommand createLineCommand = null;
+        public ICommand CreateLineCommand
         {
             get
             {
-                chooseLine = new ActionCommand(ShowMessage, param => true);
-                return chooseLine;
+                createLineCommand = new ActionCommand(CreateLine, param => true);
+                return createLineCommand;
             }
         }
 
-        public void ShowMessage(object obj)
+        private ICommand createTriangleCommand;
+        public ICommand CreateTriangleCommand
         {
-            MessageBox.Show("XYU");
+            get
+            {
+                createLineCommand = new ActionCommand(ShowMessage, param => true);
+                return createLineCommand;
+            }
+        }
+
+        public void CreateLine(object obj)
+        {
+            Path path = new Path();
+            FigureFactory triangleFabric = FigureFabric.GetFactory("triangle");
+            IFigure triangle = triangleFabric.GetFigure(0, new GrRed.Vector(0, 0), new GrRed.Vector(5, 5));
+            IGraphic triangleGraphic = new TriangleGrafic(PaintingCanvas, path);
+            triangle.Draw()
         }
 
 
@@ -279,4 +298,5 @@ namespace gui
         //    ColorContourButton.Background = Brushes.Pink;
         //}
     }
+
 }
