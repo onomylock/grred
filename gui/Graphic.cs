@@ -5,37 +5,28 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
-
 using GrRed;
 
 namespace gui
-{   
-    // Сделать ссылку на вектор и IGraphic в интерфейс
-    public struct Vector
-    {
-        public double X;
-        public double Y;
-        public Vector(double X, double Y)
-        {
-            this.X = X;
-            this.Y = Y;
-        }
-    }
-    public interface IGraphic
-    {
-        public void AddLines(List<Vector> lines, Grid grid){}
-        public void AddPolyArc(List<Vector> lines, Grid grid){}
-        public void FillPolygon(Path path, Brush brush){}
-    }
-
+{
     public class EllipseGrafic : IGraphic
     {
-        public void AddPolyArc(List<Vector> lines, Grid grid)
+        private readonly Canvas canvas;
+        private readonly Path path;
+        public EllipseGrafic(Canvas canvas, Path path)
+        {
+            this.canvas = canvas;
+            this.path = path;
+        }
+        public void AddLines(IEnumerable<GrRed.Vector> Ilines) { }
+        public void AddPolyArc(IEnumerable<GrRed.Vector> Ilines)
         {
             PathGeometry pathGeom = new PathGeometry();
-            Path path = new Path();
             PathFigure pathFig = new PathFigure();
             ArcSegment arcSegment = new ArcSegment();
+
+            List<GrRed.Vector> lines = Ilines.ToList();
+
             pathFig.StartPoint = new Point(lines[0].X, lines[0].Y);
             arcSegment.Point = new Point(lines[2].X, lines[2].Y);
             //Size size = new Size(25, 10);
@@ -53,24 +44,29 @@ namespace gui
             path.Data = pathGeom;
             path.Stroke = Brushes.Black;
 
-            grid.Children.Add(path);
+            canvas.Children.Add(path);
         }
-
-        public void FillPolygon(Path path, Brush brush)
-        {
-            path.Fill = brush;
-        }
+        public void FillPolygon(object color) => path.Fill = (Brush)color;
     }
     public class TriangleGrafic : IGraphic
     {
-        public void AddLines(List<Vector> lines, Grid grid)
+        private readonly Canvas canvas;
+        private readonly Path path;
+        public TriangleGrafic(Canvas canvas, Path path)
+        {
+            this.canvas = canvas;
+            this.path = path;
+        }
+        public void AddPolyArc(IEnumerable<GrRed.Vector> Ilines) { }
+        public void AddLines(IEnumerable<GrRed.Vector> Ilines)
         {
             //так как каждая фигура у нас придставима как набор линий,
             //то фигура будет выглядить следующим образом
             PathGeometry pathGeom = new PathGeometry();
-            Path path = new Path();
             PolyLineSegment polyLine = new PolyLineSegment(); //множество линий
             PathFigure pathFig = new PathFigure();
+
+            List<GrRed.Vector> lines = Ilines.ToList();
 
             pathFig.StartPoint = new Point(lines[0].X, lines[0].Y); //начальная точка
             for (int i = 1; i <= 2; i++)
@@ -82,25 +78,29 @@ namespace gui
             path.Data = pathGeom;
             path.Stroke = Brushes.Black; //контур
 
-            grid.Children.Add(path); //добавляем на сетку
+            canvas.Children.Add(path);
         }
-
-        public void FillPolygon(Path path, Brush brush)
-        {
-            path.Fill = brush;
-        }
-
+        public void FillPolygon(object color) => path.Fill = (Brush)color;
     }
-    public class SquareGrafic : IGraphic
+    public class RectangleGrafic : IGraphic
     {
-        public void AddLines(List<Vector> lines, Grid grid)
+        private readonly Canvas canvas;
+        private readonly Path path;
+        public RectangleGrafic(Canvas canvas, Path path)
+        {
+            this.canvas = canvas;
+            this.path = path;
+        }
+        public void AddPolyArc(IEnumerable<GrRed.Vector> Ilines) { }
+        public void AddLines(IEnumerable<GrRed.Vector> Ilines)
         {
             //так как каждая фигура у нас придставима как набор линий,
             //то фигура будет выглядить следующим образом
             PathGeometry pathGeom = new PathGeometry();
-            Path path = new Path();
             PolyLineSegment polyLine = new PolyLineSegment(); //множество линий
             PathFigure pathFig = new PathFigure();
+
+            List<GrRed.Vector> lines = Ilines.ToList();
 
             pathFig.StartPoint = new Point(lines[0].X, lines[0].Y); //начальная точка
             for (int i = 1; i <= 3; i++)
@@ -112,13 +112,8 @@ namespace gui
             path.Data = pathGeom;
             path.Stroke = Brushes.Black; //контур
 
-            grid.Children.Add(path); //добавляем на сетку
+            canvas.Children.Add(path);
         }
-
-        public void FillPolygon(Path path, Brush brush)
-        {
-            path.Fill = brush;
-        }
-
+        public void FillPolygon(object color) => path.Fill = (Brush)color;
     }
 }

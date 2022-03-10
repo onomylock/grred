@@ -58,7 +58,7 @@ namespace gui
             FigureFactory triangleFabric = FigureFabric.GetFactory("triangle");
             IFigure triangle = triangleFabric.GetFigure(0, new GrRed.Vector(0, 0), new GrRed.Vector(5, 5));
             IGraphic triangleGraphic = new TriangleGrafic(PaintingCanvas, path);
-            triangle.Draw()
+            triangle.Draw(triangleGraphic);
         }
 
 

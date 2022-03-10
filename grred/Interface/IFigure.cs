@@ -53,10 +53,10 @@ namespace GrRed
     public interface IGraphic
     {
         void AddLines(IEnumerable<Vector> lines);
-        void FillPolygon(IEnumerable<Vector> lines);
+        void FillPolygon(object color);
         void AddPolyArc(IEnumerable<Vector> lines);// каждые 3 точки -- дуга окружности
-        void FillPolyArc(IEnumerable<Vector> lines);// каждые 3 точки -- дуга окружности
     }
+
 
 
     public static class FigureFabric

@@ -281,24 +281,10 @@
 
 
 
+        <Canvas x:Name="PaintingCanvas" Grid.Column="1">
 
+        </Canvas>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-        <Grid x:Name="PaintingGrid" Grid.Column="1">
-
-        </Grid>
 
         <StackPanel x:Name="PrimitiveInfo" Grid.Column="2" Background="#D9EBFF">
             <Grid>

@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+
 namespace gui
 {
     /// <summary>
@@ -25,7 +26,6 @@ namespace gui
             InitializeComponent();
             DataContext = new MainViewModel();
         }
-
 
         private void PrimButton_Ñlick(object sender, RoutedEventArgs e)
         {
