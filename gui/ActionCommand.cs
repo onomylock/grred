@@ -15,8 +15,7 @@ namespace gui
 
         public ActionCommand(Action<object> execute)
             : this(execute, DefaultCanExecute)
-        {
-        }
+        { }
 
         public ActionCommand(Action<object> execute, Predicate<object> canExecute)
         {

@@ -427,23 +427,23 @@
                 </Grid.ColumnDefinitions>
 
                 <StackPanel x:Name="Color21" Grid.Column="0">
-                    <Button x:Name="BlackButton"  Background="Black" Height="13" Width="13" BorderThickness="0"/>
+                    <Button Command="{Binding SelectColor}"  CommandParameter="Black" x:Name="BlackButton" Background="Black" Height="13" Width="13" BorderThickness="0"/>
                 </StackPanel>
 
                 <StackPanel x:Name="Color22" Grid.Column="1">
-                    <Button x:Name="WhiteButton"  Background="White" Height="13" Width="13" BorderThickness="0"/>
+                    <Button x:Name="WhiteButton"  Command="{Binding SelectColor}"  CommandParameter="White" Background="White" Height="13" Width="13" BorderThickness="0"/>
                 </StackPanel>
 
                 <StackPanel x:Name="Color23" Grid.Column="2">
-                    <Button x:Name="RedButton"  Background="Red" Height="13" Width="13" BorderThickness="0"/>
+                    <Button x:Name="RedButton"  Command="{Binding SelectColor}"  CommandParameter="Red" Background="Red" Height="13" Width="13" BorderThickness="0"/>
                 </StackPanel>
 
                 <StackPanel x:Name="Color24" Grid.Column="3">
-                    <Button x:Name="OrangeButton"  Background="Orange" Height="13" Width="13" BorderThickness="0"/>
+                    <Button x:Name="OrangeButton"  Command="{Binding SelectColor}"  CommandParameter="Orange" Background="Orange" Height="13" Width="13" BorderThickness="0"/>
                 </StackPanel>
 
                 <StackPanel x:Name="Color25" Grid.Column="4">
-                    <Button x:Name="YellowButton"  Background="Yellow" Height="13" Width="13" BorderThickness="0"/>
+                    <Button x:Name="YellowButton"  Command="{Binding SelectColor}"  CommandParameter="Yellow" Background="Yellow" Height="13" Width="13" BorderThickness="0"/>
                 </StackPanel>
 
             </Grid>
@@ -459,23 +459,23 @@
                 </Grid.ColumnDefinitions>
 
                 <StackPanel x:Name="Color31" Grid.Column="0">
-                    <Button x:Name="GreenButton"  Background="Green" Height="13" Width="13" BorderThickness="0"/>
+                    <Button x:Name="GreenButton" Command="{Binding SelectColor}"  CommandParameter="Green" Background="Green" Height="13" Width="13" BorderThickness="0"/>
                 </StackPanel>
 
                 <StackPanel x:Name="Color32" Grid.Column="1">
-                    <Button x:Name="BlueButton"  Background="Blue" Height="13" Width="13" BorderThickness="0"/>
+                    <Button x:Name="BlueButton" Command="{Binding SelectColor}"  CommandParameter="Blue"  Background="Blue" Height="13" Width="13" BorderThickness="0"/>
                 </StackPanel>
 
                 <StackPanel x:Name="Color33" Grid.Column="2">
-                    <Button x:Name="DarkBlueButton"  Background="DarkBlue" Height="13" Width="13" BorderThickness="0"/>
+                    <Button x:Name="DarkBlueButton"  Command="{Binding SelectColor}"  CommandParameter="DarkBlue" Background="DarkBlue" Height="13" Width="13" BorderThickness="0"/>
                 </StackPanel>
 
                 <StackPanel x:Name="Color34" Grid.Column="3">
-                    <Button x:Name="PurpleButton"  Background="Purple" Height="13" Width="13" BorderThickness="0"/>
+                    <Button x:Name="PurpleButton"  Command="{Binding SelectColor}"  CommandParameter="Purple" Background="Purple" Height="13" Width="13" BorderThickness="0"/>
                 </StackPanel>
 
                 <StackPanel x:Name="Color35" Grid.Column="4">
-                    <Button x:Name="PinkButton"  Background="Pink" Height="13" Width="13" BorderThickness="0"/>
+                    <Button x:Name="PinkButton" Command="{Binding SelectColor}"  CommandParameter="Pink"  Background="Pink" Height="13" Width="13" BorderThickness="0"/>
                 </StackPanel>
 
             </Grid>

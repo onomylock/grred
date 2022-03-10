@@ -28,9 +28,10 @@ namespace gui
         private List<IFigure> selectedFigures = new List<IFigure>();
         private Stack<ICommand> actionCommands = new Stack<ICommand>();
         private InkCanvas paintingCanvas;
-        private GrRed.Vector startPoint;
+        private Brush currentBrush;
 
         private bool penIsActive = false;
+        private bool canExecute = false;
         private ICommand createLineCommand = null;
         private ICommand createTriangleCommand = null;
         private ICommand createRectangleCommand = null;
@@ -38,6 +39,7 @@ namespace gui
         private ICommand penButton = null;
         private ICommand mouseDown = null;
         private ICommand selectField = null;
+        private ICommand selectColor = null;
 
 
 
@@ -57,10 +59,7 @@ namespace gui
         {
             get
             {
-                createLineCommand = new ActionCommand(obj =>
-                {
-                    actionCommands.Push(createLineCommand);
-                }, param => true);
+                createLineCommand = new ActionCommand(createLine, param => true);
                 return createLineCommand;
             }
         }
@@ -70,7 +69,7 @@ namespace gui
             get
             {
                 createTriangleCommand = new ActionCommand(createTriangle, param => true);
-                actionCommands.Push(createTriangleCommand);
+                bool res = createTriangleCommand.CanExecute(false);
                 return createTriangleCommand;
             }
         }
@@ -91,7 +90,6 @@ namespace gui
             get
             {
                 createEllipseCommand = new ActionCommand(createEllipse, param => true);
-                actionCommands.Push(createEllipseCommand);
                 return createEllipseCommand;
             }
         }
@@ -102,7 +100,6 @@ namespace gui
             get
             {
                 penButton = new ActionCommand(activatePen, param => true);
-                actionCommands.Push(penButton);
                 return penButton;
             }
         }
@@ -128,86 +125,105 @@ namespace gui
         }
 
 
-
-        private void createLine()
+        public ICommand SelectColor
         {
-            Path path = new Path();
-            LineGrafic lineGrafic = new LineGrafic(paintingCanvas, path);
-            List<GrRed.Vector> vector2 = new List<GrRed.Vector>();
-            vector2.Add(new GrRed.Vector(300, 300));
-            vector2.Add(new GrRed.Vector(450, 50));
-            lineGrafic.AddLines(vector2);
-            Brush brush2 = Brushes.Firebrick;
-            lineGrafic.FillPolygon(brush2);
+            get
+            {
+                selectColor = new ActionCommand(changeColor, param => true);
+                return selectColor;
+            }
+        }
+
+
+
+        private void createLine(object obj)
+        {
+            if (canExecute)
+            {
+                Path path = new Path();
+                LineGrafic lineGrafic = new LineGrafic(paintingCanvas, path);
+                List<GrRed.Vector> vector2 = new List<GrRed.Vector>();
+                vector2.Add(new GrRed.Vector(300, 300));
+                vector2.Add(new GrRed.Vector(450, 50));
+                lineGrafic.AddLines(vector2);
+                Brush brush2 = Brushes.Firebrick;
+                lineGrafic.FillPolygon(brush2);
+            } else 
+                actionCommands.Push(createLineCommand);
         }
 
         private void createTriangle(object obj)
         {
-            Path path = new Path();
-            TriangleGrafic triangleGrafic = new TriangleGrafic(paintingCanvas, path);
-            FigureFactory figureFactory = FigureFabric.GetFactory("Triangle");
-            IFigure triangle = figureFactory.GetFigure(0, new GrRed.Vector(50, 50), new GrRed.Vector(10, 10));
+            if (canExecute)
+            {
+                GrRed.Vector start = new GrRed.Vector(50, 50);
+                if (obj != null)
+                    start = (GrRed.Vector)obj;
+                Path path = new Path();
+                TriangleGrafic triangleGrafic = new TriangleGrafic(paintingCanvas, path);
+                FigureFactory figureFactory = FigureFabric.GetFactory("Triangle");
+                IFigure triangle = figureFactory.GetFigure(0, start, new GrRed.Vector(10, 10));
+            } else
+                actionCommands.Push(createTriangleCommand);
         }
 
         private void createRectangle(object obj)
         {
-            Path path = new Path();
-            RectangleGrafic rectangle = new RectangleGrafic(paintingCanvas, path);
-            FigureFactory figureFactory = FigureFabric.GetFactory("Square");
-            IFigure square = figureFactory.GetFigure(0, new GrRed.Vector(50, 50), new GrRed.Vector(10, 10));
+            if (canExecute)
+            {
+                GrRed.Vector start = new GrRed.Vector(50, 50);
+                if (obj != null)
+                    start = (GrRed.Vector)obj;
+                Path path = new Path();
+                RectangleGrafic rectangle = new RectangleGrafic(paintingCanvas, path);
+                FigureFactory figureFactory = FigureFabric.GetFactory("Square");
+                IFigure square = figureFactory.GetFigure(0, start, new GrRed.Vector(10, 10));
+            } else
+                actionCommands.Push(createRectangleCommand);
         }
 
 
         private void createEllipse(object obj)
         {
-            Path path = new Path();
-            EllipseGrafic ellipseGrafic = new EllipseGrafic(paintingCanvas, path);
-            FigureFactory figureFactory = FigureFabric.GetFactory("Ellipse");
-            IFigure ellipse = figureFactory.GetFigure(0, new GrRed.Vector(50, 50), new GrRed.Vector(10, 10));
+            if (canExecute)
+            {
+                GrRed.Vector start = new GrRed.Vector(50, 50);
+                if (obj != null)
+                    start = (GrRed.Vector)obj;
+                Path path = new Path();
+                EllipseGrafic ellipseGrafic = new EllipseGrafic(paintingCanvas, path);
+                FigureFactory figureFactory = FigureFabric.GetFactory("Ellipse");
+                IFigure ellipse = figureFactory.GetFigure(0, start, new GrRed.Vector(10, 10));
+            } else
+                actionCommands.Push(createEllipseCommand);
         }
 
         private void activatePen(object obj)
         {
-            if (!penIsActive)
-            {
-                penIsActive = true;
-                paintingCanvas.EditingMode = InkCanvasEditingMode.Ink;
-            }
-            else
-            {
-                penIsActive = false;
+            if (paintingCanvas.EditingMode == InkCanvasEditingMode.Ink)
                 paintingCanvas.EditingMode = InkCanvasEditingMode.None;
-            }
+            else
+                paintingCanvas.EditingMode = InkCanvasEditingMode.Ink;
         }
 
 
         private void mouseDownHandler(object obj)
         {
-            ICommand choosen = actionCommands.Peek();
+            canExecute = true;
             Point position = Mouse.GetPosition(paintingCanvas);
             GrRed.Vector mousePos = new GrRed.Vector(position.X, position.Y);
-
-            if (choosen == createLineCommand)
-            {
-                MessageBox.Show("Line");
-                createLine();
-            }
-            else if (choosen == createRectangleCommand)
-            {
-                MessageBox.Show("Triangle");
-                createTriangle(null);
-            }
-            else if (choosen == createRectangleCommand)
-            {
-                MessageBox.Show("Rect");
-                createRectangle(null);
-            }
-            else if (choosen == createEllipseCommand)
-            {
-                MessageBox.Show("Ellipse");
-                createEllipse(null);
-            }
+            if (actionCommands.Count != 0)
+                actionCommands.Peek().Execute(mousePos);
+            canExecute = false;
         }
 
+
+        private void changeColor(object obj)
+        {
+            string colorStr = obj.ToString();
+            SolidColorBrush color = (SolidColorBrush)new BrushConverter().ConvertFromString(colorStr);
+            currentBrush = color;
+            paintingCanvas.DefaultDrawingAttributes.Color = (Color)ColorConverter.ConvertFromString(colorStr);
+        }
     }
 }

@@ -52,10 +52,5 @@ namespace gui
                 Left_all_grid.Visibility = Visibility.Visible;
             }
         }
-
-        //private void PaintingCanvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        //{
-
-        //}
     }
 }
