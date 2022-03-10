@@ -25,7 +25,7 @@ namespace gui
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = new MainViewModel();
+            DataContext = new MainViewModel(PaintingCanvas);
         }
 
 
@@ -36,8 +36,8 @@ namespace gui
             else
                 Leftgrid1.Visibility = Visibility.Hidden;
         }
-       
-
+        
+        
         private void menu_click(object sender, RoutedEventArgs e)
         {
             if (Leftgrid.Visibility == Visibility.Hidden)

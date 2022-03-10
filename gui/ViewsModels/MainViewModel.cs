@@ -26,6 +26,15 @@ namespace gui
 
         private List<IFigure> figureList;
         private Stack<ICommand> actionCommands;
+        private Canvas paintingCanvas;
+
+
+        public MainViewModel() { }
+        public MainViewModel(Canvas canvas)
+        {
+            this.paintingCanvas = canvas;
+        }
+
         public void OnPropertyChanged([CallerMemberName] string prop = "")
         {
             if (PropertyChanged != null)
@@ -52,18 +61,80 @@ namespace gui
             }
         }
 
+
+        private ICommand createRectangleCommand = null;
+        public ICommand CreateRectangleCommand
+        {
+            get
+            {
+                createRectangleCommand = new ActionCommand(createRectangle, param => true);
+                return createRectangleCommand;
+            }
+        }
+
+
+        private ICommand createEllipseCommand = null;
+        public ICommand CreateEllipseCommand
+        {
+            get
+            {
+                createEllipseCommand = new ActionCommand(createEllipse, param => true);
+                return createEllipseCommand;
+            }
+        }
+
         private void createLine(object obj)
         {
             Path path = new Path();
-            FigureFactory triangleFabric = FigureFabric.GetFactory("triangle");
-            IFigure triangle = triangleFabric.GetFigure(0, new GrRed.Vector(0, 0), new GrRed.Vector(5, 5));
-            //IGraphic triangleGraphic = new TriangleGrafic(PaintingCanvas, path);
-            //triangle.Draw(triangleGraphic);
+            LineGrafic lineGrafic = new LineGrafic(paintingCanvas, path);
+            List<GrRed.Vector> vector2 = new List<GrRed.Vector>();
+            vector2.Add(new GrRed.Vector(300, 300));
+            vector2.Add(new GrRed.Vector(450, 50));
+            lineGrafic.AddLines(vector2);
+            Brush brush2 = Brushes.Firebrick;
+            lineGrafic.FillPolygon(brush2);
         }
 
-        public void createTriangle(object obj)
+        private void createTriangle(object obj)
         {
-            MessageBox.Show("''");
+            Path path = new Path();
+            TriangleGrafic triangleGrafic = new TriangleGrafic(paintingCanvas, path);
+            List<GrRed.Vector> vector2 = new List<GrRed.Vector>();
+            vector2.Add(new GrRed.Vector(300, 300));
+            vector2.Add(new GrRed.Vector(450, 50));
+            vector2.Add(new GrRed.Vector(100, 200));
+            triangleGrafic.AddLines(vector2);
+            Brush brush2 = Brushes.Firebrick;
+            triangleGrafic.FillPolygon(brush2);
+        }
+
+        private void createRectangle(object obj)
+        {
+            Path path = new Path();
+            RectangleGrafic rectangle = new RectangleGrafic(paintingCanvas, path);
+            List<GrRed.Vector> vector = new List<GrRed.Vector>();
+            vector.Add(new GrRed.Vector(50, 50));
+            vector.Add(new GrRed.Vector(50, 100));
+            vector.Add(new GrRed.Vector(100, 100));
+            vector.Add(new GrRed.Vector(100, 50));
+            rectangle.AddLines(vector);
+            Brush brush = Brushes.Red;
+            rectangle.FillPolygon(brush);
+
+        }
+
+
+        private void createEllipse(object obj)
+        {
+            Path path = new Path();
+            EllipseGrafic ellipseGrafic = new EllipseGrafic(paintingCanvas, path);
+            List<GrRed.Vector> vector1 = new List<GrRed.Vector>();
+            vector1.Add(new GrRed.Vector(500, 500));
+            vector1.Add(new GrRed.Vector(450, 450));
+            vector1.Add(new GrRed.Vector(400, 400));
+            ellipseGrafic.AddPolyArc(vector1);
+            Brush brush1 = Brushes.BlueViolet;
+            ellipseGrafic.FillPolygon(brush1);
         }
 
 
