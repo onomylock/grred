@@ -37,28 +37,33 @@ namespace gui
         {
             get
             {
-                createLineCommand = new ActionCommand(CreateLine, param => true);
+                createLineCommand = new ActionCommand(createLine, param => true);
                 return createLineCommand;
             }
         }
 
-        private ICommand createTriangleCommand;
+        private ICommand createTriangleCommand = null;
         public ICommand CreateTriangleCommand
         {
             get
             {
-                createLineCommand = new ActionCommand(ShowMessage, param => true);
-                return createLineCommand;
+                createTriangleCommand = new ActionCommand(createTriangle, param => true);
+                return createTriangleCommand;
             }
         }
 
-        public void CreateLine(object obj)
+        private void createLine(object obj)
         {
             Path path = new Path();
             FigureFactory triangleFabric = FigureFabric.GetFactory("triangle");
             IFigure triangle = triangleFabric.GetFigure(0, new GrRed.Vector(0, 0), new GrRed.Vector(5, 5));
-            IGraphic triangleGraphic = new TriangleGrafic(PaintingCanvas, path);
-            triangle.Draw(triangleGraphic);
+            //IGraphic triangleGraphic = new TriangleGrafic(PaintingCanvas, path);
+            //triangle.Draw(triangleGraphic);
+        }
+
+        public void createTriangle(object obj)
+        {
+            MessageBox.Show("''");
         }
 
 

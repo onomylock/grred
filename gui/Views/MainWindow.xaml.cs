@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 
+
 namespace gui
 {
     /// <summary>
@@ -27,6 +28,7 @@ namespace gui
             DataContext = new MainViewModel();
         }
 
+
         private void PrimButton_Ñlick(object sender, RoutedEventArgs e)
         {
             if (Leftgrid1.Visibility == Visibility.Hidden) 
@@ -34,6 +36,7 @@ namespace gui
             else
                 Leftgrid1.Visibility = Visibility.Hidden;
         }
+       
 
         private void menu_click(object sender, RoutedEventArgs e)
         {
