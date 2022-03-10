@@ -70,17 +70,33 @@ namespace GrRed.Geometry.Domain
 
         public IFigure Move(Vector delta)
         {
-            throw new NotImplementedException();
+            Vector deltaCenter = Center + delta;
+            return new Square(Angle, deltaCenter, Scale);
         }
 
         public IFigure Reflection(bool axe)
         {
-            throw new NotImplementedException();
+            double newAngle;
+
+            if (axe) // Вертикальное отражение
+            {
+                newAngle = Math.PI - 2.0 * Angle;
+                Vector newScale = new(Scale.X, -Scale.Y);
+                return new Square(newAngle, Center, newScale);
+            }
+            else // Горизонтальное отражение
+            {
+                newAngle = 2.0 * Math.PI - 2.0 * Angle;
+                Vector newScale = new(-Scale.X, Scale.Y);
+                return new Square(newAngle, Center, newScale);
+            }
         }
 
         public IFigure Rotate(double delta)
         {
-            throw new NotImplementedException();
+            double newAngle = Angle + delta;
+            Vector newScale = new(Scale.X * Math.Cos(newAngle), Scale.Y * Math.Cos(newAngle));
+            return new Square(newAngle, Center, newScale);
         }
 
         public IFigure SetScale(double dx, double dy)

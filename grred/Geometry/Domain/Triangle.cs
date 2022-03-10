@@ -5,9 +5,9 @@ namespace GrRed.Geometry.Domain
     class Triangle : IFigure
     {
 
-        private readonly Vector _Center = new(1.0, 1.0);
+        private readonly Vector _Center = new(1.0, 1.0); // Центр тяжести
         private readonly double _Angle = 0.0;
-        private readonly Vector _Scale = new(1.0, 1.0);
+        private readonly Vector _Scale = new(0.866, 0.75);
 
         public Triangle() { }
 
@@ -24,7 +24,7 @@ namespace GrRed.Geometry.Domain
         public Vector Scale => _Scale;
 
         public (double l, double t, double r, double b) Gabarit =>
-            (Center.X - Scale.X, Center.Y + Scale.Y, Center.X + Scale.X, Center.Y - Scale.Y);
+            (Center.X - Scale.X,         Center.Y + Scale.Y * 2.0 / 3.0,       Center.X,       Center.Y - Scale.Y * 2.0 / 3.0);
 
 
         public void Draw(IGraphic graphic)
