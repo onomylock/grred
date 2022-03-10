@@ -45,9 +45,23 @@ namespace GrRed.Geometry.Domain
 
         public bool IsIn(Vector p, double eps)
         {
+            double AxisX;
+            double AxisY;
+
+            // Вычисляем полуоси повёрнутого эллипса
+            if (Math.Abs(Angle) % Math.PI/2.0 <= eps) // Случай, когда угол кратен пи/2 
+            {
+                AxisY = Scale.X;
+                AxisX = Scale.Y;
+            }
+            else                                      // Любой другой случай
+            {
+                AxisX = Scale.X / Math.Cos(Angle);
+                AxisY = Scale.Y / Math.Cos(Angle); 
+            }
+
             // Проверяем (x-x0)^2/a^2 + (y-y0)^2/b^2 +- eps <= 1, но для повёрнутого эллипса (немного другая формула для более общего случая)
-            double AxisX = Scale.X / Math.Cos(Angle); // Полуоси 
-            double AxisY = Scale.Y / Math.Cos(Angle); // повёрнутого эллипса
+            
             double IsInCheck = Math.Pow((p.X - Center.X) * Math.Cos(Angle) + (p.Y - Center.Y) * Math.Sin(Angle), 2) / (AxisX * AxisX) + Math.Pow((-p.X + Center.X) * Math.Sin(Angle) + (p.Y - Center.Y) * Math.Cos(Angle), 2) / (AxisY * AxisY);
 
             if (IsInCheck + eps <= 1.0 || IsInCheck - eps <= 1.0)
@@ -69,12 +83,14 @@ namespace GrRed.Geometry.Domain
             if (axe) // Вертикальное отражение
             {
                 newAngle = Math.PI - 2.0 * Angle;
-                return new Ellipse(newAngle, Center, Scale);
+                Vector newScale = new(Scale.X, -Scale.Y);
+                return new Ellipse(newAngle, Center, newScale);
             }
             else // Горизонтальное отражение
             {
                 newAngle = 2.0 * Math.PI - 2.0 * Angle;
-                return new Ellipse(newAngle, Center, Scale);
+                Vector newScale = new(-Scale.X, Scale.Y);
+                return new Ellipse(newAngle, Center, newScale);
             }
         }
 
