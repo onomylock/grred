@@ -39,6 +39,8 @@ namespace gui
         private ICommand mouseDown = null;
         private ICommand selectField = null;
 
+        
+
         public MainViewModel() { }
         public MainViewModel(InkCanvas canvas)
         {
@@ -104,7 +106,6 @@ namespace gui
             }
         }
 
-
     
         public ICommand MouseDown
         {
@@ -143,29 +144,16 @@ namespace gui
         {
             Path path = new Path();
             TriangleGrafic triangleGrafic = new TriangleGrafic(paintingCanvas, path);
-            List<GrRed.Vector> vector2 = new List<GrRed.Vector>();
-            vector2.Add(new GrRed.Vector(300, 300));
-            vector2.Add(new GrRed.Vector(450, 50));
-            vector2.Add(new GrRed.Vector(100, 200));
-            triangleGrafic.AddLines(vector2);
-            Brush brush2 = Brushes.Firebrick;
-            triangleGrafic.FillPolygon(brush2);
-
+            FigureFactory figureFactory = FigureFabric.GetFactory("Triangle");
+            IFigure triangle = figureFactory.GetFigure(0, new GrRed.Vector(50, 50), new GrRed.Vector(10, 10));
         }
 
         private void createRectangle(object obj)
         {
             Path path = new Path();
             RectangleGrafic rectangle = new RectangleGrafic(paintingCanvas, path);
-            List<GrRed.Vector> vector = new List<GrRed.Vector>();
-            vector.Add(new GrRed.Vector(50, 50));
-            vector.Add(new GrRed.Vector(50, 100));
-            vector.Add(new GrRed.Vector(100, 100));
-            vector.Add(new GrRed.Vector(100, 50));
-            rectangle.AddLines(vector);
-            Brush brush = Brushes.Red;
-            rectangle.FillPolygon(brush);
-
+            FigureFactory figureFactory = FigureFabric.GetFactory("Square");
+            IFigure square = figureFactory.GetFigure(0, new GrRed.Vector(50, 50), new GrRed.Vector(10, 10));
         }
 
 
@@ -173,13 +161,8 @@ namespace gui
         {
             Path path = new Path();
             EllipseGrafic ellipseGrafic = new EllipseGrafic(paintingCanvas, path);
-            List<GrRed.Vector> vector1 = new List<GrRed.Vector>();
-            vector1.Add(new GrRed.Vector(500, 500));
-            vector1.Add(new GrRed.Vector(450, 450));
-            vector1.Add(new GrRed.Vector(400, 400));
-            ellipseGrafic.AddPolyArc(vector1);
-            Brush brush1 = Brushes.BlueViolet;
-            ellipseGrafic.FillPolygon(brush1);
+            FigureFactory figureFactory = FigureFabric.GetFactory("Ellipse");
+            IFigure ellipse = figureFactory.GetFigure(0, new GrRed.Vector(50, 50), new GrRed.Vector(10, 10));
         }
 
         private void activatePen(object obj)

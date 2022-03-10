@@ -53,9 +53,9 @@ namespace gui
             }
         }
 
-        private void PaintingCanvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
+        //private void PaintingCanvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        //{
 
-        }
+        //}
     }
 }

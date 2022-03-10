@@ -28,7 +28,6 @@ namespace GrRed.Geometry.Domain
 
         public void Draw(IGraphic graphic)
         {
-            throw new NotImplementedException();
         }
 
         public IFigure Intersection(IFigure fig2)

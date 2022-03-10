@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 
 using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace GrRed.Geometry.Domain
@@ -35,7 +36,16 @@ namespace GrRed.Geometry.Domain
 
         public void Draw(IGraphic graphic)
         {
-            throw new NotImplementedException();
+            //Path path = new Path();
+            //EllipseGrafic ellipseGrafic = new EllipseGrafic(paintingCanvas, path);
+            List<Vector> vector1 = new List<GrRed.Vector>();
+            vector1.Add(new GrRed.Vector(500, 500));
+            vector1.Add(new GrRed.Vector(450, 450));
+            vector1.Add(new GrRed.Vector(400, 400));
+            graphic.AddPolyArc(vector1);
+            //Brush brush1 = Brushes.BlueViolet;
+            //ellipseGrafic.FillPolygon(brush1);
+
         }
 
         public IFigure Intersection(IFigure fig2)
