@@ -31,7 +31,13 @@ namespace gui
         private GrRed.Vector startPoint;
 
         private bool penIsActive = false;
-
+        private ICommand createLineCommand = null;
+        private ICommand createTriangleCommand = null;
+        private ICommand createRectangleCommand = null;
+        private ICommand createEllipseCommand = null;
+        private ICommand penButton = null;
+        private ICommand mouseDown = null;
+        private ICommand selectField = null;
 
         public MainViewModel() { }
         public MainViewModel(InkCanvas canvas)
@@ -45,7 +51,6 @@ namespace gui
                 PropertyChanged(this, new PropertyChangedEventArgs(prop));
         }
 
-        private ICommand createLineCommand = null;
         public ICommand CreateLineCommand
         {
             get
@@ -56,7 +61,6 @@ namespace gui
             }
         }
 
-        private ICommand createTriangleCommand = null;
         public ICommand CreateTriangleCommand
         {
             get
@@ -68,7 +72,6 @@ namespace gui
         }
 
 
-        private ICommand createRectangleCommand = null;
         public ICommand CreateRectangleCommand
         {
             get
@@ -80,7 +83,6 @@ namespace gui
         }
 
 
-        private ICommand createEllipseCommand = null;
         public ICommand CreateEllipseCommand
         {
             get
@@ -92,7 +94,6 @@ namespace gui
         }
 
 
-        private ICommand penButton = null;
         public ICommand PenButton
         {
             get
@@ -104,7 +105,7 @@ namespace gui
         }
 
 
-        private ICommand mouseDown = null;
+    
         public ICommand MouseDown
         {
             get
@@ -115,7 +116,6 @@ namespace gui
         }
 
 
-        private ICommand selectField = null;
         public ICommand SelectField
         {
             get
