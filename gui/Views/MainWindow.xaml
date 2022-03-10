@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:gui"
+        xmlns:local="clr-namespace:gui" xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" xmlns:mvvm="http://www.galasoft.ch/mvvmlight"
         mc:Ignorable="d"
         Title="Графический редактор" Height="600" Width="850" ResizeMode="NoResize">
 
@@ -169,7 +169,7 @@
                 <Button x:Name="Approximation"   Height="30" Width="30" Background="{x:Null}" BorderThickness="0" Margin="32,-156,0,156">
                     <Image Source="../Resources/pribliz.png" Width="30" />
                 </Button>
-                <Button x:Name="PenButton"   Height="30" Width="30" Background="{x:Null}" Margin="0,-156,0,156" BorderThickness="0">
+                <Button Command="{Binding PenButton}" x:Name="PenButton"   Height="30" Width="30" Background="{x:Null}" Margin="0,-156,0,156" BorderThickness="0">
                     <Image Source="../Resources/icons8karand.png" Width="27" Margin="-12,0,-13,0"/>
                 </Button>
                 <Button x:Name="FillButton"   Height="30" Width="30" Background="{x:Null}" Margin="0,-157,0,157" BorderThickness="0">
@@ -259,8 +259,13 @@
 
 
 
-        <Canvas x:Name="PaintingCanvas" Grid.Column="1">
-
+        <Canvas  x:Name="PaintingCanvas" Grid.Column="1" Background="LightCyan">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseDown">
+                    <i:InvokeCommandAction
+                            Command="{Binding MouseDown}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
         </Canvas>
 
 

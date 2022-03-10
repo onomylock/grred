@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Interactivity;
 
 
 
@@ -50,6 +51,11 @@ namespace gui
                 Leftgrid.Visibility = Visibility.Hidden;
                 Left_all_grid.Visibility = Visibility.Visible;
             }
+        }
+
+        private void PaintingCanvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+
         }
     }
 }
