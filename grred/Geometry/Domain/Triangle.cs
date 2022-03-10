@@ -2,6 +2,7 @@
 
 using Newtonsoft.Json;
 using System.Runtime.Serialization;
+using System.Collections.Generic;
 
 namespace GrRed.Geometry.Domain
 {
@@ -37,7 +38,17 @@ namespace GrRed.Geometry.Domain
 
         public void Draw(IGraphic graphic)
         {
-            throw new NotImplementedException();
+            //Path path = new Path();
+            //LineGrafic lineGrafic = new LineGrafic(paintingCanvas, path);
+            List<Vector> vector2 = new List<Vector>();
+            vector2.Add(Center);
+            vector2.Add(Scale);
+            vector2.Add(new Vector(Scale.X, Center.Y));
+            graphic.AddLines(vector2);
+            //object brush2 = "#ffc0cb";
+
+            //Brush brush2 = Brushes.Firebrick;
+            //graphic.FillPolygon(brush2);
         }
 
         public IFigure Intersection(IFigure fig2)

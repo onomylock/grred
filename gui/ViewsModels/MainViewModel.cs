@@ -146,6 +146,7 @@ namespace gui
             TriangleGrafic triangleGrafic = new TriangleGrafic(paintingCanvas, path);
             FigureFactory figureFactory = FigureFabric.GetFactory("Triangle");
             IFigure triangle = figureFactory.GetFigure(0, new GrRed.Vector(50, 50), new GrRed.Vector(10, 10));
+            triangle.Draw(triangleGrafic);
         }
 
         private void createRectangle(object obj)
