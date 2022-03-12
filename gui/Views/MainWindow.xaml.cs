@@ -30,27 +30,27 @@ namespace gui
         }
 
 
-        private void PrimButton_Ñlick(object sender, RoutedEventArgs e)
-        {
-            if (Leftgrid1.Visibility == Visibility.Hidden) 
-                Leftgrid1.Visibility = Visibility.Visible;
-            else
-                Leftgrid1.Visibility = Visibility.Hidden;
-        }
+        //private void PrimButton_Ñlick(object sender, RoutedEventArgs e)
+        //{
+        //    if (Leftgrid1.Visibility == Visibility.Hidden) 
+        //        Leftgrid1.Visibility = Visibility.Visible;
+        //    else
+        //        Leftgrid1.Visibility = Visibility.Hidden;
+        //}
         
         
-        private void menu_click(object sender, RoutedEventArgs e)
-        {
-            if (Leftgrid.Visibility == Visibility.Hidden)
-            {
-                Leftgrid.Visibility = Visibility.Visible;
-                Left_all_grid.Visibility = Visibility.Hidden;
-            }
-            else
-            {
-                Leftgrid.Visibility = Visibility.Hidden;
-                Left_all_grid.Visibility = Visibility.Visible;
-            }
-        }
+        //private void menu_click(object sender, RoutedEventArgs e)
+        //{
+        //    if (Leftgrid.Visibility == Visibility.Hidden)
+        //    {
+        //        Leftgrid.Visibility = Visibility.Visible;
+        //        Left_all_grid.Visibility = Visibility.Hidden;
+        //    }
+        //    else
+        //    {
+        //        Leftgrid.Visibility = Visibility.Hidden;
+        //        Left_all_grid.Visibility = Visibility.Visible;
+        //    }
+        //}
     }
 }

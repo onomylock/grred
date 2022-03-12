@@ -75,8 +75,8 @@
         </Grid.ColumnDefinitions>
 
         <StackPanel x:Name="ToolBar" Grid.Column="0" Background="#688AE8">
-            <Grid>
-                <Border Name="CbmBorder" Grid.Row="2" Height="30" Width="65" HorizontalAlignment="Left" VerticalAlignment="Top">
+
+            <!--<Border Name="CbmBorder" Grid.Row="2" Height="30" Width="65" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <Button Style="{StaticResource ComboboxButton}" Click="menu_click">
                         <StackPanel Orientation="Horizontal">
                             <Image Height="25" Width="20" Margin="12,0,0,0">
@@ -154,7 +154,7 @@
                         </StackPanel>
                     </Grid>
                 </Grid>
-            </Grid>
+ 
 
             <StackPanel Name="Left_all_grid">
                 <Button Command="{Binding BackButton}" x:Name="BackButton"   Width="30" Height="30" Background="{x:Null}" HorizontalAlignment="Left" Margin="5,-98,0,98" BorderThickness="0">
@@ -182,12 +182,14 @@
                     <Image Source="../Resources/icons8-ochistit-korzinu-50.png" Width="30" Margin="-12,0,-12,0"/>
                 </Button>
             </StackPanel>
-            <Grid Margin="0,-153,0,0" Height="155">
+            -->
+            <!--<Grid Margin="0,-153,0,0" Height="155">
                 <Border Name="CbmBorder1" Grid.Row="2" Height="27" Width="65" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <Grid>
                         <Button Style="{StaticResource ComboboxButton}" Click="PrimButton_Сlick">
                             <StackPanel Orientation="Horizontal">
-                                <Image Height="25" Width="25" Margin="12,0,0,0">
+                                -->
+            <!--<Image Height="25" Width="25" Margin="12,0,0,0">
                                     <Image.Style>
                                         <Style TargetType="{x:Type Image}">
                                             <Setter Property="Source" Value="../Resources/pri.png"/>
@@ -218,7 +220,8 @@
                                             </Style.Triggers>
                                         </Style>
                                     </Image.Style>
-                                </Image>
+                                </Image>-->
+            <!--
                             </StackPanel>
                         </Button>
                     </Grid>
@@ -255,9 +258,35 @@
                                 <Image Height="18" Source="../Resources/icons8-неотмеченный-круг-60.png" Margin ="18 0 0 0"/>
                             </Button>
                         </StackPanel>
-                    </Grid>
-                </Grid>
-            </Grid>
+                    </Grid>-->
+            <!--</Grid>
+            </Grid>-->
+
+            <Menu Margin="0,10,0,10" Background="#688AE8" Width="35" Height="35">
+                <MenuItem Height="33" Width="34" >
+
+                    <MenuItem.Icon>
+                        <Image  Source="../Resources/activ_Menu.png" Margin="-3,-13,-14,-13" />
+                    </MenuItem.Icon>
+                    <MenuItem Header="Создать" ></MenuItem>
+                    <MenuItem Header="Открыть" ></MenuItem>
+                    <MenuItem Header="Сохранить" ></MenuItem>
+                    <MenuItem Header="Сохранить как" ></MenuItem>
+                    <MenuItem Header="Справка" ></MenuItem>
+                </MenuItem>
+            </Menu>
+
+
+            <ComboBox>
+                <ComboBox.Background>
+                    <ImageBrush ImageSource="/Resources/squarePrimitiv.png"/>
+                </ComboBox.Background>
+                <Image Source="../Resources/linePrimitiv.png" Width="25"/>
+                <Image Source="../Resources/trianglePrimitiv.png" Width="25"/>
+                <Image Source="../Resources/squarePrimitiv.png" Width="25"/>
+                <Image Source="../Resources/brokenLinePrimitiv.png" Width="25"/>
+                <Image Source="../Resources/circlePrimitiv.png" Width="25" />
+            </ComboBox>
             
         </StackPanel>
 
