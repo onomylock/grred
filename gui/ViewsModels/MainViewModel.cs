@@ -41,6 +41,13 @@ namespace gui
         private ICommand selectField = null;
         private ICommand selectColor = null;
 
+        //private ICommand YkazButton = null;
+        //private ICommand MysorButton = null;
+        //private ICommand FillButton = null;
+        //private ICommand ApproximationButton = null;
+        //private ICommand DistanceButton = null;
+        //private ICommand NextButton = null;
+        //private ICommand BackButton = null;       
 
 
         public MainViewModel() { }
