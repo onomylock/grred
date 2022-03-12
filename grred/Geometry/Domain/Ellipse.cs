@@ -23,6 +23,11 @@ namespace GrRed.Geometry.Domain
             _Scale = Scale;
         }
 
+        public Ellipse(IEnumerable<Vector> Points)
+        {
+
+        }
+
         public string TypeName => "Ellipse";
         [DataMember]
         public double Angle => _Angle;
@@ -59,7 +64,7 @@ namespace GrRed.Geometry.Domain
             double AxisY;
 
             // Вычисляем полуоси повёрнутого эллипса
-            if (Math.Abs(Angle) % Math.PI/2.0 <= eps) // Случай, когда угол кратен пи/2 
+            if (Math.Abs(Angle) % Math.PI / 2.0 <= eps) // Случай, когда угол кратен пи/2 
             {
                 AxisY = Scale.X;
                 AxisX = Scale.Y;
@@ -67,11 +72,11 @@ namespace GrRed.Geometry.Domain
             else                                      // Любой другой случай
             {
                 AxisX = Scale.X / Math.Cos(Angle);
-                AxisY = Scale.Y / Math.Cos(Angle); 
+                AxisY = Scale.Y / Math.Cos(Angle);
             }
 
             // Проверяем (x-x0)^2/a^2 + (y-y0)^2/b^2 +- eps <= 1, но для повёрнутого эллипса (немного другая формула для более общего случая)
-            
+
             double IsInCheck = Math.Pow((p.X - Center.X) * Math.Cos(Angle) + (p.Y - Center.Y) * Math.Sin(Angle), 2) / (AxisX * AxisX) + Math.Pow((-p.X + Center.X) * Math.Sin(Angle) + (p.Y - Center.Y) * Math.Cos(Angle), 2) / (AxisY * AxisY);
 
             if (IsInCheck + eps <= 1.0 || IsInCheck - eps <= 1.0)

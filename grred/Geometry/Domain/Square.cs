@@ -3,6 +3,8 @@
 using Newtonsoft.Json;
 using System.Runtime.Serialization;
 
+using System.Collections.Generic;
+
 namespace GrRed.Geometry.Domain
 {
     [DataContract]
@@ -20,6 +22,11 @@ namespace GrRed.Geometry.Domain
             _Center = Center;
             _Angle = Angle;
             _Scale = Scale;
+        }
+
+        public Square(IEnumerable<Vector> Points)
+        {
+
         }
 
         public string TypeName => "Square";
@@ -60,8 +67,8 @@ namespace GrRed.Geometry.Domain
             }
             else                                          // Любой другой случай
             {
-                side_B = Math.Sqrt(  Math.Pow((Gabarit.r - Gabarit.l), 2) + Math.Pow((Gabarit.t - Gabarit.b), 2)  );
-                side_A = Math.Sqrt(  (4.0 * Scale.Y * Scale.Y) / (Math.Sin(Angle) * Math.Sin(Angle)) - side_B * side_B  );
+                side_B = Math.Sqrt(Math.Pow((Gabarit.r - Gabarit.l), 2) + Math.Pow((Gabarit.t - Gabarit.b), 2));
+                side_A = Math.Sqrt((4.0 * Scale.Y * Scale.Y) / (Math.Sin(Angle) * Math.Sin(Angle)) - side_B * side_B);
             }
 
             double A_bigger_2 = Math.Abs(side_A) / 2.0;
