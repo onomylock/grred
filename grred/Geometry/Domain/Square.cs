@@ -3,6 +3,8 @@
 using Newtonsoft.Json;
 using System.Runtime.Serialization;
 
+using System.Collections.Generic;
+
 namespace GrRed.Geometry.Domain
 {
     [DataContract]
