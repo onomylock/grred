@@ -130,6 +130,12 @@
   <data name="ArrowToDown" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons8-развернуть-48.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="brokenLinePrimitiv" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\brokenLinePrimitiv.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="circlePrimitiv" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\circlePrimitiv.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="ContButton" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ContButton.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -151,23 +157,11 @@
   <data name="icons8-квадратный-спиннер-40" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\icons8-квадратный-спиннер-40.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="icons8-линия-48" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\icons8-линия-48.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="icons8-ломаная-кривая-50" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\icons8-ломаная-кривая-50.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="icons8-меню-50" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons8-меню-50.ico;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="icons8-неотмеченный-круг-60" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\icons8-неотмеченный-круг-60.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="icons8-развернуть-24" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons8-развернуть-24.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="icons8-треугольник-48" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\icons8-треугольник-48.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="icons8-шеврон-вправо-60" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons8-шеврон-вправо-60.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -178,9 +172,6 @@
   <data name="icons8nazad" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons8nazad.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="icons8primitiv" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\icons8primitiv.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="icons8vpered" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons8vpered.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -189,6 +180,9 @@
   </data>
   <data name="IntersectionButton" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\IntersectionButton.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="linePrimitiv" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\linePrimitiv.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="lypamin" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\lypamin.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -208,11 +202,17 @@
   <data name="pribliz" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icons8-приблизить-30.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="squarePrimitiv" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\squarePrimitiv.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="strelka" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\strelka.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="SubtractionButton" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\SubtractionButton.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="trianglePrimitiv" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\trianglePrimitiv.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="UnionButton" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\UnionButton.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
