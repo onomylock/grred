@@ -12,6 +12,8 @@
     <None Remove="Resources\angle.png" />
     <None Remove="Resources\ContButton.png" />
     <None Remove="Resources\HorButton.png" />
+    <None Remove="Resources\icons8-kursor-64.png" />
+    <None Remove="Resources\icons8-ochistit-korzinu-50.png" />
     <None Remove="Resources\icons8-заливка-64.ico" />
     <None Remove="Resources\icons8-квадратный-спиннер-40.png" />
     <None Remove="Resources\icons8-линия-48.png" />
@@ -55,6 +57,8 @@
     <Resource Include="Resources\angle.png" />
     <Resource Include="Resources\ContButton.png" />
     <Resource Include="Resources\HorButton.png" />
+    <Resource Include="Resources\icons8-kursor-64.png" />
+    <Resource Include="Resources\icons8-ochistit-korzinu-50.png" />
     <Resource Include="Resources\icons8-заливка-64.ico" />
     <Resource Include="Resources\icons8-квадратный-спиннер-40.png" />
     <Resource Include="Resources\icons8-линия-48.png" />
