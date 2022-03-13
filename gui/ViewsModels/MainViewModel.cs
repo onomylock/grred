@@ -24,22 +24,22 @@ namespace gui
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private List<IFigure> figureList = new List<IFigure>();
-        private List<IFigure> selectedFigures = new List<IFigure>();
-        private Stack<ICommand> actionCommands = new Stack<ICommand>();
-        private InkCanvas paintingCanvas;
-        private Brush currentBrush;
+        public List<IFigure> figureList = new List<IFigure>();
+        public List<IFigure> selectedFigures = new List<IFigure>();
+        public Stack<ICommand> actionCommands = new Stack<ICommand>();
+        public InkCanvas paintingCanvas;
+        public Brush currentBrush;
 
-        private bool penIsActive = false;
-        private bool canExecute = false;
-        private ICommand createLineCommand = null;
-        private ICommand createTriangleCommand = null;
-        private ICommand createRectangleCommand = null;
-        private ICommand createEllipseCommand = null;
-        private ICommand penButton = null;
-        private ICommand mouseDown = null;
-        private ICommand selectField = null;
-        private ICommand selectColor = null;
+        public bool penIsActive = false;
+        public bool canExecute = false;
+        public ICommand createLineCommand = null;
+        public ICommand createTriangleCommand = null;
+        public ICommand createRectangleCommand = null;
+        public ICommand createEllipseCommand = null;
+        public ICommand penButton = null;
+        public ICommand mouseDown = null;
+        public ICommand selectField = null;
+        public ICommand selectColor = null;
 
 
 
@@ -136,7 +136,7 @@ namespace gui
 
 
 
-        private void createLine(object obj)
+        public void createLine(object obj)
         {
             if (canExecute)
             {
@@ -152,7 +152,7 @@ namespace gui
                 actionCommands.Push(createLineCommand);
         }
 
-        private void createTriangle(object obj)
+        public void createTriangle(object obj)
         {
             if (canExecute)
             {
@@ -167,7 +167,7 @@ namespace gui
                 actionCommands.Push(createTriangleCommand);
         }
 
-        private void createRectangle(object obj)
+        public void createRectangle(object obj)
         {
             if (canExecute)
             {
@@ -183,7 +183,7 @@ namespace gui
         }
 
 
-        private void createEllipse(object obj)
+        public void createEllipse(object obj)
         {
             if (canExecute)
             {
@@ -198,7 +198,7 @@ namespace gui
                 actionCommands.Push(createEllipseCommand);
         }
 
-        private void activatePen(object obj)
+        public void activatePen(object obj)
         {
             if (paintingCanvas.EditingMode == InkCanvasEditingMode.Ink)
                 paintingCanvas.EditingMode = InkCanvasEditingMode.None;
@@ -207,7 +207,7 @@ namespace gui
         }
 
 
-        private void mouseDownHandler(object obj)
+        public void mouseDownHandler(object obj)
         {
             canExecute = true;
             Point position = Mouse.GetPosition(paintingCanvas);
@@ -218,7 +218,7 @@ namespace gui
         }
 
 
-        private void changeColor(object obj)
+        public void changeColor(object obj)
         {
             string colorStr = obj.ToString();
             SolidColorBrush color = (SolidColorBrush)new BrushConverter().ConvertFromString(colorStr);

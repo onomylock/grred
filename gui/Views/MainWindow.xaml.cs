@@ -52,5 +52,10 @@ namespace gui
                 Left_all_grid.Visibility = Visibility.Visible;
             }
         }
+
+        public InkCanvas GetCanvas()
+        {
+            return PaintingCanvas;
+        }
     }
 }

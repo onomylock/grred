@@ -4,11 +4,15 @@ using gui.Interface;
 using Newtonsoft.Json;
 using gui;
 using NUnit.Framework;
+using System.Drawing;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace TestProject
 {
     public class Tests
     {
+        private MainViewModel model;
         [SetUp]
         public void Setup()
         {
@@ -25,21 +29,13 @@ namespace TestProject
         //    Assert.AreEqual(0.0, ellipse2.Center.Y);
         //}
         [Test]
-        public void Test2()
+        public void TestColorRed()
         {
-            var ellipse = new EllipseFactory().GetFigure(3, new Vector(1, 0), new Vector(2, 2));
-            var settings = new JsonSerializerSettings()
-            {
-                Formatting = Formatting.Indented, 
-                TypeNameHandling = TypeNameHandling.All
-            };
-
-            var str=JsonConvert.SerializeObject(ellipse,settings);
-            var ellipse2 = JsonConvert.DeserializeObject(str,settings);
-            Assert.AreEqual("GrRed.Geometry.Domain.Ellipse", ellipse2.GetType().FullName);
-            var ellipse3= ellipse2 as IFigure;
-            Assert.AreEqual(1.0, ellipse3.Center.X);
-            Assert.AreEqual(0.0, ellipse3.Center.Y);
+            InkCanvas canvas = new();
+            model = new MainViewModel(canvas);
+            var color = model.SelectColor;
+            color.Execute("Red");
+            Assert.AreEqual(model.paintingCanvas.DefaultDrawingAttributes.Color, Color.Red);
         }
     }
 }
