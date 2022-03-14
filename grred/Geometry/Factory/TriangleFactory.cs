@@ -2,7 +2,7 @@
 
 namespace GrRed.Geometry.Factory
 {
-    class TriangleFactory : FigureFactory
+    public class TriangleFactory : FigureFactory
     {
         public override IFigure GetFigure(double Angle, Vector Center, Vector Scale)
         {
