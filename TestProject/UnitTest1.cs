@@ -92,7 +92,6 @@ namespace TestProject
         public void Move_ellips()
         {
             var elipse = new EllipseFactory().GetFigure(0, new Vector(0, 0), new Vector(5, 5));
-            var elipse2 = new EllipseFactory().GetFigure(0, new Vector(1, 1), new Vector(5, 5));
             var delta = new Vector(1, 1);
 
             Assert.AreEqual(elipse2, elipse.Move(delta));
