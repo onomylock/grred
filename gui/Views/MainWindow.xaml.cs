@@ -30,15 +30,15 @@ namespace gui
         }
 
 
-        private void PrimButton_Ñlick(object sender, RoutedEventArgs e)
+        private void PrimButton_Click(object sender, RoutedEventArgs e)
         {
-            if (Leftgrid1.Visibility == Visibility.Hidden) 
+            if (Leftgrid1.Visibility == Visibility.Hidden)
                 Leftgrid1.Visibility = Visibility.Visible;
             else
                 Leftgrid1.Visibility = Visibility.Hidden;
         }
-        
-        
+
+
         private void menu_click(object sender, RoutedEventArgs e)
         {
             if (Leftgrid.Visibility == Visibility.Hidden)
