@@ -150,19 +150,29 @@
                     </Style>
                 </ComboBox.ItemContainerStyle>
                 <ComboBoxItem>
-                    <Image x:Name="temp" Source="../Resources/linePrimitiv.png" Width="25" />
+                    <Button Command ="{Binding CreateLineCommand}">
+                        <Image x:Name="temp" Source="../Resources/linePrimitiv.png" Width="25" />
+                    </Button>
                 </ComboBoxItem>
                 <ComboBoxItem>
-                    <Image Source="../Resources/trianglePrimitiv.png" Width="25"/>
+                    <Button Command ="{Binding CreateTriangleCommand}">
+                        <Image Source="../Resources/trianglePrimitiv.png" Width="25"/>
+                     </Button>
                 </ComboBoxItem>
                 <ComboBoxItem IsSelected="True">
-                    <Image Source="../Resources/squarePrimitiv.png" Width="25"/>
+                    <Button Command ="{Binding CreateRectangleCommand}">
+                        <Image Source="../Resources/squarePrimitiv.png" Width="25"/>
+                    </Button>
                 </ComboBoxItem>
                 <ComboBoxItem>
-                    <Image Source="../Resources/brokenLinePrimitiv.png" Width="25"/>
+                    <Button >
+                        <Image Source="../Resources/brokenLinePrimitiv.png" Width="25"/>
+                    </Button>
                 </ComboBoxItem>
                 <ComboBoxItem>
-                    <Image Source="../Resources/circlePrimitiv.png" Width="25" />
+                    <Button Command ="{Binding CreateEllipseCommand}">
+                        <Image Source="../Resources/circlePrimitiv.png" Width="25" />
+                    </Button>
                 </ComboBoxItem>
             </ComboBox>
         </StackPanel>
@@ -207,7 +217,7 @@
                     <TextBlock Text="X"  />
                 </StackPanel>
                 <StackPanel x:Name="PrimitiveLocation1" Grid.Column="1">
-                    <TextBox Background="{x:Null}" />
+                    <TextBox Background="{x:Null}"/>
                 </StackPanel>
                 <StackPanel x:Name="PrimitiveLocationY1" Grid.Column="2" Margin="10,0,0,0">
                     <TextBlock Text="Y" />

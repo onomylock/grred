@@ -1,19 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
+
 using GrRed;
 using GrRed.Geometry.Factory;
 
@@ -21,25 +14,48 @@ namespace gui
 {
     public partial class MainViewModel : INotifyPropertyChanged
     {
+        public enum Mode
+        {
+            Сursor,
+            Pencil,
+            Line,
+            Triangle,
+            Ellipse,
+            BrokenLine,
+            Rectangle,
+            Fill
+        }
+
+        Mode currentMode;
+        public Mode CurrentMode
+        {
+            get => currentMode;
+            set
+            {
+                PreviousIndex = (int)currentMode;
+                OnPropertyChanged();
+            }
+        }
+        public int PreviousIndex { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public List<IFigure> figureList = new List<IFigure>();
-        public List<IFigure> selectedFigures = new List<IFigure>();
-        public Stack<ICommand> actionCommands = new Stack<ICommand>();
+        public List<IFigure> figureList = new();
+        public List<IFigure> selectedFigures = new();
+        public Stack<ICommand> actionCommands = new();
         public InkCanvas paintingCanvas;
         public Brush currentBrush;
 
-        public bool penIsActive = false;
-        public bool canExecute = false;
-        public ICommand createLineCommand = null;
-        public ICommand createTriangleCommand = null;
-        public ICommand createRectangleCommand = null;
-        public ICommand createEllipseCommand = null;
-        public ICommand penButton = null;
-        public ICommand mouseDown = null;
-        public ICommand selectField = null;
-        public ICommand selectColor = null;
+        public bool penIsActive;
+        public bool canExecute;
+        public ICommand createLineCommand;
+        public ICommand createTriangleCommand;
+        public ICommand createRectangleCommand;
+        public ICommand createEllipseCommand;
+        public ICommand penButton;
+        public ICommand mouseDown;
+        public ICommand selectField;
+        public ICommand selectColor;
 
         //private ICommand YkazButton = null;
         //private ICommand MysorButton = null;
@@ -49,17 +65,17 @@ namespace gui
         //private ICommand NextButton = null;
         //private ICommand BackButton = null;       
 
+        private readonly double esp = 0.01;
 
         public MainViewModel() { }
         public MainViewModel(InkCanvas canvas)
         {
-            this.paintingCanvas = canvas;
+            paintingCanvas = canvas;
         }
 
         public void OnPropertyChanged([CallerMemberName] string prop = "")
         {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(prop));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
         }
 
         public ICommand CreateLineCommand
@@ -214,12 +230,65 @@ namespace gui
                 paintingCanvas.EditingMode = InkCanvasEditingMode.Ink;
         }
 
+        IFigure FindFigure(GrRed.Vector p)
+        {
+            foreach (var fig in figureList)
+            {
+                if (fig.IsIn(p,esp))
+                {
+                    return fig;
+                }
+            }
+
+            return null;
+        }
 
         public void mouseDownHandler(object obj)
         {
+           
             canExecute = true;
+
             Point position = Mouse.GetPosition(paintingCanvas);
             GrRed.Vector mousePos = new GrRed.Vector(position.X, position.Y);
+
+            //switch (CurrentMode)
+            //{
+            //    case Mode.Сursor:
+            //        GrRed.Vector p = mousePos;
+            //        IFigure figure = FindFigure(p);
+            //        //SelectedFigure = figure;
+            //        break;
+
+            //    case Mode.Pencil:
+            //        activatePen(obj);
+            //        break;
+
+            //    case Mode.Line:
+            //        createLine(obj);
+            //        break;
+
+            //    case Mode.Triangle:
+            //        createTriangle(obj);
+            //        break;
+
+            //    case Mode.Rectangle:
+            //        createRectangle(obj);
+            //        break;
+
+            //    case Mode.Ellipse:
+            //        createEllipse(obj);
+            //        break;
+
+            //    case Mode.BrokenLine:
+            //        break;
+
+            //    case Mode.Fill:
+            //        break;
+
+            //    default:
+            //        break;
+            //}
+
             if (actionCommands.Count != 0)
                 actionCommands.Peek().Execute(mousePos);
             canExecute = false;
