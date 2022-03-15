@@ -39,18 +39,23 @@ namespace gui
         //}
         
         
-        //private void menu_click(object sender, RoutedEventArgs e)
-        //{
-        //    if (Leftgrid.Visibility == Visibility.Hidden)
-        //    {
-        //        Leftgrid.Visibility = Visibility.Visible;
-        //        Left_all_grid.Visibility = Visibility.Hidden;
-        //    }
-        //    else
-        //    {
-        //        Leftgrid.Visibility = Visibility.Hidden;
-        //        Left_all_grid.Visibility = Visibility.Visible;
-        //    }
-        //}
+        private void menu_click(object sender, RoutedEventArgs e)
+        {
+            if (Leftgrid.Visibility == Visibility.Hidden)
+            {
+                Leftgrid.Visibility = Visibility.Visible;
+                Left_all_grid.Visibility = Visibility.Hidden;
+            }
+            else
+            {
+                Leftgrid.Visibility = Visibility.Hidden;
+                Left_all_grid.Visibility = Visibility.Visible;
+            }
+        }
+
+        public InkCanvas GetCanvas()
+        {
+            return PaintingCanvas;
+        }
     }
 }
