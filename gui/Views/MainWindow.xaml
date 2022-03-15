@@ -265,6 +265,14 @@
                     <i:InvokeCommandAction
                             Command="{Binding MouseDown}"/>
                 </i:EventTrigger>
+                <i:EventTrigger EventName="MouseUp">
+                    <i:InvokeCommandAction
+                            Command="{Binding MouseUp}"/>
+                </i:EventTrigger>
+                <i:EventTrigger EventName="MouseMove">
+                    <i:InvokeCommandAction
+                            Command="{Binding MouseMove}"/>
+                </i:EventTrigger>
             </i:Interaction.Triggers>
         </InkCanvas>
 

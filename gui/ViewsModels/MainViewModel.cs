@@ -16,31 +16,48 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using GrRed;
 using GrRed.Geometry.Factory;
+using System.Windows.Ink;
 
 namespace gui
 {
+
+    public enum Mode
+    {
+        Selection,
+        Rectangle,
+        Line,
+        Ellipse,
+        Triangle,
+        Pencil,
+        OpenFile,
+        Brush
+    }
+
     public partial class MainViewModel : INotifyPropertyChanged
     {
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public List<IFigure> figureList = new List<IFigure>();
-        public List<IFigure> selectedFigures = new List<IFigure>();
-        public Stack<ICommand> actionCommands = new Stack<ICommand>();
-        public InkCanvas paintingCanvas;
-        public Brush currentBrush;
+        private List<IFigure> figureList = new List<IFigure>();
+        private List<IFigure> selectedFigures = new List<IFigure>();
+        private Stack<ICommand> actionCommands = new Stack<ICommand>();
+        private InkCanvas paintingCanvas;
+        private Brush currentBrush;
 
-        public bool penIsActive = false;
-        public bool canExecute = false;
-        public ICommand createLineCommand = null;
-        public ICommand createTriangleCommand = null;
-        public ICommand createRectangleCommand = null;
-        public ICommand createEllipseCommand = null;
-        public ICommand penButton = null;
-        public ICommand mouseDown = null;
-        public ICommand selectField = null;
-        public ICommand selectColor = null;
+        private IFigure drawingObject = null;
+        private Mode mode = Mode.Selection;
+        private bool isMouseDown = false;
 
+        private ICommand createLineCommand = null;
+        private ICommand createTriangleCommand = null;
+        private ICommand createRectangleCommand = null;
+        private ICommand createEllipseCommand = null;
+        private ICommand penButton = null;
+        private ICommand mouseDown = null;
+        private ICommand selectField = null;
+        private ICommand selectColor = null;
+        private ICommand mouseUp = null;
+        private ICommand mouseMove = null;
 
 
         public MainViewModel() { }
@@ -134,72 +151,80 @@ namespace gui
             }
         }
 
-
-
-        public void createLine(object obj)
+        public ICommand MouseUp
         {
-            if (canExecute)
+            get
             {
-                Path path = new Path();
-                LineGrafic lineGrafic = new LineGrafic(paintingCanvas, path);
-                List<GrRed.Vector> vector2 = new List<GrRed.Vector>();
-                vector2.Add(new GrRed.Vector(300, 300));
-                vector2.Add(new GrRed.Vector(450, 50));
-                lineGrafic.AddLines(vector2);
-                Brush brush2 = Brushes.Firebrick;
-                lineGrafic.FillPolygon(brush2);
-            } else 
-                actionCommands.Push(createLineCommand);
+                mouseUp = new ActionCommand(onMouseUp, param => true);
+                return mouseUp;
+            }
         }
 
-        public void createTriangle(object obj)
+        public ICommand MouseMove
         {
-            if (canExecute)
+            get
             {
-                GrRed.Vector start = new GrRed.Vector(50, 50);
-                if (obj != null)
-                    start = (GrRed.Vector)obj;
-                Path path = new Path();
-                TriangleGrafic triangleGrafic = new TriangleGrafic(paintingCanvas, path);
-                FigureFactory figureFactory = FigureFabric.GetFactory("Triangle");
-                IFigure triangle = figureFactory.GetFigure(0, start, new GrRed.Vector(10, 10));
-                triangle.Draw(triangleGrafic);
-            } else
-                actionCommands.Push(createTriangleCommand);
-        }
-
-        public void createRectangle(object obj)
-        {
-            if (canExecute)
-            {
-                GrRed.Vector start = new GrRed.Vector(50, 50);
-                if (obj != null)
-                    start = (GrRed.Vector)obj;
-                Path path = new Path();
-                RectangleGrafic rectangle = new RectangleGrafic(paintingCanvas, path);
-                FigureFactory figureFactory = FigureFabric.GetFactory("Square");
-                IFigure square = figureFactory.GetFigure(0, start, new GrRed.Vector(10, 10));
-            } else
-                actionCommands.Push(createRectangleCommand);
+                mouseMove = new ActionCommand(onMouseMove, param => true);
+                return mouseMove;
+            }
         }
 
 
-        public void createEllipse(object obj)
+
+        private void createLine(object obj)
         {
-            if (canExecute)
-            {
-                GrRed.Vector start = new GrRed.Vector(50, 50);
-                if (obj != null)
-                    start = (GrRed.Vector)obj;
-                Path path = new Path();
-                EllipseGrafic ellipseGrafic = new EllipseGrafic(paintingCanvas, path);
-                FigureFactory figureFactory = FigureFabric.GetFactory("Ellipse");
-                IFigure ellipse = figureFactory.GetFigure(0, start, new GrRed.Vector(10, 10));
-            } else
-                actionCommands.Push(createEllipseCommand);
+            //Path path = new Path();
+            //LineGrafic lineGrafic = new LineGrafic(paintingCanvas, path);
+            //List<GrRed.Vector> vector2 = new List<GrRed.Vector>();
+            //vector2.Add(new GrRed.Vector(300, 300));
+            //vector2.Add(new GrRed.Vector(450, 50));
+            //lineGrafic.AddLines(vector2);
+            //Brush brush2 = Brushes.Firebrick;
+            //lineGrafic.FillPolygon(brush2);
+            //actionCommands.Push(createLineCommand);
+            mode = Mode.Line;
         }
 
-        public void activatePen(object obj)
+        private void createTriangle(object obj)
+        {
+            GrRed.Vector start = new GrRed.Vector(50, 50);
+            if (obj != null)
+                start = (GrRed.Vector)obj;
+            FigureFactory figureFactory = FigureFabric.GetFactory("Triangle");
+            IFigure triangle = figureFactory.GetFigure(0, start, new GrRed.Vector(10, 10));
+            figureList.Add(triangle);
+            actionCommands.Push(createTriangleCommand);
+            mode = Mode.Triangle;
+        }
+
+        private void createRectangle(object obj)
+        {
+            GrRed.Vector start = new GrRed.Vector(50, 50);
+            if (obj != null)
+                start = (GrRed.Vector)obj;
+            Path path = new Path();
+            RectangleGrafic rectangle = new RectangleGrafic(paintingCanvas, path);
+            FigureFactory figureFactory = FigureFabric.GetFactory("Square");
+            IFigure square = figureFactory.GetFigure(0, start, new GrRed.Vector(10, 10));
+            actionCommands.Push(createRectangleCommand);
+            mode = Mode.Rectangle;
+        }
+
+
+        private void createEllipse(object obj)
+        {
+            GrRed.Vector start = new GrRed.Vector(50, 50);
+            if (obj != null)
+                start = (GrRed.Vector)obj;
+            Path path = new Path();
+            EllipseGrafic ellipseGrafic = new EllipseGrafic(paintingCanvas, path);
+            FigureFactory figureFactory = FigureFabric.GetFactory("Ellipse");
+            IFigure ellipse = figureFactory.GetFigure(0, start, new GrRed.Vector(10, 10));
+            actionCommands.Push(createEllipseCommand);
+            mode = Mode.Ellipse;
+        }
+
+        private void activatePen(object obj)
         {
             if (paintingCanvas.EditingMode == InkCanvasEditingMode.Ink)
                 paintingCanvas.EditingMode = InkCanvasEditingMode.None;
@@ -208,23 +233,75 @@ namespace gui
         }
 
 
-        public void mouseDownHandler(object obj)
+        private void mouseDownHandler(object obj)
         {
-            canExecute = true;
+            isMouseDown = true;
             Point position = Mouse.GetPosition(paintingCanvas);
             GrRed.Vector mousePos = new GrRed.Vector(position.X, position.Y);
-            if (actionCommands.Count != 0)
-                actionCommands.Peek().Execute(mousePos);
-            canExecute = false;
+            switch (mode)
+            {
+                case Mode.Selection:
+                    //IFigure selected = FindFigure(new GrRed.Vector(position.X, position.Y));
+                    //selectedFigures.Add(selected);
+                    selectedFigures.Add(figureList.Last());
+                    break;
+                case Mode.Rectangle:
+                    break;
+                case Mode.Line:
+                    break;
+                case Mode.Ellipse:
+                    break;
+                case Mode.Triangle:
+                    Path path = new Path();
+                    TriangleGrafic triangleGrafic = new TriangleGrafic(paintingCanvas, path);
+                    IFigure current = figureList.Last();
+                    current.Draw(triangleGrafic);
+                    mode = Mode.Selection;
+                    break;
+                case Mode.Pencil:
+                    break;
+                case Mode.OpenFile:
+                    break;
+                default:
+                    break;
+            }
         }
 
-
-        public void changeColor(object obj)
+        private IFigure FindFigure(GrRed.Vector p)
         {
+            IFigure res = null;
+            foreach (var fig in figureList)
+                if (fig.IsIn(p, 1E-2))
+                    res = fig;
+            return res;
+        }
+
+        private void changeColor(object obj)
+        {
+            mode = Mode.Brush;
             string colorStr = obj.ToString();
             SolidColorBrush color = (SolidColorBrush)new BrushConverter().ConvertFromString(colorStr);
             currentBrush = color;
             paintingCanvas.DefaultDrawingAttributes.Color = (Color)ColorConverter.ConvertFromString(colorStr);
+        }
+
+        private void onMouseUp(object obj)
+        {
+            isMouseDown = false;
+        }
+
+        private void onMouseMove(object obj)
+        {
+            Point position = Mouse.GetPosition(paintingCanvas);
+            GrRed.Vector mousePos = new GrRed.Vector(position.X, position.Y);
+            if (selectedFigures.Count != 0)
+            {
+                foreach (var fig in selectedFigures)
+                {
+                    GrRed.Vector delta = fig.Center;
+                    fig.Move(new GrRed.Vector(0.1, 0.1));
+                }
+            }
         }
     }
 }
