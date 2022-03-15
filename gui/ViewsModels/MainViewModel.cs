@@ -323,9 +323,13 @@ namespace gui
 
         private void onMouseMove(object obj)
         {
-            if (isMouseDown)
+            if (Mouse.LeftButton == MouseButtonState.Pressed)
             {
                 mouseMoveHandler();
+            }
+            else
+            {
+                previousPath = null;
             }
         }
 
