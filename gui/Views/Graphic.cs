@@ -12,7 +12,7 @@ namespace gui
     public class EllipseGrafic : IGraphic
     {
         private readonly InkCanvas canvas;
-        private readonly Path path;
+        public readonly Path path;
         public EllipseGrafic(InkCanvas canvas, Path path)
         {
             this.canvas = canvas;
@@ -51,7 +51,7 @@ namespace gui
     public class TriangleGrafic : IGraphic
     {
         private readonly InkCanvas canvas;
-        private readonly Path path;
+        public readonly Path path;
         public TriangleGrafic(InkCanvas canvas, Path path)
         {
             this.canvas = canvas;
@@ -87,7 +87,7 @@ namespace gui
     public class LineGrafic : IGraphic
     {
         private readonly InkCanvas canvas;
-        private readonly Path path;
+        public readonly Path path;
         public LineGrafic(InkCanvas canvas, Path path)
         {
             this.canvas = canvas;
@@ -120,7 +120,7 @@ namespace gui
     public class RectangleGrafic : IGraphic
     {
         private readonly InkCanvas canvas;
-        private readonly Path path;
+        public readonly Path path;
         public RectangleGrafic(InkCanvas canvas, Path path)
         {
             this.canvas = canvas;
@@ -150,5 +150,19 @@ namespace gui
             canvas.Children.Add(path);
         }
         public void FillPolygon(object color) => path.Fill = (Brush)color;
+    }
+
+    public static class GraphicFabric
+    {
+        public static IGraphic GetFactory(string name, InkCanvas canvas, Path path)
+        {
+            return name switch
+            {
+                "Ellipse" => new EllipseGrafic(canvas, path),
+                "Triangle" => new TriangleGrafic(canvas, path),
+                "Square" => new RectangleGrafic(canvas, path),
+                _ => null,
+            };
+        }
     }
 }
