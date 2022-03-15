@@ -195,10 +195,7 @@ namespace gui
             vector2.Add(new GrRed.Vector(300, 300));
             vector2.Add(new GrRed.Vector(450, 50));
             lineGrafic.AddLines(vector2);
-            Brush brush2 = Brushes.Firebrick;
-            lineGrafic.FillPolygon(brush2);
             actionCommands.Push(createLineCommand);
-            mode = Mode.Line;
         }
 
         private void createTriangle(object obj)
@@ -207,10 +204,9 @@ namespace gui
             if (obj != null)
                 start = (GrRed.Vector)obj;
             FigureFactory figureFactory = FigureFabric.GetFactory("Triangle");
-            IFigure triangle = figureFactory.GetFigure(0, start, new GrRed.Vector(50, 50));
+            IFigure triangle = figureFactory.GetFigure(0, start, new GrRed.Vector(0, 0));
             figureList.Add(triangle);
-            actionCommands.Push(createTriangleCommand);
-            mode = Mode.Triangle;
+            actionCommands.Push(createTriangleCommand);;
         }
 
         private void createRectangle(object obj)
@@ -218,12 +214,10 @@ namespace gui
             GrRed.Vector start = new GrRed.Vector(50, 50);
             if (obj != null)
                 start = (GrRed.Vector)obj;
-            Path path = new Path();
-            RectangleGrafic rectangle = new RectangleGrafic(paintingCanvas, path);
             FigureFactory figureFactory = FigureFabric.GetFactory("Square");
             IFigure square = figureFactory.GetFigure(0, start, new GrRed.Vector(10, 10));
+            figureList.Add(square);
             actionCommands.Push(createRectangleCommand);
-            mode = Mode.Rectangle;
         }
 
 
@@ -232,12 +226,10 @@ namespace gui
             GrRed.Vector start = new GrRed.Vector(50, 50);
             if (obj != null)
                 start = (GrRed.Vector)obj;
-            Path path = new Path();
-            EllipseGrafic ellipseGrafic = new EllipseGrafic(paintingCanvas, path);
             FigureFactory figureFactory = FigureFabric.GetFactory("Ellipse");
             IFigure ellipse = figureFactory.GetFigure(0, start, new GrRed.Vector(10, 10));
+            figureList.Add(ellipse);
             actionCommands.Push(createEllipseCommand);
-            mode = Mode.Ellipse;
         }
 
         private void activatePen()
@@ -381,6 +373,19 @@ namespace gui
                 }
             }
         }
+
+
+        //private void reDraw(IFigure figure)
+        //{
+        //    Path path = new Path();
+        //    IGraphic triangleGrafic = GraphicFabric.GetFactory(figure.TypeName, paintingCanvas, path);
+        //    IFigure current = figureList.Last();
+        //    figureList.Remove(figure);
+        //    figureList.Add(current);
+        //    paintingCanvas.Children.Remove(previousPath);
+        //    current.Draw(triangleGrafic);
+        //    previousPath = triangleGrafic.path;
+        //}
 
     }
 }

@@ -68,7 +68,7 @@ namespace GrRed.Geometry.Domain
 
         public IFigure Move(Vector delta)
         {
-            throw new NotImplementedException();
+           throw new NotImplementedException();
         }
 
         public IFigure Reflection(bool axe)
