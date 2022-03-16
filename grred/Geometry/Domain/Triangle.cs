@@ -1,7 +1,12 @@
 ﻿using System;
 
+using Newtonsoft.Json;
+using System.Runtime.Serialization;
+using System.Collections.Generic;
+
 namespace GrRed.Geometry.Domain
 {
+    [DataContract]
     class Triangle : IFigure
     {
 
@@ -11,6 +16,7 @@ namespace GrRed.Geometry.Domain
 
         public Triangle() { }
 
+        [JsonConstructor]
         public Triangle(double Angle, Vector Center, Vector Scale)
         {
             _Center = Center;
@@ -18,18 +24,36 @@ namespace GrRed.Geometry.Domain
             _Scale = Scale;
         }
 
+        public Triangle(IEnumerable<Vector> Points)
+        {
+
+        }
+
         public string TypeName => "Triangle";
+        [DataMember]
         public double Angle => _Angle;
+        [DataMember]
         public Vector Center => _Center;
+        [DataMember]
         public Vector Scale => _Scale;
 
         public (double l, double t, double r, double b) Gabarit =>
-            (Center.X - Scale.X,         Center.Y + Scale.Y * 2.0 / 3.0,       Center.X,       Center.Y - Scale.Y * 2.0 / 3.0);
+            (Center.X - Scale.X, Center.Y + Scale.Y * 2.0 / 3.0, Center.X, Center.Y - Scale.Y * 2.0 / 3.0);
 
 
         public void Draw(IGraphic graphic)
         {
-            throw new NotImplementedException();
+            //Path path = new Path();
+            //LineGrafic lineGrafic = new LineGrafic(paintingCanvas, path);
+            List<Vector> vector2 = new List<Vector>();
+            vector2.Add(Center);
+            vector2.Add(Scale);
+            vector2.Add(new Vector(Scale.X, Center.Y));
+            graphic.AddLines(vector2);
+            //object brush2 = "#ffc0cb";
+
+            //Brush brush2 = Brushes.Firebrick;
+            //graphic.FillPolygon(brush2);
         }
 
         public IFigure Intersection(IFigure fig2)
