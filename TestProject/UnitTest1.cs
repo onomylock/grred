@@ -6,6 +6,8 @@ using Newtonsoft.Json;
 
 using NUnit.Framework;
 
+using System.Collections.Generic;
+
 namespace TestProject
 {
     public class Tests
@@ -25,27 +27,37 @@ namespace TestProject
         //    Assert.AreEqual(1.0, ellipse2.Center.X);
         //    Assert.AreEqual(0.0, ellipse2.Center.Y);
         //}
-        //[Test]
-        //public void Test2()
-        //{
-        //    var ellipse = new EllipseFactory().GetFigure(3, new Vector(1, 0), new Vector(2, 2));
-        //    var settings = new JsonSerializerSettings()
-        //    {
-        //        Formatting = Formatting.Indented, 
-        //        TypeNameHandling = TypeNameHandling.All
-        //    };
-
-        //    var str=JsonConvert.SerializeObject(ellipse,settings);
-        //    var ellipse2 = JsonConvert.DeserializeObject(str,settings);
-        //    Assert.AreEqual("GrRed.Geometry.Domain.Ellipse", ellipse2.GetType().FullName);
-        //    var ellipse3= ellipse2 as IFigure;
-        //    Assert.AreEqual(1.0, ellipse3.Center.X);
-        //    Assert.AreEqual(0.0, ellipse3.Center.Y);
-        //}
         [Test]
-        public void Test3()
+        public void Test2()
         {
-            Save();
+            List<IFigure> figureList = new List<IFigure>();
+            var ellipse = new EllipseFactory().GetFigure(3, new Vector(1, 0), new Vector(2, 2));
+            var triangle = new TriangleFactory().GetFigure(3, new Vector(0, 1), new Vector(2, 2));
+            var settings = new JsonSerializerSettings()
+            {
+                Formatting = Formatting.Indented,
+                TypeNameHandling = TypeNameHandling.All
+            };
+
+            var str = "NEWOBJ";
+            str += JsonConvert.SerializeObject(ellipse, settings);
+            str += "NEWOBJ";
+            str += JsonConvert.SerializeObject(triangle, settings);
+
+            string[] stringlist = str.Split("NEWOBJ");
+
+            foreach(string strobj in stringlist)
+            {
+                if (strobj != "")
+                {
+                    var obj = JsonConvert.DeserializeObject(strobj, settings) as IFigure;
+                    figureList.Add(obj);
+                }
+            }
+            Assert.AreEqual(1.0, figureList[0].Center.X);
+            Assert.AreEqual(0.0, figureList[0].Center.Y);
+            Assert.AreEqual(0.0, figureList[1].Center.X);
+            Assert.AreEqual(1.0, figureList[1].Center.Y);
         }
     }
 }

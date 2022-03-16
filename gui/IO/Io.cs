@@ -48,6 +48,7 @@ namespace GrRed.IO
             string outstring = "";
             foreach(IFigure figure in figureList)
             {
+                outstring += "NEWOBJ";
                 outstring += Output_json(figure);
             }
             File.WriteAllText(filename, outstring);
@@ -123,6 +124,32 @@ namespace GrRed.IO
                     Save_json(figureList, filename);
                     break;
             }
+        }
+
+        public static List<IFigure> Load()
+        {
+            var settings = new JsonSerializerSettings()
+            {
+                Formatting = Formatting.Indented,
+                TypeNameHandling = TypeNameHandling.All
+            };
+            List<IFigure> figureList = new List<IFigure>();
+            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
+            dlg.FileName = "file";
+            dlg.DefaultExt = ".json";
+            dlg.Filter = "Json|*.json";
+            Nullable<bool> result = dlg.ShowDialog();
+            string filesr = File.ReadAllText(dlg.FileName);
+            string[] stringlist = filesr.Split("NEWOBJ");
+            foreach (string strobj in stringlist)
+            {
+                if (strobj != "")
+                {
+                    var obj = JsonConvert.DeserializeObject(strobj, settings) as IFigure;
+                    figureList.Add(obj);
+                }
+            }
+            return figureList;
         }
     }
 }
