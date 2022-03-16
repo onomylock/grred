@@ -46,10 +46,10 @@ namespace GrRed.Geometry.Domain
         {
         }
 
-        private Vector SetInputScale(IEnumerable<Vector> Points, Vector center)
-        {
+        // private Vector SetInputScale(IEnumerable<Vector> Points, Vector center)
+        // {
 
-        }
+        // }
 
         private double SetInputAngle(IEnumerable<Vector> Points)
         {
