@@ -59,7 +59,24 @@ namespace gui
         private ICommand selectColor = null;
         private ICommand mouseUp = null;
         private ICommand mouseMove = null;
+        private ICommand reflection = null;
 
+
+        public ICommand Reflection()
+        {
+            reflection = new ActionCommand(ActionReflection, param => true);
+            return reflection;
+        }
+
+        void ActionReflection(object obj)
+        {
+            if (mode == Mode.Selection)
+            {
+                bool ob = Convert.ToBoolean(obj);
+                IFigure figreflection = selectedFigures[selectedFigures.Count - 1].Reflection(ob);
+                //отрисовка
+            }
+        }
 
         public MainViewModel() { }
         public MainViewModel(InkCanvas canvas)
