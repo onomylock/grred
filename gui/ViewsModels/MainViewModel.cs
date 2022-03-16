@@ -41,7 +41,33 @@ namespace gui
         public ICommand selectField = null;
         public ICommand selectColor = null;
 
+        private ICommand rotate;
+        public ICommand Rotate()
+        {
+            rotate = new ActionCommand(ActionRotate, param => true);
+            return rotate;
+        }
 
+        void ActionRotate(object obj)
+        {
+
+            
+           IFigure figrotate = selectedFigures[selectedFigures.Count - 1].Rotate(obj);
+           figrotate.Draw
+           
+        }
+
+
+        // void ActionOrange(object obj)
+        // {
+        //     double eps = 0.1;
+        //     Vector point = new Vector(Mouse.GetPosition(null).X, Mouse.GetPosition(null).Y);
+        //     bool is = selectedFigures[selectedFigures.Count-1].IsIn(point, eps);
+        //     if (is)
+        //     {
+                
+        //     }
+        // }
 
         public MainViewModel() { }
         public MainViewModel(InkCanvas canvas)
