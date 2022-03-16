@@ -38,14 +38,13 @@ namespace gui
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private List<IFigure> figureList = new List<IFigure>();
+        private Dictionary<IFigure, Path> figureList = new Dictionary<IFigure, Path>();
         private List<IFigure> selectedFigures = new List<IFigure>();
         private Stack<ICommand> actionCommands = new Stack<ICommand>();
         private InkCanvas paintingCanvas;
         private Brush currentBrush;
         private Path previousPath;
 
-        private IFigure drawingObject = null;
         private Mode mode = Mode.Selection;
         private bool isMouseDown = false;
 
@@ -289,7 +288,7 @@ namespace gui
         private IFigure FindFigure(GrRed.Vector p)
         {
             IFigure res = null;
-            foreach (var fig in figureList)
+            foreach (var fig in figureList.Keys)
                 if (fig.IsIn(p, 1E-2))
                     res = fig;
             return res;
@@ -374,7 +373,7 @@ namespace gui
             }
         }
 
-
+        // Функция для отрисовки и перерисовки
         //private void reDraw(IFigure figure)
         //{
         //    Path path = new Path();
@@ -386,6 +385,13 @@ namespace gui
         //    current.Draw(triangleGrafic);
         //    previousPath = triangleGrafic.path;
         //}
+
+
+        // TODO 1:
+        // Для дальнеший действий над фигурой нужен словарь с фигурой в качестве ключа и Path объектом в качестве значений
+        // Path объект хранит в себе заливку
+        // Команды добавляются в стек только если они выполнены !!!!!!!!! Для каждрй команды это индивидуально, но есть способы сделать красиво, но времени нет
+        // Фигуры добавляются в словарь только если они созданы
 
     }
 }
