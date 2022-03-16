@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using System.Runtime.Serialization;
 using System.Collections.Generic;
 using System.Linq;
+
 namespace GrRed.Geometry.Domain
 {
     [DataContract]
@@ -25,9 +26,9 @@ namespace GrRed.Geometry.Domain
 
         public Square(IEnumerable<Vector> Points)
         {
-            _Center = SetInputCentr(Points);
+            _Center = SetInputCenter(Points);
             _Angle = SetInputAngle(Points);
-
+            _Scale = SetInputScale(Points);
         }
 
         public string TypeName => "Square";
@@ -44,21 +45,26 @@ namespace GrRed.Geometry.Domain
 
         public void Draw(IGraphic graphic)
         {
+
         }
 
-        // private Vector SetInputScale(IEnumerable<Vector> Points, Vector center)
-        // {
+        private Vector SetInputScale(IEnumerable<Vector> Points)
+        {
+            Vector p1 = Points.ElementAt(0);
+            Vector p2 = Points.ElementAt(1);
+            Vector p3 = Points.ElementAt(2);
 
-        // }
+            return new Vector(Math.Abs(p1.X - p2.X), Math.Abs(p2.Y - p3.Y));
+        }
 
         private double SetInputAngle(IEnumerable<Vector> Points)
         {
             Vector p1 = Points.ElementAt(1);
             Vector p2 = Points.ElementAt(2);
-            return Math.Asin((p2.Y - p1.Y) / Math.Sqrt(Math.Pow(p2.X - p1.X, 2) + Math.Pow(p2.Y - p1.X, 2));
+            return Math.Asin((p2.Y - p1.Y) / Math.Sqrt(Math.Pow(p2.X - p1.X, 2) + Math.Pow(p2.Y - p1.X, 2)));
         }
 
-        private Vector SetInputCentr(IEnumerable<Vector> Points)
+        private Vector SetInputCenter(IEnumerable<Vector> Points)
         {
             Vector p1 = Points.ElementAt(0);
             Vector p2 = Points.ElementAt(1);

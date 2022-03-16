@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using System.Linq;
 
 namespace GrRed.Geometry.Domain
 {
@@ -25,7 +26,11 @@ namespace GrRed.Geometry.Domain
 
         public Ellipse(IEnumerable<Vector> Points)
         {
-            
+            _Scale = new Vector(Math.Abs(Points.ElementAt(0).X), Math.Abs(Points.ElementAt(1).Y));
+            _Center = SetInputCenter(Points);
+            Vector point = Points.ElementAt(1);
+            _Angle = Math.Asin((point.Y - _Center.Y) / Math.Sqrt(Math.Pow(point.X - _Center.X, 2) + Math.Pow(point.Y - _Center.X, 2)));
+
         }
 
         public string TypeName => "Ellipse";
@@ -51,6 +56,16 @@ namespace GrRed.Geometry.Domain
             //Brush brush1 = Brushes.BlueViolet;
             //ellipseGrafic.FillPolygon(brush1);
 
+        }
+
+        private Vector SetInputCenter(IEnumerable<Vector> Points)
+        {
+            Vector p1 = Points.ElementAt(0);
+            Vector p2 = Points.ElementAt(1);
+            Vector p3 = Points.ElementAt(2);
+            Vector p4 = Points.ElementAt(3);
+
+            return new Vector(p3.X - p1.X, p2.Y - p4.Y);
         }
 
         public IFigure Intersection(IFigure fig2)
@@ -93,27 +108,45 @@ namespace GrRed.Geometry.Domain
 
         public IFigure Reflection(bool axe)
         {
-            double newAngle;
+            // if (axe) // Вертикальное отражение
+            // {
+            //     newAngle = Math.PI - Angle;
+            //     Vector newScale = new(Scale.X, -Scale.Y);
+            //     return new Ellipse(newAngle, Center, newScale);
+            // }
+            // else // Горизонтальное отражение
+            // {
+            //     newAngle = 2.0 * Math.PI - Angle;
+            //     Vector newScale = new(-Scale.X, Scale.Y);
+            //     return new Ellipse(newAngle, Center, newScale);
+            // }
 
-            if (axe) // Вертикальное отражение
+            if (axe)
             {
-                newAngle = Math.PI - 2.0 * Angle;
-                Vector newScale = new(Scale.X, -Scale.Y);
-                return new Ellipse(newAngle, Center, newScale);
+                return this.Rotate(-Math.PI + 2 * Angle);
             }
-            else // Горизонтальное отражение
+            else
             {
-                newAngle = 2.0 * Math.PI - 2.0 * Angle;
-                Vector newScale = new(-Scale.X, Scale.Y);
-                return new Ellipse(newAngle, Center, newScale);
+                return this.Rotate(-2 * Angle);
             }
+
         }
 
         public IFigure Rotate(double delta)
         {
             double newAngle = Angle + delta;
-            Vector newScale = new(Scale.X * Math.Cos(newAngle), Scale.Y * Math.Cos(newAngle));
-            return new Ellipse(newAngle, Center, newScale);
+            double eps = 0.1;
+            Vector newScale;
+            if (Math.Abs(newAngle - Math.PI / 2) < eps)
+            {
+                newScale = new(Scale.Y, Scale.X);
+                return new Ellipse(newAngle, Center, newScale);
+            }
+            else
+            {
+                newScale = new(Scale.X * Math.Cos(newAngle), Scale.Y * Math.Cos(newAngle));
+                return new Ellipse(newAngle, Center, newScale);
+            }
         }
 
         public IFigure SetScale(double dx, double dy)
