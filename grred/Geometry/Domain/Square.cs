@@ -44,6 +44,16 @@ namespace GrRed.Geometry.Domain
 
         public void Draw(IGraphic graphic)
         {
+            List<Vector> vector1 = new List<GrRed.Vector>();
+            double h_X = _Center.X + _Scale.X * Math.Cos(_Angle);
+            double h_Y = _Center.Y - _Scale.X * Math.Sin(_Angle);
+            double v_X = _Center.X + _Scale.Y * Math.Sin(_Angle);
+            double v_Y = _Center.Y + _Scale.Y * Math.Cos(_Angle);
+            vector1.Add(new GrRed.Vector(h_X, h_Y));
+            vector1.Add(new GrRed.Vector(v_X, v_Y));
+            vector1.Add(new GrRed.Vector(_Center.X - Math.Abs(_Center.X - h_X), _Center.Y - Math.Abs(_Center.Y - h_Y)));
+            vector1.Add(new GrRed.Vector(_Center.X - Math.Abs(_Center.X - v_X), _Center.Y - Math.Abs(_Center.Y - v_Y)));
+            graphic.AddPolyArc(vector1);
         }
 
         // private Vector SetInputScale(IEnumerable<Vector> Points, Vector center)
@@ -55,7 +65,7 @@ namespace GrRed.Geometry.Domain
         {
             Vector p1 = Points.ElementAt(1);
             Vector p2 = Points.ElementAt(2);
-            return Math.Asin((p2.Y - p1.Y) / Math.Sqrt(Math.Pow(p2.X - p1.X, 2) + Math.Pow(p2.Y - p1.X, 2));
+            return Math.Asin((p2.Y - p1.Y) / Math.Sqrt(Math.Pow(p2.X - p1.X, 2) + Math.Pow(p2.Y - p1.X, 2)));
         }
 
         private Vector SetInputCentr(IEnumerable<Vector> Points)
