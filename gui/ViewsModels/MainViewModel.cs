@@ -1,88 +1,86 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
-
 using GrRed;
 using GrRed.Geometry.Factory;
+using System.Windows.Ink;
 
 namespace gui
 {
+
+    public enum Mode
+    {
+        Selection,
+        Rectangle,
+        Line,
+        Ellipse,
+        Triangle,
+        Pencil,
+        OpenFile,
+        Brush
+    }
+
     public partial class MainViewModel : INotifyPropertyChanged
     {
-        public enum Mode
-        {
-            Сursor,
-            Pencil,
-            Line,
-            Triangle,
-            Ellipse,
-            BrokenLine,
-            Rectangle,
-            Fill
-        }
-
-        Mode currentMode;
-        public Mode CurrentMode
-        {
-            get => currentMode;
-            set
-            {
-                PreviousIndex = (int)currentMode;
-                OnPropertyChanged();
-            }
-        }
-        public int PreviousIndex { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public List<IFigure> figureList = new();
-        public List<IFigure> selectedFigures = new();
-        public Stack<ICommand> actionCommands = new();
-        public InkCanvas paintingCanvas;
-        public Brush currentBrush;
+        private List<IFigure> figureList = new List<IFigure>();
+        private List<IFigure> selectedFigures = new List<IFigure>();
+        private Stack<ICommand> actionCommands = new Stack<ICommand>();
+        private InkCanvas paintingCanvas;
+        private Brush currentBrush;
+        private Path previousPath;
 
-        public bool penIsActive;
-        public bool canExecute;
-        public ICommand createLineCommand;
-        public ICommand createTriangleCommand;
-        public ICommand createRectangleCommand;
-        public ICommand createEllipseCommand;
-        public ICommand penButton;
-        public ICommand mouseDown;
-        public ICommand selectField;
-        public ICommand selectColor;
+        private IFigure drawingObject = null;
+        private Mode mode = Mode.Selection;
+        private bool isMouseDown = false;
 
-        //private ICommand YkazButton = null;
-        //private ICommand MysorButton = null;
-        //private ICommand FillButton = null;
-        //private ICommand ApproximationButton = null;
-        //private ICommand DistanceButton = null;
-        //private ICommand NextButton = null;
-        //private ICommand BackButton = null;       
+        private ICommand createLineCommand = null;
+        private ICommand createTriangleCommand = null;
+        private ICommand createRectangleCommand = null;
+        private ICommand createEllipseCommand = null;
+        private ICommand penButton = null;
+        private ICommand mouseDown = null;
+        private ICommand selectField = null;
+        private ICommand selectColor = null;
+        private ICommand mouseUp = null;
+        private ICommand mouseMove = null;
 
-        private readonly double esp = 0.01;
 
         public MainViewModel() { }
         public MainViewModel(InkCanvas canvas)
         {
-            paintingCanvas = canvas;
+            this.paintingCanvas = canvas;
         }
 
         public void OnPropertyChanged([CallerMemberName] string prop = "")
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(prop));
         }
 
         public ICommand CreateLineCommand
         {
             get
             {
-                createLineCommand = new ActionCommand(createLine, param => true);
+                createLineCommand = new ActionCommand(obj =>
+                {
+                    mode = Mode.Line;
+                }, param => true);
                 return createLineCommand;
             }
         }
@@ -91,8 +89,11 @@ namespace gui
         {
             get
             {
-                createTriangleCommand = new ActionCommand(createTriangle, param => true);
-                //bool res = createTriangleCommand.CanExecute(false);
+                createTriangleCommand = new ActionCommand(obj =>
+                {
+                    mode = Mode.Triangle;
+                }, param => true);
+                bool res = createTriangleCommand.CanExecute(false);
                 return createTriangleCommand;
             }
         }
@@ -102,7 +103,10 @@ namespace gui
         {
             get
             {
-                createRectangleCommand = new ActionCommand(createRectangle, param => true);
+                createRectangleCommand = new ActionCommand(obj =>
+                {
+                    mode = Mode.Rectangle;
+                }, param => true);
                 return createRectangleCommand;
             }
         }
@@ -112,7 +116,10 @@ namespace gui
         {
             get
             {
-                createEllipseCommand = new ActionCommand(createEllipse, param => true);
+                createEllipseCommand = new ActionCommand(obj =>
+                {
+                    mode = Mode.Ellipse;
+                }, param => true);
                 return createEllipseCommand;
             }
         }
@@ -122,7 +129,10 @@ namespace gui
         {
             get
             {
-                penButton = new ActionCommand(activatePen, param => true);
+                penButton = new ActionCommand(obj =>
+                {
+                    mode = Mode.Pencil;
+                }, param => true);
                 return penButton;
             }
         }
@@ -157,73 +167,72 @@ namespace gui
             }
         }
 
-
-
-        public void createLine(object obj)
+        public ICommand MouseUp
         {
-            if (canExecute)
+            get
             {
-                Path path = new Path();
-                LineGrafic lineGrafic = new LineGrafic(paintingCanvas, path);
-                List<GrRed.Vector> vector2 = new List<GrRed.Vector>();
-                vector2.Add(new GrRed.Vector(300, 300));
-                vector2.Add(new GrRed.Vector(450, 50));
-                lineGrafic.AddLines(vector2);
-                Brush brush2 = Brushes.Firebrick;
-                lineGrafic.FillPolygon(brush2);
-            } else 
-                actionCommands.Push(createLineCommand);
+                mouseUp = new ActionCommand(onMouseUp, param => true);
+                return mouseUp;
+            }
         }
 
-        public void createTriangle(object obj)
+        public ICommand MouseMove
         {
-            if (canExecute)
+            get
             {
-                GrRed.Vector start = new GrRed.Vector(50, 50);
-                if (obj != null)
-                    start = (GrRed.Vector)obj;
-                Path path = new Path();
-                TriangleGrafic triangleGrafic = new TriangleGrafic(paintingCanvas, path);
-                FigureFactory figureFactory = FigureFabric.GetFactory("Triangle");
-                IFigure triangle = figureFactory.GetFigure(0, start, new GrRed.Vector(10, 10));
-                triangle.Draw(triangleGrafic);
-            } else
-                actionCommands.Push(createTriangleCommand);
-        }
-
-        public void createRectangle(object obj)
-        {
-            if (canExecute)
-            {
-                GrRed.Vector start = new GrRed.Vector(50, 50);
-                if (obj != null)
-                    start = (GrRed.Vector)obj;
-                Path path = new Path();
-                RectangleGrafic rectangle = new RectangleGrafic(paintingCanvas, path);
-                FigureFactory figureFactory = FigureFabric.GetFactory("Square");
-                IFigure square = figureFactory.GetFigure(0, start, new GrRed.Vector(10, 10));
-            } else
-                actionCommands.Push(createRectangleCommand);
+                mouseMove = new ActionCommand(onMouseMove, param => true);
+                return mouseMove;
+            }
         }
 
 
-        public void createEllipse(object obj)
+
+        private void createLine(object obj)
         {
-            if (canExecute)
-            {
-                GrRed.Vector start = new GrRed.Vector(50, 50);
-                if (obj != null)
-                    start = (GrRed.Vector)obj;
-                Path path = new Path();
-                EllipseGrafic ellipseGrafic = new EllipseGrafic(paintingCanvas, path);
-                FigureFactory figureFactory = FigureFabric.GetFactory("Ellipse");
-                IFigure ellipse = figureFactory.GetFigure(0, start, new GrRed.Vector(10, 10));
-                
-            } else
-                actionCommands.Push(createEllipseCommand);
+            Path path = new Path();
+            LineGrafic lineGrafic = new LineGrafic(paintingCanvas, path);
+            List<GrRed.Vector> vector2 = new List<GrRed.Vector>();
+            vector2.Add(new GrRed.Vector(300, 300));
+            vector2.Add(new GrRed.Vector(450, 50));
+            lineGrafic.AddLines(vector2);
+            actionCommands.Push(createLineCommand);
         }
 
-        public void activatePen(object obj)
+        private void createTriangle(object obj)
+        {
+            GrRed.Vector start = new GrRed.Vector(50, 50);
+            if (obj != null)
+                start = (GrRed.Vector)obj;
+            FigureFactory figureFactory = FigureFabric.GetFactory("Triangle");
+            IFigure triangle = figureFactory.GetFigure(0, start, new GrRed.Vector(0, 0));
+            figureList.Add(triangle);
+            actionCommands.Push(createTriangleCommand);;
+        }
+
+        private void createRectangle(object obj)
+        {
+            GrRed.Vector start = new GrRed.Vector(50, 50);
+            if (obj != null)
+                start = (GrRed.Vector)obj;
+            FigureFactory figureFactory = FigureFabric.GetFactory("Square");
+            IFigure square = figureFactory.GetFigure(0, start, new GrRed.Vector(10, 10));
+            figureList.Add(square);
+            actionCommands.Push(createRectangleCommand);
+        }
+
+
+        private void createEllipse(object obj)
+        {
+            GrRed.Vector start = new GrRed.Vector(50, 50);
+            if (obj != null)
+                start = (GrRed.Vector)obj;
+            FigureFactory figureFactory = FigureFabric.GetFactory("Ellipse");
+            IFigure ellipse = figureFactory.GetFigure(0, start, new GrRed.Vector(10, 10));
+            figureList.Add(ellipse);
+            actionCommands.Push(createEllipseCommand);
+        }
+
+        private void activatePen()
         {
             if (paintingCanvas.EditingMode == InkCanvasEditingMode.Ink)
                 paintingCanvas.EditingMode = InkCanvasEditingMode.None;
@@ -231,77 +240,152 @@ namespace gui
                 paintingCanvas.EditingMode = InkCanvasEditingMode.Ink;
         }
 
-        IFigure FindFigure(GrRed.Vector p)
+
+        private void mouseDownHandler(object obj)
         {
-            foreach (var fig in figureList)
-            {
-                if (fig.IsIn(p,esp))
-                {
-                    return fig;
-                }
-            }
-
-            return null;
-        }
-
-        public void mouseDownHandler(object obj)
-        {
-           
-            canExecute = true;
-
+            isMouseDown = true;
             Point position = Mouse.GetPosition(paintingCanvas);
             GrRed.Vector mousePos = new GrRed.Vector(position.X, position.Y);
+            switch (mode)
+            {
+                case Mode.Selection:
+                    if (figureList.Count != 0)
+                    {
+                        //IFigure selected = FindFigure(new GrRed.Vector(position.X, position.Y));
+                        //selectedFigures.Add(selected);
 
-            //switch (CurrentMode)
-            //{
-            //    case Mode.Сursor:
-            //        GrRed.Vector p = mousePos;
-            //        IFigure figure = FindFigure(p);
-            //        //SelectedFigure = figure;
-            //        break;
+                        // For test
+                        selectedFigures.Add(figureList.Last());
+                    }
+                    break;
+                case Mode.Pencil:
+                    activatePen();
+                    break;
+                case Mode.OpenFile:
+                    break;
+                case Mode.Brush:
+                    if (figureList.Count != 0)
+                    {
+                        //Path path1 = new();
+                        //IFigure selected = FindFigure(new GrRed.Vector(position.X, position.Y));
+                        //IGraphic graphic = GraphicFabric.GetFactory(selected.TypeName, paintingCanvas, path1);
+                        //selected.Draw(graphic);
+                        //graphic.FillPolygon(currentBrush);
+                        
 
-            //    case Mode.Pencil:
-            //        activatePen(obj);
-            //        break;
-
-            //    case Mode.Line:
-            //        createLine(obj);
-            //        break;
-
-            //    case Mode.Triangle:
-            //        createTriangle(obj);
-            //        break;
-
-            //    case Mode.Rectangle:
-            //        createRectangle(obj);
-            //        break;
-
-            //    case Mode.Ellipse:
-            //        createEllipse(obj);
-            //        break;
-
-            //    case Mode.BrokenLine:
-            //        break;
-
-            //    case Mode.Fill:
-            //        break;
-
-            //    default:
-            //        break;
-            //}
-
-            if (actionCommands.Count != 0)
-                actionCommands.Peek().Execute(mousePos);
-            canExecute = false;
+                        // For test
+                        Path path1 = new();
+                        IFigure selected = figureList.Last();
+                        IGraphic graphic = GraphicFabric.GetFactory(selected.TypeName, paintingCanvas, path1);
+                        selected.Draw(graphic);
+                        graphic.FillPolygon(currentBrush);
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
 
-
-        public void changeColor(object obj)
+        private IFigure FindFigure(GrRed.Vector p)
         {
+            IFigure res = null;
+            foreach (var fig in figureList)
+                if (fig.IsIn(p, 1E-2))
+                    res = fig;
+            return res;
+        }
+
+        private void changeColor(object obj)
+        {
+            mode = Mode.Brush;
             string colorStr = obj.ToString();
             SolidColorBrush color = (SolidColorBrush)new BrushConverter().ConvertFromString(colorStr);
             currentBrush = color;
             paintingCanvas.DefaultDrawingAttributes.Color = (Color)ColorConverter.ConvertFromString(colorStr);
+            paintingCanvas.UseCustomCursor = true;
+            // paintingCanvas.Cursor = Cursors.Wait; // Можно поставить другой курсор
         }
+
+        private void onMouseUp(object obj)
+        {
+            isMouseDown = false;
+            mode = Mode.Selection;
+            previousPath = null;
+        }
+
+        private void onMouseMove(object obj)
+        {
+            if (Mouse.LeftButton == MouseButtonState.Pressed)
+            {
+                mouseMoveHandler();
+            }
+            else
+            {
+                previousPath = null;
+            }
+        }
+
+        private void mouseMoveHandler()
+        {
+            Point position = Mouse.GetPosition(paintingCanvas);
+            GrRed.Vector mousePos = new GrRed.Vector(position.X, position.Y);
+            switch (mode)
+            {
+                case Mode.Selection:
+                    break;
+                case Mode.Rectangle:
+                    break;
+                case Mode.Line:
+                    break;
+                case Mode.Ellipse:
+                    break;
+                case Mode.Triangle:
+                    createTriangle(mousePos);
+                    Path path = new Path();
+                    TriangleGrafic triangleGrafic = new TriangleGrafic(paintingCanvas, path);
+                    IFigure current = figureList.Last();
+                    figureList.Clear();
+                    figureList.Add(current);
+                    paintingCanvas.Children.Remove(previousPath);
+                    current.Draw(triangleGrafic);
+                    previousPath = triangleGrafic.path;
+                    break;
+                default:
+                    break;
+            }
+        }
+        private void moveSelectedFigures()
+        {
+
+            // Not working
+            if (isMouseDown && selectedFigures.Count != 0)
+            {
+                Point position = Mouse.GetPosition(paintingCanvas);
+                GrRed.Vector mousePos = new GrRed.Vector(position.X, position.Y);
+
+                foreach (var fig in selectedFigures)
+                {
+                    GrRed.Vector delta = fig.Center + mousePos;
+                    IFigure newFig = fig.Move(delta);
+                    Path path = new Path();
+                    TriangleGrafic triangleGrafic = new TriangleGrafic(paintingCanvas, path);
+                    newFig.Draw(triangleGrafic);
+                }
+            }
+        }
+
+
+        //private void reDraw(IFigure figure)
+        //{
+        //    Path path = new Path();
+        //    IGraphic triangleGrafic = GraphicFabric.GetFactory(figure.TypeName, paintingCanvas, path);
+        //    IFigure current = figureList.Last();
+        //    figureList.Remove(figure);
+        //    figureList.Add(current);
+        //    paintingCanvas.Children.Remove(previousPath);
+        //    current.Draw(triangleGrafic);
+        //    previousPath = triangleGrafic.path;
+        //}
+
     }
 }

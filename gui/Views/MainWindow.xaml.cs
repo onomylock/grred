@@ -57,5 +57,6 @@ namespace gui
         {
             return PaintingCanvas;
         }
+
     }
 }
