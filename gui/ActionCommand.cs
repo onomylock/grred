@@ -5,6 +5,7 @@ using System.Windows.Input;
 
 namespace gui
 {
+
     public class ActionCommand : ICommand
     {
 

@@ -30,7 +30,7 @@ namespace gui
         }
 
 
-        private void PrimButton_Ñlick(object sender, RoutedEventArgs e)
+        private void PrimButton_Ð¡lick(object sender, RoutedEventArgs e)
         {
             if (Leftgrid1.Visibility == Visibility.Hidden)
                 Leftgrid1.Visibility = Visibility.Visible;
@@ -57,5 +57,6 @@ namespace gui
         {
             return PaintingCanvas;
         }
+
     }
 }
