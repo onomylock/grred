@@ -19,7 +19,7 @@ namespace GrRed.IO
 {
     public class Io
     {
-        public string Output_json(IFigure obj)
+        public static string Output_json(IFigure obj)
         {
             var settings = new JsonSerializerSettings()
             {
@@ -43,7 +43,17 @@ namespace GrRed.IO
             return obj;
         }
 
-        public static void CanvToPNG(Canvas canvas, string filename)
+        private static void Save_json(List<IFigure> figureList, string filename)
+        {
+            string outstring = "";
+            foreach(IFigure figure in figureList)
+            {
+                outstring += Output_json(figure);
+            }
+            File.WriteAllText(filename, outstring);
+        }
+
+        private static void CanvToPNG(Canvas canvas, string filename)
         {
             canvas.LayoutTransform = null;
 
@@ -65,40 +75,54 @@ namespace GrRed.IO
             }
         }
 
-        private void CanvasToPDF(Canvas canvas)
+        private static void CanvasToPDF(Canvas canvas, string filename)
+        {
+             RenderTargetBitmap renderBitmap = new RenderTargetBitmap((int)canvas.ActualWidth, (int)canvas.ActualHeight + 125, 96d, 96d, PixelFormats.Pbgra32);
+             renderBitmap.Render(canvas);
+
+             PngBitmapEncoder encoder = new PngBitmapEncoder();
+             encoder.Frames.Add(BitmapFrame.Create(renderBitmap));
+
+             byte[] bytes;
+             using (MemoryStream stream = new MemoryStream())
+             {
+                 encoder.Save(stream);
+                 bytes = stream.ToArray();
+             }
+
+             var document = new iTextSharp.text.Document(new iTextSharp.text.Rectangle((float)canvas.ActualWidth, (float)canvas.ActualHeight), 0, 0, 0, 0);
+             iTextSharp.text.Image image = iTextSharp.text.Image.GetInstance(bytes);
+             image.SetAbsolutePosition(0, 0);
+
+             FileStream file = File.Create(filename);
+             PdfWriter.GetInstance(document, file);
+             document.Open();
+             document.Add(image);
+             document.Close();
+        }
+
+        public static void Save(Canvas canvas, List<IFigure> figureList)
         {
             Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
-            dlg.FileName = "Canvas"; 
-            dlg.DefaultExt = ".pdf"; 
-            dlg.Filter = "Text documents (.pdf)|*.pdf"; 
+            dlg.FileName = "Canvas";
+            dlg.DefaultExt = ".pdf";
+            dlg.Filter = "PDF|*.pdf" + "Json|*.json" + "PNG|*.png";
             Nullable<bool> result = dlg.ShowDialog();
+            var ext = dlg.FilterIndex;
+            var filename = dlg.FileName;
 
-            if (result == true)
+            switch (ext)
             {
-                RenderTargetBitmap renderBitmap = new RenderTargetBitmap((int)canvas.ActualWidth, (int)canvas.ActualHeight + 125, 96d, 96d, PixelFormats.Pbgra32);
-                renderBitmap.Render(canvas);
-
-                PngBitmapEncoder encoder = new PngBitmapEncoder();
-                encoder.Frames.Add(BitmapFrame.Create(renderBitmap));
-
-                byte[] bytes;
-                using (MemoryStream stream = new MemoryStream())
-                {
-                    encoder.Save(stream);
-                    bytes = stream.ToArray();
-                }
-
-                var document = new iTextSharp.text.Document(new iTextSharp.text.Rectangle((float)canvas.ActualWidth, (float)canvas.ActualHeight), 0, 0, 0, 0);
-                iTextSharp.text.Image image = iTextSharp.text.Image.GetInstance(bytes);
-                image.SetAbsolutePosition(0, 0);
-
-                FileStream file = File.Create(dlg.FileName);
-                PdfWriter.GetInstance(document, file);
-                document.Open();
-                document.Add(image);
-                document.Close();
+                case 0:
+                    CanvasToPDF(canvas, filename);
+                    break;
+                case 1:
+                    CanvToPNG(canvas, filename);
+                    break;
+                case 2:
+                    Save_json(figureList, filename);
+                    break;
             }
-
         }
     }
 }
