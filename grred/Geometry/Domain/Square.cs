@@ -131,13 +131,13 @@ namespace GrRed.Geometry.Domain
             {
                 newAngle = Math.PI - 2.0 * Angle;
                 Vector newScale = new(Scale.X, -Scale.Y);
-                return new Square(newAngle, Center, newScale);
+                return new Square(newAngle, Center, Scale);
             }
             else // Горизонтальное отражение
             {
                 newAngle = 2.0 * Math.PI - 2.0 * Angle;
                 Vector newScale = new(-Scale.X, Scale.Y);
-                return new Square(newAngle, Center, newScale);
+                return new Square(newAngle, Center, Scale);
             }
         }
 
