@@ -261,9 +261,17 @@
 
         <InkCanvas EditingMode="None"  x:Name="PaintingCanvas" Grid.Column="1" Background="LightCyan">
             <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseUp">
+                    <i:InvokeCommandAction
+                            Command="{Binding MouseUp}"/>
+                </i:EventTrigger>
                 <i:EventTrigger EventName="MouseDown">
                     <i:InvokeCommandAction
                             Command="{Binding MouseDown}"/>
+                </i:EventTrigger>
+                <i:EventTrigger EventName="MouseMove">
+                    <i:InvokeCommandAction
+                            Command="{Binding MouseMove}"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
         </InkCanvas>
@@ -594,19 +602,19 @@
                 </Grid.ColumnDefinitions>
 
                 <StackPanel x:Name="LotsOf1" Grid.Column="0">
-                    <Button x:Name="UnfButton"  ToolTip="Объединение примитивов" Background="{x:Null}"  BorderThickness="0">
+                    <Button x:Name="UnfButton" Command="{Binding Union}"  ToolTip="Объединение примитивов" Background="{x:Null}"  BorderThickness="0">
                         <Image Source="../Resources/UnionButton.png"  Width="27"/>
                     </Button>
                 </StackPanel>
 
                 <StackPanel x:Name="LotsOf2" Grid.Column="1">
-                    <Button x:Name="InterButton"  ToolTip="Пересечение примитивов" Background="{x:Null}"  BorderThickness="0">
+                    <Button x:Name="InterButton" Command="{Binding Intersept}" ToolTip="Пересечение примитивов" Background="{x:Null}"  BorderThickness="0">
                         <Image Source="../Resources/IntersectionButton.png"  Width="30"/>
                     </Button>
                 </StackPanel>
 
                 <StackPanel x:Name="LotsOf3" Grid.Column="2">
-                    <Button x:Name="SubtrButton"  ToolTip="Вычитание примитивов" Background="{x:Null}"  BorderThickness="0">
+                    <Button x:Name="SubtrButton" Command="{Binding Subtruct}" ToolTip="Вычитание примитивов" Background="{x:Null}"  BorderThickness="0">
                         <Image Source="../Resources/SubtractionButton.png" Width="27"/>
                     </Button>
                 </StackPanel>
