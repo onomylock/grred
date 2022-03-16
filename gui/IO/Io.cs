@@ -106,17 +106,17 @@ namespace GrRed.IO
             Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
             dlg.FileName = "Canvas";
             dlg.DefaultExt = ".pdf";
-            dlg.Filter = "PDF|*.pdf" + "Json|*.json" + "PNG|*.png";
+            dlg.Filter = "PDF|*.pdf" + "|Json|*.json" + "|PNG|*.png";
             Nullable<bool> result = dlg.ShowDialog();
             var ext = dlg.FilterIndex;
             var filename = dlg.FileName;
 
             switch (ext)
             {
-                case 0:
+                case 1:
                     CanvasToPDF(canvas, filename);
                     break;
-                case 1:
+                case 3:
                     CanvToPNG(canvas, filename);
                     break;
                 case 2:
