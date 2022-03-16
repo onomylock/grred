@@ -2,7 +2,8 @@
 
 using Newtonsoft.Json;
 using System.Runtime.Serialization;
-
+using System.Collections.Generic;
+using System.Linq;
 namespace GrRed.Geometry.Domain
 {
     [DataContract]
@@ -24,6 +25,8 @@ namespace GrRed.Geometry.Domain
 
         public Square(IEnumerable<Vector> Points)
         {
+            _Center = SetInputCentr(Points);
+            _Angle = SetInputAngle(Points);
 
         }
 
@@ -41,6 +44,40 @@ namespace GrRed.Geometry.Domain
 
         public void Draw(IGraphic graphic)
         {
+        }
+
+        private Vector SetInputScale(IEnumerable<Vector> Points, Vector center)
+        {
+
+        }
+
+        private double SetInputAngle(IEnumerable<Vector> Points)
+        {
+            Vector p1 = Points.ElementAt(1);
+            Vector p2 = Points.ElementAt(2);
+            return Math.Asin((p2.Y - p1.Y) / Math.Sqrt(Math.Pow(p2.X - p1.X, 2) + Math.Pow(p2.Y - p1.X, 2));
+        }
+
+        private Vector SetInputCentr(IEnumerable<Vector> Points)
+        {
+            Vector p1 = Points.ElementAt(0);
+            Vector p2 = Points.ElementAt(1);
+            Vector p3 = Points.ElementAt(2);
+            Vector p4 = Points.ElementAt(3);
+
+            double n = 0;
+            if ((p2.Y - p1.Y) != 0)
+            {
+                double q = (p3.X - p1.X) / (p1.Y - p3.Y);
+                double sn = (p2.X - p4.X) + (p2.Y - p4.Y) * q;
+                double fn = (p3.X - p1.X) + (p2.Y - p1.Y) * q;
+                n = fn / sn;
+            }
+            else
+            {
+                n = (p2.Y - p1.Y) / (p2.Y - p4.Y);
+            }
+            return new Vector(p2.X + (p4.X - p2.X) * n, p2.Y + (p4.Y - p2.X) * n);
         }
 
         public IFigure Intersection(IFigure fig2)

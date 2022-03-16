@@ -25,7 +25,7 @@ namespace GrRed.Geometry.Domain
 
         public Ellipse(IEnumerable<Vector> Points)
         {
-
+            
         }
 
         public string TypeName => "Ellipse";

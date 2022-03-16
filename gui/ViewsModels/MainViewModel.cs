@@ -49,6 +49,11 @@ namespace gui
             this.paintingCanvas = canvas;
         }
 
+        public void InOrenge(object obj)
+        {
+
+        }
+
         public void OnPropertyChanged([CallerMemberName] string prop = "")
         {
             if (PropertyChanged != null)
@@ -148,7 +153,8 @@ namespace gui
                 lineGrafic.AddLines(vector2);
                 Brush brush2 = Brushes.Firebrick;
                 lineGrafic.FillPolygon(brush2);
-            } else 
+            }
+            else
                 actionCommands.Push(createLineCommand);
         }
 
@@ -164,7 +170,8 @@ namespace gui
                 FigureFactory figureFactory = FigureFabric.GetFactory("Triangle");
                 IFigure triangle = figureFactory.GetFigure(0, start, new GrRed.Vector(10, 10));
                 triangle.Draw(triangleGrafic);
-            } else
+            }
+            else
                 actionCommands.Push(createTriangleCommand);
         }
 
@@ -179,7 +186,8 @@ namespace gui
                 RectangleGrafic rectangle = new RectangleGrafic(paintingCanvas, path);
                 FigureFactory figureFactory = FigureFabric.GetFactory("Square");
                 IFigure square = figureFactory.GetFigure(0, start, new GrRed.Vector(10, 10));
-            } else
+            }
+            else
                 actionCommands.Push(createRectangleCommand);
         }
 
@@ -195,7 +203,8 @@ namespace gui
                 EllipseGrafic ellipseGrafic = new EllipseGrafic(paintingCanvas, path);
                 FigureFactory figureFactory = FigureFabric.GetFactory("Ellipse");
                 IFigure ellipse = figureFactory.GetFigure(0, start, new GrRed.Vector(10, 10));
-            } else
+            }
+            else
                 actionCommands.Push(createEllipseCommand);
         }
 
