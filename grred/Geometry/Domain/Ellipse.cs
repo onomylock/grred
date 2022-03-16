@@ -41,16 +41,21 @@ namespace GrRed.Geometry.Domain
 
         public void Draw(IGraphic graphic)
         {
-            //Path path = new Path();
-            //EllipseGrafic ellipseGrafic = new EllipseGrafic(paintingCanvas, path);
             List<Vector> vector1 = new List<GrRed.Vector>();
-            vector1.Add(new GrRed.Vector(500, 500));
-            vector1.Add(new GrRed.Vector(450, 450));
-            vector1.Add(new GrRed.Vector(400, 400));
+            double h_X = _Center.X + _Scale.X * Math.Cos(_Angle);
+            double h_Y = _Center.Y - _Scale.X * Math.Sin(_Angle);
+            vector1.Add(new GrRed.Vector(h_X, h_Y));
+            if (_Scale.X != _Scale.Y)
+            {
+                double v_X = _Center.X + _Scale.Y * Math.Sin(_Angle);
+                double v_Y = _Center.Y + _Scale.Y * Math.Cos(_Angle);
+                vector1.Add(new GrRed.Vector(v_X, v_Y));
+            } else
+            {
+                vector1.Add(new GrRed.Vector(_Center.X, _Center.Y));
+            }
+            vector1.Add(new GrRed.Vector(_Center.X + Math.Abs(_Center.X - h_X), _Center.Y + Math.Abs(_Center.Y - h_Y)));
             graphic.AddPolyArc(vector1);
-            //Brush brush1 = Brushes.BlueViolet;
-            //ellipseGrafic.FillPolygon(brush1);
-
         }
 
         public IFigure Intersection(IFigure fig2)
