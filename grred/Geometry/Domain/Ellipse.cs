@@ -29,8 +29,7 @@ namespace GrRed.Geometry.Domain
             _Scale = new Vector(Math.Abs(Points.ElementAt(0).X), Math.Abs(Points.ElementAt(1).Y));
             _Center = SetInputCenter(Points);
             Vector point = Points.ElementAt(1);
-            _Angle = Math.Asin((point.Y - _Center.Y) / Math.Sqrt(Math.Pow(point.X - _Center.X, 2) + Math.Pow(point.Y - _Center.X, 2)));
-
+            _Angle = Math.Asin((point.Y - _Center.Y) / VectorModul(point - _Center);
         }
 
         public string TypeName => "Ellipse";
@@ -43,6 +42,8 @@ namespace GrRed.Geometry.Domain
 
         public (double l, double t, double r, double b) Gabarit =>
             (Center.X - Scale.X, Center.Y + Scale.Y, Center.X + Scale.X, Center.Y - Scale.Y);
+
+        private double VectorModul(Vector a) => Math.Sqrt(Math.Pow(a.X, 2) + Math.Pow(a.Y, 2));
 
         public void Draw(IGraphic graphic)
         {
@@ -108,28 +109,7 @@ namespace GrRed.Geometry.Domain
 
         public IFigure Reflection(bool axe)
         {
-            // if (axe) // Вертикальное отражение
-            // {
-            //     newAngle = Math.PI - Angle;
-            //     Vector newScale = new(Scale.X, -Scale.Y);
-            //     return new Ellipse(newAngle, Center, newScale);
-            // }
-            // else // Горизонтальное отражение
-            // {
-            //     newAngle = 2.0 * Math.PI - Angle;
-            //     Vector newScale = new(-Scale.X, Scale.Y);
-            //     return new Ellipse(newAngle, Center, newScale);
-            // }
-
-            if (axe)
-            {
-                return this.Rotate(-Math.PI + 2 * Angle);
-            }
-            else
-            {
-                return this.Rotate(-2 * Angle);
-            }
-
+            return this.Rotate(-2.0 * Angle);
         }
 
         public IFigure Rotate(double delta)
@@ -137,7 +117,7 @@ namespace GrRed.Geometry.Domain
             double newAngle = Angle + delta;
             double eps = 0.1;
             Vector newScale;
-            if (Math.Abs(newAngle - Math.PI / 2) < eps)
+            if (Math.Abs(newAngle) % Math.PI < eps)
             {
                 newScale = new(Scale.Y, Scale.X);
                 return new Ellipse(newAngle, Center, newScale);
@@ -151,7 +131,7 @@ namespace GrRed.Geometry.Domain
 
         public IFigure SetScale(double dx, double dy)
         {
-            Vector newScale = new(Scale.X + dx / 2, Scale.Y + dy / 2);
+            Vector newScale = new(Scale.X + dx / 2.0, Scale.Y + dy / 2.0);
             return new Ellipse(Angle, Center, newScale);
         }
 
