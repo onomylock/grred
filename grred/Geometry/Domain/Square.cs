@@ -27,8 +27,8 @@ namespace GrRed.Geometry.Domain
         public Square(IEnumerable<Vector> Points)
         {
             _Center = SetInputCenter(Points);
-            _Angle = SetInputAngle(Points);
-            _Scale = SetInputScale(Points);
+            //_Angle = SetInputAngle(Points);
+            //_Scale = SetInputScale(Points);
         }
 
         public string TypeName => "Square";

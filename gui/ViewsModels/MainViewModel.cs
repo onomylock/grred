@@ -255,6 +255,7 @@ namespace gui
                     if (figureDict.Count != 0)
                     {
                         IFigure selected = FindFigure(new GrRed.Vector(position.X, position.Y));
+                        //paintingCanvas.Children.
                         selectedFigures.Add(selected);
                     }
                     break;
@@ -340,7 +341,6 @@ namespace gui
                     break;
                 case Mode.Line:
                     Path path_line = new();
-                    
                     LineGrafic lineGrafic = new LineGrafic(paintingCanvas, path_line);
                     List<GrRed.Vector> line = new List<GrRed.Vector>();
                     line.Add(mousePos);
@@ -369,6 +369,7 @@ namespace gui
                     break;
             }
         }
+
         private void moveSelectedFigures()
         {
 
