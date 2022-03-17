@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
@@ -56,6 +57,7 @@ namespace gui
         public ICommand mouseDown;
         public ICommand selectField;
         public ICommand selectColor;
+        private ICommand clearCanvasCommand;
 
         //private ICommand YkazButton = null;
         //private ICommand MysorButton = null;
@@ -157,7 +159,22 @@ namespace gui
             }
         }
 
+        public ICommand ClearCanvasCommand
+        {
+            get
+            {
+                clearCanvasCommand = new ActionCommand(ClearCanvas, param => true);
+                return clearCanvasCommand;
+            }
+        }
 
+        private void ClearCanvas(object obj)
+        {
+            paintingCanvas.Strokes.Clear();
+            actionCommands.Clear();
+            figureList.Clear();
+            selectedFigures.Clear();
+        }
 
         public void createLine(object obj)
         {
