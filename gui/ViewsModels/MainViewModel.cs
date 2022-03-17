@@ -1,26 +1,16 @@
-﻿using System;
+﻿using GrRed;
+using GrRed.Geometry.Factory;
 using System.Collections.Generic;
-using System.Linq;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
-using GrRed;
-using GrRed.Geometry.Factory;
-using System.Windows.Ink;
 
 namespace gui
 {
-
     public enum Mode
     {
         Selection,
@@ -222,7 +212,7 @@ namespace gui
         {
             FigureFactory figureFactory = FigureFabric.GetFactory("Square");
             IFigure square = figureFactory.GetFigure(0, start, scale);
-            lastCommand= createRectangleCommand;
+            lastCommand = createRectangleCommand;
             return square;
         }
 
@@ -333,7 +323,7 @@ namespace gui
                     break;
                 case Mode.Rectangle:
                     IFigure square = createRectangle(mousePos, scale);
-                    Path path_square = new ();
+                    Path path_square = new();
                     RectangleGrafic squareGrafic = new RectangleGrafic(paintingCanvas, path_square);
                     square.Draw(squareGrafic);
                     figureDict.Add(path_square, square);
