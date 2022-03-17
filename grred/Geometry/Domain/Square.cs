@@ -131,27 +131,45 @@ namespace GrRed.Geometry.Domain
 
         public IFigure Reflection(bool axe)
         {
-            double newAngle;
+            // if (axe) // Вертикальное отражение
+            // {
+            //     newAngle = Math.PI - Angle;
+            //     Vector newScale = new(Scale.X, -Scale.Y);
+            //     return new Ellipse(newAngle, Center, newScale);
+            // }
+            // else // Горизонтальное отражение
+            // {
+            //     newAngle = 2.0 * Math.PI - Angle;
+            //     Vector newScale = new(-Scale.X, Scale.Y);
+            //     return new Ellipse(newAngle, Center, newScale);
+            // }
 
-            if (axe) // Вертикальное отражение
+            if (axe)
             {
-                newAngle = Math.PI - 2.0 * Angle;
-                Vector newScale = new(Scale.X, -Scale.Y);
-                return new Square(newAngle, Center, Scale);
+                return this.Rotate(-Math.PI + 2 * Angle);
             }
-            else // Горизонтальное отражение
+            else
             {
-                newAngle = 2.0 * Math.PI - 2.0 * Angle;
-                Vector newScale = new(-Scale.X, Scale.Y);
-                return new Square(newAngle, Center, Scale);
+                return this.Rotate(-2 * Angle);
             }
+
         }
 
         public IFigure Rotate(double delta)
         {
             double newAngle = Angle + delta;
-            Vector newScale = new(Scale.X * Math.Cos(newAngle), Scale.Y * Math.Cos(newAngle));
-            return new Square(newAngle, Center, newScale);
+            double eps = 0.1;
+            Vector newScale;
+            if (Math.Abs(newAngle - Math.PI / 2) < eps)
+            {
+                newScale = new(Scale.Y, Scale.X);
+                return new Square(newAngle, Center, newScale);
+            }
+            else
+            {
+                newScale = new(Scale.X * Math.Cos(newAngle), Scale.Y * Math.Cos(newAngle));
+                return new Square(newAngle, Center, newScale);
+            }
         }
 
         public IFigure SetScale(double dx, double dy)
