@@ -33,12 +33,28 @@ namespace gui
             DataContext = new MainViewModel(PaintingCanvas);
 
             //List<GrRed.Vector> lines = new List<GrRed.Vector>();
-
-            //LineGrafic lineGrafic = new LineGrafic(PaintingCanvas, curConturBrush, curThickness);
-            //lineGrafic.AddLines(lines);
-
-            //EllipseGrafic ellipseGeometry = new EllipseGrafic(PaintingCanvas, curConturBrush, curFillBrush, curThickness);
-            //ellipseGeometry.AddPolyArc(lines);
         }
+
+        //private void PrimButton_Ñlick(object sender, RoutedEventArgs e)
+        //{
+        //    if (Leftgrid1.Visibility == Visibility.Hidden)
+        //        Leftgrid1.Visibility = Visibility.Visible;
+        //    else
+        //        Leftgrid1.Visibility = Visibility.Hidden;
+        //}
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+
+        //EllipseGrafic ellipseGeometry = new EllipseGrafic(PaintingCanvas, curConturBrush, curFillBrush, curThickness);
+        //ellipseGeometry.AddPolyArc(lines);
     }
+
+    //public InkCanvas GetCanvas()
+    //    {
+    //        return PaintingCanvas;
+    //    }
 }

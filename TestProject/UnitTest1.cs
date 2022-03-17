@@ -2,8 +2,11 @@ using GrRed;
 using GrRed.Geometry.Factory;
 using System;
 using Newtonsoft.Json;
-
+using gui;
 using NUnit.Framework;
+using System.Drawing;
+using System.Windows;
+using System.Windows.Controls;
 
 using System.Collections.Generic;
 
@@ -11,6 +14,7 @@ namespace TestProject
 {
     public class Json_Test
     {
+        private MainViewModel model;
         [SetUp]
         public void Setup()
         {

@@ -51,7 +51,7 @@ namespace GrRed.Geometry.Domain
             List<Vector> vector1 = new List<GrRed.Vector>();
             vector1.Add(new GrRed.Vector(500, 500));
             vector1.Add(new GrRed.Vector(450, 450));
-            vector1.Add(new GrRed.Vector(400, 400));
+            //vector1.Add(new GrRed.Vector(400, 400));
             graphic.AddPolyArc(vector1);
             //Brush brush1 = Brushes.BlueViolet;
             //ellipseGrafic.FillPolygon(brush1);
