@@ -14,8 +14,6 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Interactivity;
 
-
-
 namespace gui
 {
     /// <summary>
@@ -23,12 +21,18 @@ namespace gui
     /// </summary>
     public partial class MainWindow : Window
     {
+        public Brush curConturBrush;
+        public Brush curFillBrush;
+        public double curThickness;
         public MainWindow()
         {
+            curConturBrush = Brushes.Black;
+            curFillBrush = Brushes.White;
+            curThickness = 1;
             InitializeComponent();
             DataContext = new MainViewModel(PaintingCanvas);
-        }
 
+            //List<GrRed.Vector> lines = new List<GrRed.Vector>();
 
         private void PrimButton_Ñlick(object sender, RoutedEventArgs e)
         {
@@ -39,18 +43,8 @@ namespace gui
         }
 
 
-        private void menu_click(object sender, RoutedEventArgs e)
-        {
-            if (Leftgrid.Visibility == Visibility.Hidden)
-            {
-                Leftgrid.Visibility = Visibility.Visible;
-                Left_all_grid.Visibility = Visibility.Hidden;
-            }
-            else
-            {
-                Leftgrid.Visibility = Visibility.Hidden;
-                Left_all_grid.Visibility = Visibility.Visible;
-            }
+            //EllipseGrafic ellipseGeometry = new EllipseGrafic(PaintingCanvas, curConturBrush, curFillBrush, curThickness);
+            //ellipseGeometry.AddPolyArc(lines);
         }
 
         public InkCanvas GetCanvas()

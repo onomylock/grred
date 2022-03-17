@@ -59,6 +59,13 @@ namespace gui
         private ICommand mouseUp = null;
         private ICommand mouseMove = null;
 
+        //private ICommand YkazButton = null;
+        //private ICommand MysorButton = null;
+        //private ICommand FillButton = null;
+        //private ICommand ApproximationButton = null;
+        //private ICommand DistanceButton = null;
+        //private ICommand NextButton = null;
+        //private ICommand BackButton = null;       
 
         public MainViewModel() { }
         public MainViewModel(InkCanvas canvas)
@@ -300,7 +307,7 @@ namespace gui
             mode = Mode.Brush;
             string colorStr = obj.ToString();
             SolidColorBrush color = (SolidColorBrush)new BrushConverter().ConvertFromString(colorStr);
-            currentBrush = color;
+            //currentBrush = color;
             paintingCanvas.DefaultDrawingAttributes.Color = (Color)ColorConverter.ConvertFromString(colorStr);
             paintingCanvas.UseCustomCursor = true;
             // paintingCanvas.Cursor = Cursors.Wait; // Можно поставить другой курсор

@@ -3,7 +3,7 @@
 using System.Collections.Generic;
 namespace GrRed.Geometry.Factory
 {
-    class TriangleFactory : FigureFactory
+    public class TriangleFactory : FigureFactory
     {
         public override IFigure GetFigure(IEnumerable<Vector> Points)
         {

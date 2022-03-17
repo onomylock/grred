@@ -7,7 +7,7 @@ using System.Collections.Generic;
 namespace GrRed.Geometry.Domain
 {
     [DataContract]
-    class Triangle : IFigure
+    public class Triangle : IFigure
     {
 
         private readonly Vector _Center = new(1.0, 1.0); // Центр тяжести
