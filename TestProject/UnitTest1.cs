@@ -5,6 +5,8 @@ using Newtonsoft.Json;
 
 using NUnit.Framework;
 
+using System.Collections.Generic;
+
 namespace TestProject
 {
     public class Json_Test
