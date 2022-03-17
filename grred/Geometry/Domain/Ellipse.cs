@@ -97,13 +97,13 @@ namespace GrRed.Geometry.Domain
 
             if (axe) // Вертикальное отражение
             {
-                newAngle = Math.PI - 2.0 * Angle;
+                newAngle = Math.PI - Angle;
                 Vector newScale = new(Scale.X, -Scale.Y);
                 return new Ellipse(newAngle, Center, newScale);
             }
             else // Горизонтальное отражение
             {
-                newAngle = 2.0 * Math.PI - 2.0 * Angle;
+                newAngle = 2.0 * Math.PI - Angle;
                 Vector newScale = new(-Scale.X, Scale.Y);
                 return new Ellipse(newAngle, Center, newScale);
             }
