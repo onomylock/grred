@@ -146,7 +146,7 @@
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="SelectionChanged">
                         <i:InvokeCommandAction
-                            Command="{Binding CreateTriangleCommand}"/>
+                            Command="{Binding CreateEllipseCommand}"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
                 <ComboBox.ItemContainerStyle>

@@ -28,6 +28,7 @@ namespace GrRed
 
         public static Vector operator -(Vector a, Vector b)
             => new Vector(a.X - b.X, a.Y - b.Y);
+
         //Добавить перегрузки если нужно
     }
 

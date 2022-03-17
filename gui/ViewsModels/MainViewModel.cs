@@ -205,53 +205,32 @@ namespace gui
             }
         }
 
-
-
-        private void createLine(object obj)
+        private IFigure createTriangle(GrRed.Vector start, GrRed.Vector scale)
         {
-            Path path = new Path();
-            LineGrafic lineGrafic = new LineGrafic(paintingCanvas, path);
-            List<GrRed.Vector> vector2 = new List<GrRed.Vector>();
-            vector2.Add(new GrRed.Vector(300, 300));
-            vector2.Add(new GrRed.Vector(450, 50));
-            lineGrafic.AddLines(vector2);
-            actionCommands.Push(createLineCommand);
-        }
-
-        private IFigure createTriangle(object obj)
-        {
-            GrRed.Vector start = new GrRed.Vector(50, 50);
-            if (obj != null)
-                start = (GrRed.Vector)obj;
             FigureFactory figureFactory = FigureFabric.GetFactory("Triangle");
-            IFigure triangle = figureFactory.GetFigure(0, start, new GrRed.Vector(0, 0));
-            //figureDict.Add(triangle);
-            //actionCommands.Push(createTriangleCommand);
+            IFigure triangle = figureFactory.GetFigure(0, start, scale);
             lastCommand = createTriangleCommand;
             return triangle;
         }
 
-        private void createRectangle(object obj)
+        private IFigure createRectangle(object obj)
         {
             GrRed.Vector start = new GrRed.Vector(50, 50);
             if (obj != null)
                 start = (GrRed.Vector)obj;
             FigureFactory figureFactory = FigureFabric.GetFactory("Square");
-            IFigure square = figureFactory.GetFigure(0, start, new GrRed.Vector(10, 10));
-            //figureDict.Add(square);
-            actionCommands.Push(createRectangleCommand);
+            IFigure square = figureFactory.GetFigure(0, start, new GrRed.Vector(0, 0));
+            lastCommand= createRectangleCommand;
+            return square;
         }
 
 
-        private void createEllipse(object obj)
+        private IFigure createEllipse(GrRed.Vector start, GrRed.Vector scale)
         {
-            GrRed.Vector start = new GrRed.Vector(50, 50);
-            if (obj != null)
-                start = (GrRed.Vector)obj;
             FigureFactory figureFactory = FigureFabric.GetFactory("Ellipse");
-            IFigure ellipse = figureFactory.GetFigure(0, start, new GrRed.Vector(10, 10));
-            //figureDict.Add(ellipse);
-            actionCommands.Push(createEllipseCommand);
+            IFigure ellipse = figureFactory.GetFigure(0, start, scale);
+            lastCommand = createEllipseCommand;
+            return ellipse;
         }
 
         private void activatePen()
@@ -288,12 +267,12 @@ namespace gui
                 case Mode.Brush:
                     if (figureDict.Count != 0)
                     {
-                        //Path path1 = new();
-                        //IFigure selected = FindFigure(new GrRed.Vector(position.X, position.Y));
-                        //IGraphic graphic = GraphicFabric.GetFactory(selected.TypeName, paintingCanvas, path1);
-                        //selected.Draw(graphic);
-                        //graphic.FillPolygon(currentBrush);
-                        
+                        Path path1 = new();
+                        IFigure selected = FindFigure(new GrRed.Vector(position.X, position.Y));
+                        IGraphic graphic = GraphicFabric.GetFactory(selected.TypeName, paintingCanvas, path1);
+                        selected.Draw(graphic);
+                        graphic.FillPolygon(currentBrush);
+
 
                         // For test
                         //Path path1 = new();
@@ -322,16 +301,18 @@ namespace gui
             mode = Mode.Brush;
             string colorStr = obj.ToString();
             SolidColorBrush color = (SolidColorBrush)new BrushConverter().ConvertFromString(colorStr);
-            //currentBrush = color;
+            currentBrush = color;
             paintingCanvas.DefaultDrawingAttributes.Color = (Color)ColorConverter.ConvertFromString(colorStr);
-            paintingCanvas.UseCustomCursor = true;
+
+
+            //paintingCanvas.UseCustomCursor = true;
             // paintingCanvas.Cursor = Cursors.Wait; // Можно поставить другой курсор
         }
 
         private void onMouseUp(object obj)
         {
             isMouseDown = false;
-            mode = Mode.Selection;
+            actionCommands.Push(lastCommand);
             previousPath = null;
         }
 
@@ -351,28 +332,50 @@ namespace gui
         {
             Point position = Mouse.GetPosition(paintingCanvas);
             GrRed.Vector mousePos = new GrRed.Vector(position.X, position.Y);
+            GrRed.Vector scale = mousePos;
+            if (previousPath != null)
+            {
+                paintingCanvas.Children.Remove(previousPath);
+                mousePos = figureDict.GetValueOrDefault(previousPath).Center;
+                figureDict.Remove(previousPath);
+            }
             switch (mode)
             {
                 case Mode.Selection:
                     break;
                 case Mode.Rectangle:
+                    IFigure square = createRectangle(mousePos);
+                    Path path_square = new ();
+                    RectangleGrafic squareGrafic = new RectangleGrafic(paintingCanvas, path_square);
+                    square.Draw(squareGrafic);
+                    figureDict.Add(path_square, square);
+                    previousPath = squareGrafic.path;
                     break;
                 case Mode.Line:
+                    Path path_line = new();
+                    
+                    LineGrafic lineGrafic = new LineGrafic(paintingCanvas, path_line);
+                    List<GrRed.Vector> line = new List<GrRed.Vector>();
+                    line.Add(mousePos);
+                    line.Add(scale);
+                    lineGrafic.AddLines(line);
+                    figureDict.Add(lineGrafic.path, null);
+                    previousPath = lineGrafic.path;
                     break;
                 case Mode.Ellipse:
+                    IFigure ellipse = createEllipse(mousePos, scale);
+                    Path path_ellipse = new();
+                    EllipseGrafic ellipseGrafic = new EllipseGrafic(paintingCanvas, path_ellipse);
+                    ellipse.Draw(ellipseGrafic);
+                    figureDict.Add(path_ellipse, ellipse);
+                    previousPath = ellipseGrafic.path;
                     break;
                 case Mode.Triangle:
-                    IFigure newFigure = createTriangle(mousePos);
-                    Path path = new Path();
-                    TriangleGrafic triangleGrafic = new TriangleGrafic(paintingCanvas, path);
-                    //IFigure current = figureDict.GetValueOrDefault(previousPath);
-                    if (previousPath != null)
-                    {
-                        paintingCanvas.Children.Remove(previousPath);
-                        figureDict.Remove(previousPath);
-                    }
-                    newFigure.Draw(triangleGrafic);
-                    figureDict.Add(path, newFigure);
+                    IFigure triangle = createTriangle(mousePos, scale);
+                    Path path_triangle = new Path();
+                    TriangleGrafic triangleGrafic = new TriangleGrafic(paintingCanvas, path_triangle);
+                    triangle.Draw(triangleGrafic);
+                    figureDict.Add(path_triangle, triangle);
                     previousPath = triangleGrafic.path;
                     break;
                 default:
