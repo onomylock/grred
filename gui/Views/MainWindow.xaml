@@ -143,12 +143,12 @@
             </Grid>-->
 
             <ComboBox SelectionChanged="ComboBox_SelectionChanged">
-                <i:Interaction.Triggers>
+                <!--<i:Interaction.Triggers>
                     <i:EventTrigger EventName="SelectionChanged">
                         <i:InvokeCommandAction
-                            Command="{Binding CreateEllipseCommand}"/>
+                            Command="{Binding CreateRectangleCommand}"/>
                     </i:EventTrigger>
-                </i:Interaction.Triggers>
+                </i:Interaction.Triggers>-->
                 <ComboBox.ItemContainerStyle>
                     <Style TargetType="ComboBoxItem">
                         <Setter Property="Background" Value="#688AE8"/>
@@ -156,20 +156,28 @@
                     </Style>
                 </ComboBox.ItemContainerStyle>
                 <ComboBoxItem>
-                    <Image x:Name="temp" Source="../Resources/linePrimitiv.png" Width="25" />
+                    <Button Command="{Binding CreateLineCommand}">
+                        <Image x:Name="temp" Source="../Resources/linePrimitiv.png" Width="25" />
+                    </Button>
                 </ComboBoxItem>
                 <ComboBoxItem>
-                    
-                    <Image Source="../Resources/trianglePrimitiv.png" Width="25"/>
+                    <Button Command="{Binding CreateTriangleCommand}">
+                        <Image Source="../Resources/trianglePrimitiv.png" Width="25"/>
+                    </Button>
                 </ComboBoxItem>
                 <ComboBoxItem IsSelected="True">
-                    <Image Source="../Resources/squarePrimitiv.png" Width="25"/>
+                    <Button Command="{Binding CreateRectangleCommand}">
+                        <Image Source="../Resources/squarePrimitiv.png" Width="25"/>
+                    </Button>
+                    
                 </ComboBoxItem>
                 <!--<ComboBoxItem>
                     <Image Source="../Resources/brokenLinePrimitiv.png" Width="25"/>
                 </ComboBoxItem>-->
                 <ComboBoxItem>
-                    <Image Source="../Resources/circlePrimitiv.png" Width="25" />
+                    <Button Command="{Binding CreateEllipseCommand}">
+                        <Image Source="../Resources/circlePrimitiv.png" Width="25" />
+                    </Button>
                 </ComboBoxItem>
             </ComboBox>
         </StackPanel>

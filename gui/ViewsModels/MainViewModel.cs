@@ -218,13 +218,10 @@ namespace gui
             return triangle;
         }
 
-        private IFigure createRectangle(object obj)
+        private IFigure createRectangle(GrRed.Vector start, GrRed.Vector scale)
         {
-            GrRed.Vector start = new GrRed.Vector(50, 50);
-            if (obj != null)
-                start = (GrRed.Vector)obj;
             FigureFactory figureFactory = FigureFabric.GetFactory("Square");
-            IFigure square = figureFactory.GetFigure(0, start, new GrRed.Vector(0, 0));
+            IFigure square = figureFactory.GetFigure(0, start, scale);
             lastCommand= createRectangleCommand;
             return square;
         }
@@ -257,11 +254,8 @@ namespace gui
                 case Mode.Selection:
                     if (figureDict.Count != 0)
                     {
-                        //IFigure selected = FindFigure(new GrRed.Vector(position.X, position.Y));
-                        //selectedFigures.Add(selected);
-
-                        // For test
-                        //selectedFigures.Add(figureDict.Last());
+                        IFigure selected = FindFigure(new GrRed.Vector(position.X, position.Y));
+                        selectedFigures.Add(selected);
                     }
                     break;
                 case Mode.Pencil:
@@ -277,14 +271,6 @@ namespace gui
                         IGraphic graphic = GraphicFabric.GetFactory(selected.TypeName, paintingCanvas, path1);
                         selected.Draw(graphic);
                         graphic.FillPolygon(currentBrush);
-
-
-                        // For test
-                        //Path path1 = new();
-                        //IFigure selected = figureDict.Last();
-                        //IGraphic graphic = GraphicFabric.GetFactory(selected.TypeName, paintingCanvas, path1);
-                        //selected.Draw(graphic);
-                        //graphic.FillPolygon(currentBrush);
                     }
                     break;
                 default:
@@ -308,10 +294,6 @@ namespace gui
             SolidColorBrush color = (SolidColorBrush)new BrushConverter().ConvertFromString(colorStr);
             currentBrush = color;
             paintingCanvas.DefaultDrawingAttributes.Color = (Color)ColorConverter.ConvertFromString(colorStr);
-
-
-            //paintingCanvas.UseCustomCursor = true;
-            // paintingCanvas.Cursor = Cursors.Wait; // Можно поставить другой курсор
         }
 
         private void onMouseUp(object obj)
@@ -349,7 +331,7 @@ namespace gui
                 case Mode.Selection:
                     break;
                 case Mode.Rectangle:
-                    IFigure square = createRectangle(mousePos);
+                    IFigure square = createRectangle(mousePos, scale);
                     Path path_square = new ();
                     RectangleGrafic squareGrafic = new RectangleGrafic(paintingCanvas, path_square);
                     square.Draw(squareGrafic);
@@ -419,13 +401,6 @@ namespace gui
         //    current.Draw(triangleGrafic);
         //    previousPath = triangleGrafic.path;
         //}
-
-
-        // TODO 1:
-        // Для дальнеший действий над фигурой нужен словарь с фигурой в качестве ключа и Path объектом в качестве значений
-        // Path объект хранит в себе заливку
-        // Команды добавляются в стек только если они выполнены !!!!!!!!! Для каждрй команды это индивидуально, но есть способы сделать красиво, но времени нет
-        // Фигуры добавляются в словарь только если они созданы
 
     }
 }
