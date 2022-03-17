@@ -57,15 +57,24 @@ namespace gui
         public ICommand mouseDown;
         public ICommand selectField;
         public ICommand selectColor;
-        private ICommand clearCanvasCommand;
-
+        public ICommand clearCanvasCommand;
         //private ICommand YkazButton = null;
         //private ICommand MysorButton = null;
         //private ICommand FillButton = null;
         //private ICommand ApproximationButton = null;
         //private ICommand DistanceButton = null;
         //private ICommand NextButton = null;
-        //private ICommand BackButton = null;       
+        //private ICommand BackButton = null;
+
+        public ICommand CreateLineCommand => createLineCommand = new ActionCommand(createLine, param => true);
+        public ICommand CreateRectangleCommand => createRectangleCommand = new ActionCommand(createRectangle, param => true);
+        public ICommand CreateEllipseCommand => createEllipseCommand = new ActionCommand(createEllipse, param => true);
+        public ICommand PenButton => penButton = new ActionCommand(activatePen, param => true);
+        public ICommand MouseDown => mouseDown = new ActionCommand(mouseDownHandler, param => true);
+        public ICommand SelectField => selectField = new ActionCommand(mouseDownHandler, param => true);
+        public ICommand SelectColor => selectColor = new ActionCommand(changeColor, param => true);
+        public ICommand ClearCanvasCommand => clearCanvasCommand = new ActionCommand(ClearCanvas, param => true);
+
 
         private readonly double esp = 0.01;
 
@@ -75,20 +84,6 @@ namespace gui
             paintingCanvas = canvas;
         }
 
-        public void OnPropertyChanged([CallerMemberName] string prop = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
-        }
-
-        public ICommand CreateLineCommand
-        {
-            get
-            {
-                createLineCommand = new ActionCommand(createLine, param => true);
-                return createLineCommand;
-            }
-        }
-
         public ICommand CreateTriangleCommand
         {
             get
@@ -96,75 +91,6 @@ namespace gui
                 createTriangleCommand = new ActionCommand(createTriangle, param => true);
                 bool res = createTriangleCommand.CanExecute(false);
                 return createTriangleCommand;
-            }
-        }
-
-
-        public ICommand CreateRectangleCommand
-        {
-            get
-            {
-                createRectangleCommand = new ActionCommand(createRectangle, param => true);
-                return createRectangleCommand;
-            }
-        }
-
-
-        public ICommand CreateEllipseCommand
-        {
-            get
-            {
-                createEllipseCommand = new ActionCommand(createEllipse, param => true);
-                return createEllipseCommand;
-            }
-        }
-
-
-        public ICommand PenButton
-        {
-            get
-            {
-                penButton = new ActionCommand(activatePen, param => true);
-                return penButton;
-            }
-        }
-
-
-        public ICommand MouseDown
-        {
-            get
-            {
-                mouseDown = new ActionCommand(mouseDownHandler, param => true);
-                return mouseDown;
-            }
-        }
-
-
-        public ICommand SelectField
-        {
-            get
-            {
-                selectField = new ActionCommand(mouseDownHandler, param => true);
-                return selectField;
-            }
-        }
-
-
-        public ICommand SelectColor
-        {
-            get
-            {
-                selectColor = new ActionCommand(changeColor, param => true);
-                return selectColor;
-            }
-        }
-
-        public ICommand ClearCanvasCommand
-        {
-            get
-            {
-                clearCanvasCommand = new ActionCommand(ClearCanvas, param => true);
-                return clearCanvasCommand;
             }
         }
 
@@ -318,6 +244,11 @@ namespace gui
             SolidColorBrush color = (SolidColorBrush)new BrushConverter().ConvertFromString(colorStr);
             currentBrush = color;
             paintingCanvas.DefaultDrawingAttributes.Color = (Color)ColorConverter.ConvertFromString(colorStr);
+        }
+
+        public void OnPropertyChanged([CallerMemberName] string prop = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
         }
     }
 }
