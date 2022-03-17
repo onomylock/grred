@@ -38,7 +38,7 @@ namespace gui
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private Dictionary<IFigure, Path> figureList = new Dictionary<IFigure, Path>();
+        private Dictionary<Path, IFigure> figureDict = new Dictionary<Path, IFigure>();
         private List<IFigure> selectedFigures = new List<IFigure>();
         private Stack<ICommand> actionCommands = new Stack<ICommand>();
         private InkCanvas paintingCanvas;
@@ -197,15 +197,16 @@ namespace gui
             actionCommands.Push(createLineCommand);
         }
 
-        private void createTriangle(object obj)
+        private IFigure createTriangle(object obj)
         {
             GrRed.Vector start = new GrRed.Vector(50, 50);
             if (obj != null)
                 start = (GrRed.Vector)obj;
             FigureFactory figureFactory = FigureFabric.GetFactory("Triangle");
             IFigure triangle = figureFactory.GetFigure(0, start, new GrRed.Vector(0, 0));
-            figureList.Add(triangle);
-            actionCommands.Push(createTriangleCommand);;
+            //figureDict.Add(triangle);
+            actionCommands.Push(createTriangleCommand);
+            return triangle;
         }
 
         private void createRectangle(object obj)
@@ -215,7 +216,7 @@ namespace gui
                 start = (GrRed.Vector)obj;
             FigureFactory figureFactory = FigureFabric.GetFactory("Square");
             IFigure square = figureFactory.GetFigure(0, start, new GrRed.Vector(10, 10));
-            figureList.Add(square);
+            //figureDict.Add(square);
             actionCommands.Push(createRectangleCommand);
         }
 
@@ -227,7 +228,7 @@ namespace gui
                 start = (GrRed.Vector)obj;
             FigureFactory figureFactory = FigureFabric.GetFactory("Ellipse");
             IFigure ellipse = figureFactory.GetFigure(0, start, new GrRed.Vector(10, 10));
-            figureList.Add(ellipse);
+            //figureDict.Add(ellipse);
             actionCommands.Push(createEllipseCommand);
         }
 
@@ -248,13 +249,13 @@ namespace gui
             switch (mode)
             {
                 case Mode.Selection:
-                    if (figureList.Count != 0)
+                    if (figureDict.Count != 0)
                     {
                         //IFigure selected = FindFigure(new GrRed.Vector(position.X, position.Y));
                         //selectedFigures.Add(selected);
 
                         // For test
-                        selectedFigures.Add(figureList.Last());
+                        //selectedFigures.Add(figureDict.Last());
                     }
                     break;
                 case Mode.Pencil:
@@ -263,7 +264,7 @@ namespace gui
                 case Mode.OpenFile:
                     break;
                 case Mode.Brush:
-                    if (figureList.Count != 0)
+                    if (figureDict.Count != 0)
                     {
                         //Path path1 = new();
                         //IFigure selected = FindFigure(new GrRed.Vector(position.X, position.Y));
@@ -273,11 +274,11 @@ namespace gui
                         
 
                         // For test
-                        Path path1 = new();
-                        IFigure selected = figureList.Last();
-                        IGraphic graphic = GraphicFabric.GetFactory(selected.TypeName, paintingCanvas, path1);
-                        selected.Draw(graphic);
-                        graphic.FillPolygon(currentBrush);
+                        //Path path1 = new();
+                        //IFigure selected = figureDict.Last();
+                        //IGraphic graphic = GraphicFabric.GetFactory(selected.TypeName, paintingCanvas, path1);
+                        //selected.Draw(graphic);
+                        //graphic.FillPolygon(currentBrush);
                     }
                     break;
                 default:
@@ -288,7 +289,7 @@ namespace gui
         private IFigure FindFigure(GrRed.Vector p)
         {
             IFigure res = null;
-            foreach (var fig in figureList.Keys)
+            foreach (var fig in figureDict.Values)
                 if (fig.IsIn(p, 1E-2))
                     res = fig;
             return res;
@@ -339,14 +340,17 @@ namespace gui
                 case Mode.Ellipse:
                     break;
                 case Mode.Triangle:
-                    createTriangle(mousePos);
+                    IFigure newFigure = createTriangle(mousePos);
                     Path path = new Path();
                     TriangleGrafic triangleGrafic = new TriangleGrafic(paintingCanvas, path);
-                    IFigure current = figureList.Last();
-                    figureList.Clear();
-                    figureList.Add(current);
-                    paintingCanvas.Children.Remove(previousPath);
-                    current.Draw(triangleGrafic);
+                    //IFigure current = figureDict.GetValueOrDefault(previousPath);
+                    if (previousPath != null)
+                    {
+                        paintingCanvas.Children.Remove(previousPath);
+                        figureDict.Remove(previousPath);
+                    }
+                    newFigure.Draw(triangleGrafic);
+                    figureDict.Add(path, newFigure);
                     previousPath = triangleGrafic.path;
                     break;
                 default:
@@ -378,9 +382,9 @@ namespace gui
         //{
         //    Path path = new Path();
         //    IGraphic triangleGrafic = GraphicFabric.GetFactory(figure.TypeName, paintingCanvas, path);
-        //    IFigure current = figureList.Last();
-        //    figureList.Remove(figure);
-        //    figureList.Add(current);
+        //    IFigure current = figureDict.Last();
+        //    figureDict.Remove(figure);
+        //    figureDict.Add(current);
         //    paintingCanvas.Children.Remove(previousPath);
         //    current.Draw(triangleGrafic);
         //    previousPath = triangleGrafic.path;
