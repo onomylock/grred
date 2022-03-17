@@ -11,17 +11,17 @@ namespace gui
 {
     public class EllipseGrafic : IGraphic
     {
+        public readonly Path path;
         private readonly InkCanvas canvas;
-        private readonly Path path;
-        Brush conturColor, fillColor;
-        double thickness;
-        public EllipseGrafic(InkCanvas canvas, Brush curConturBrush, Brush curFillBrush, double curThickness)
+        private Brush conturColor, fillColor;
+        private double thickness;
+        public EllipseGrafic(InkCanvas canvas)
         {
             this.canvas = canvas;
             path = new Path();
-            conturColor = curConturBrush;
-            fillColor = curFillBrush;
-            thickness = curThickness;
+            //conturColor = curConturBrush;
+            //fillColor = curFillBrush;
+            //thickness = curThickness;
         }
         public void AddLines(IEnumerable<GrRed.Vector> Ilines) { }
         public void AddPolyArc(IEnumerable<GrRed.Vector> Ilines)
@@ -61,14 +61,14 @@ namespace gui
     public class TriangleGrafic : IGraphic
     {
         private readonly InkCanvas canvas;
-        private readonly Path path;
+        public readonly Path path;
         public TriangleGrafic(InkCanvas canvas, Path path)
         {
             this.canvas = canvas;
-            path = new Path();
-            conturColor = curConturBrush;
-            fillColor = curFillBrush;
-            thickness = curThickness;
+            this.path = path;
+            //conturColor = curConturBrush;
+            //fillColor = curFillBrush;
+            //thickness = curThickness;
         }
         public void AddPolyArc(IEnumerable<GrRed.Vector> Ilines) { }
         public void AddLines(IEnumerable<GrRed.Vector> Ilines)
@@ -89,9 +89,9 @@ namespace gui
             pathGeom.Figures.Add(pathFig);
 
             path.Data = pathGeom;
-            path.Stroke = conturColor;
-            path.StrokeThickness = thickness;
-            path.Fill = fillColor;
+            //path.Stroke = conturColor;
+            //path.StrokeThickness = thickness;
+            //path.Fill = fillColor;
 
             canvas.Children.Add(path);
         }
@@ -101,13 +101,13 @@ namespace gui
     public class LineGrafic : IGraphic
     {
         private readonly InkCanvas canvas;
-        private readonly Path path;
+        public readonly Path path;
         public LineGrafic(InkCanvas canvas, Path path)
         {
             this.canvas = canvas;
             path = new Path();
-            conturColor = curConturBrush;
-            thickness = curThickness;
+            //conturColor = curConturBrush;
+            //thickness = curThickness;
         }
         public void AddPolyArc(IEnumerable<GrRed.Vector> Ilines) { }
         public void AddLines(IEnumerable<GrRed.Vector> Ilines)
@@ -126,9 +126,9 @@ namespace gui
 
             pathGeom.Figures.Add(pathFig);
 
-            path.Data = pathGeom;
-            path.Stroke = conturColor;
-            path.StrokeThickness = thickness;
+            //path.Data = pathGeom;
+            //path.Stroke = conturColor;
+            //path.StrokeThickness = thickness;
 
             canvas.Children.Add(path);
         }
@@ -138,14 +138,14 @@ namespace gui
     public class RectangleGrafic : IGraphic
     {
         private readonly InkCanvas canvas;
-        private readonly Path path;
+        public readonly Path path;
         public RectangleGrafic(InkCanvas canvas, Path path)
         {
             this.canvas = canvas;
             path = new Path();
-            conturColor = curConturBrush;
-            fillColor = curFillBrush;
-            thickness = curThickness;
+            //conturColor = curConturBrush;
+            //fillColor = curFillBrush;
+            //thickness = curThickness;
         }
         public void AddPolyArc(IEnumerable<GrRed.Vector> Ilines) { }
         public void AddLines(IEnumerable<GrRed.Vector> Ilines)
@@ -166,9 +166,9 @@ namespace gui
             pathGeom.Figures.Add(pathFig);
 
             path.Data = pathGeom;
-            path.Stroke = conturColor;
-            path.StrokeThickness = thickness;
-            path.Fill = fillColor;
+            //path.Stroke = conturColor;
+            //path.StrokeThickness = thickness;
+            //path.Fill = fillColor;
 
             canvas.Children.Add(path);
         }
@@ -181,7 +181,7 @@ namespace gui
         {
             return name switch
             {
-                "Ellipse" => new EllipseGrafic(canvas, path),
+                "Ellipse" => new EllipseGrafic(canvas),
                 "Triangle" => new TriangleGrafic(canvas, path),
                 "Square" => new RectangleGrafic(canvas, path),
                 _ => null,

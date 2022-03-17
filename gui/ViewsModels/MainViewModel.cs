@@ -47,6 +47,7 @@ namespace gui
 
         private Mode mode = Mode.Selection;
         private bool isMouseDown = false;
+        private ICommand lastCommand;
 
         private ICommand createLineCommand = null;
         private ICommand createTriangleCommand = null;
@@ -58,6 +59,7 @@ namespace gui
         private ICommand selectColor = null;
         private ICommand mouseUp = null;
         private ICommand mouseMove = null;
+        private ICommand selectionCommand = null;
 
         //private ICommand YkazButton = null;
         //private ICommand MysorButton = null;
@@ -191,6 +193,18 @@ namespace gui
             }
         }
 
+        public ICommand SelectionCommand
+        {
+            get
+            {
+                selectionCommand = new ActionCommand(obj =>
+                {
+                    mode = Mode.Selection;
+                }, param => true);
+                return selectionCommand;
+            }
+        }
+
 
 
         private void createLine(object obj)
@@ -212,7 +226,8 @@ namespace gui
             FigureFactory figureFactory = FigureFabric.GetFactory("Triangle");
             IFigure triangle = figureFactory.GetFigure(0, start, new GrRed.Vector(0, 0));
             //figureDict.Add(triangle);
-            actionCommands.Push(createTriangleCommand);
+            //actionCommands.Push(createTriangleCommand);
+            lastCommand = createTriangleCommand;
             return triangle;
         }
 
