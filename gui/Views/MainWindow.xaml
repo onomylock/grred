@@ -158,9 +158,9 @@
                 <ComboBoxItem IsSelected="True">
                     <Image Source="../Resources/squarePrimitiv.png" Width="25"/>
                 </ComboBoxItem>
-                <ComboBoxItem>
+                <!--<ComboBoxItem>
                     <Image Source="../Resources/brokenLinePrimitiv.png" Width="25"/>
-                </ComboBoxItem>
+                </ComboBoxItem>-->
                 <ComboBoxItem>
                     <Image Source="../Resources/circlePrimitiv.png" Width="25" />
                 </ComboBoxItem>

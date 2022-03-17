@@ -28,7 +28,13 @@ namespace gui
         private List<IFigure> selectedFigures = new List<IFigure>();
         private Stack<ICommand> actionCommands = new Stack<ICommand>();
         private InkCanvas paintingCanvas;
-        private Brush currentBrush;
+        //private Brush currentBrush;
+
+        //***************************//
+        private Brush curConturBrush;
+        private Brush curFillBrush;
+        private double curThickness;
+        //***************************//
 
         private bool penIsActive = false;
         private bool canExecute = false;
@@ -147,8 +153,7 @@ namespace gui
         {
             if (canExecute)
             {
-                Path path = new Path();
-                LineGrafic lineGrafic = new LineGrafic(paintingCanvas, path);
+                LineGrafic lineGrafic = new LineGrafic(paintingCanvas, curConturBrush, curThickness);
                 List<GrRed.Vector> vector2 = new List<GrRed.Vector>();
                 vector2.Add(new GrRed.Vector(300, 300));
                 vector2.Add(new GrRed.Vector(450, 50));
@@ -166,8 +171,7 @@ namespace gui
                 GrRed.Vector start = new GrRed.Vector(50, 50);
                 if (obj != null)
                     start = (GrRed.Vector)obj;
-                Path path = new Path();
-                TriangleGrafic triangleGrafic = new TriangleGrafic(paintingCanvas, path);
+                TriangleGrafic triangleGrafic = new TriangleGrafic(paintingCanvas, curConturBrush, curFillBrush, curThickness);
                 FigureFactory figureFactory = FigureFabric.GetFactory("Triangle");
                 IFigure triangle = figureFactory.GetFigure(0, start, new GrRed.Vector(10, 10));
                 triangle.Draw(triangleGrafic);
@@ -182,8 +186,7 @@ namespace gui
                 GrRed.Vector start = new GrRed.Vector(50, 50);
                 if (obj != null)
                     start = (GrRed.Vector)obj;
-                Path path = new Path();
-                RectangleGrafic rectangle = new RectangleGrafic(paintingCanvas, path);
+                RectangleGrafic rectangle = new RectangleGrafic(paintingCanvas, curConturBrush, curFillBrush, curThickness);
                 FigureFactory figureFactory = FigureFabric.GetFactory("Square");
                 IFigure square = figureFactory.GetFigure(0, start, new GrRed.Vector(10, 10));
             } else
@@ -199,7 +202,7 @@ namespace gui
                 if (obj != null)
                     start = (GrRed.Vector)obj;
                 Path path = new Path();
-                EllipseGrafic ellipseGrafic = new EllipseGrafic(paintingCanvas, path);
+                EllipseGrafic ellipseGrafic = new EllipseGrafic(paintingCanvas, curConturBrush, curFillBrush, curThickness);
                 FigureFactory figureFactory = FigureFabric.GetFactory("Ellipse");
                 IFigure ellipse = figureFactory.GetFigure(0, start, new GrRed.Vector(10, 10));
             } else
@@ -230,7 +233,7 @@ namespace gui
         {
             string colorStr = obj.ToString();
             SolidColorBrush color = (SolidColorBrush)new BrushConverter().ConvertFromString(colorStr);
-            currentBrush = color;
+            //currentBrush = color;
             paintingCanvas.DefaultDrawingAttributes.Color = (Color)ColorConverter.ConvertFromString(colorStr);
         }
     }
