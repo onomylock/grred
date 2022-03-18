@@ -1,13 +1,22 @@
 ﻿using GrRed;
 using GrRed.Geometry.Factory;
 using System.Collections.Generic;
+using System.Linq;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
+using GrRed;
+using GrRed.Geometry.Factory;
 
 namespace gui
 {
@@ -177,6 +186,21 @@ namespace gui
                 mouseUp = new ActionCommand(onMouseUp, param => true);
                 return mouseUp;
             }
+        }
+        public ICommand ClearCanvasCommand
+        {
+            get
+            {
+                clearCanvasCommand = new ActionCommand(ClearCanvas, param => true);
+                return clearCanvasCommand;
+            }
+        }
+        private void ClearCanvas(object obj)
+        {
+            paintingCanvas.Strokes.Clear();
+            actionCommands.Clear();
+            figureList.Clear();
+            selectedFigures.Clear();
         }
 
         public ICommand MouseMove
