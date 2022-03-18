@@ -52,7 +52,7 @@ namespace GrRed.Geometry.Domain
             List<Vector> vector1 = new List<GrRed.Vector>();
             vector1.Add(new GrRed.Vector(500, 500));
             vector1.Add(new GrRed.Vector(450, 450));
-            //vector1.Add(new GrRed.Vector(400, 400));
+            vector1.Add(new GrRed.Vector(400, 400));
             graphic.AddPolyArc(vector1);
             //Brush brush1 = Brushes.BlueViolet;
             //ellipseGrafic.FillPolygon(brush1);
@@ -117,14 +117,28 @@ namespace GrRed.Geometry.Domain
             double newAngle = Angle + delta;
             double eps = 0.1;
             Vector newScale;
-            if (Math.Abs(newAngle) % Math.PI < eps)
+            double AxisX;
+            double AxisY;
+
+            if (Math.Abs(Math.PI / 2.0 + Angle) % Math.PI <= eps) // Случай, когда угол кратен пи/2
             {
-                newScale = new(Scale.Y, Scale.X);
+                AxisY = Scale.Y;
+                AxisX = Scale.X;
+            }
+            else                                      // Любой другой случай
+            {
+                AxisX = Scale.X / Math.Cos(Angle);
+                AxisY = Scale.Y / Math.Cos(Angle);
+            }
+
+            if (Math.Abs(Math.PI / 2.0 + newAngle) % Math.PI <= eps) // Случай, когда угол кратен пи/2 
+            {
+                newScale = new(AxisY, AxisX);
                 return new Ellipse(newAngle, Center, newScale);
             }
             else
             {
-                newScale = new(Scale.X * Math.Cos(newAngle), Scale.Y * Math.Cos(newAngle));
+                newScale = new(AxisX * Math.Cos(newAngle), AxisY * Math.Cos(newAngle));
                 return new Ellipse(newAngle, Center, newScale);
             }
         }
