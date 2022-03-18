@@ -27,8 +27,8 @@ namespace GrRed.Geometry.Domain
         public Square(IEnumerable<Vector> Points)
         {
             _Center = SetInputCenter(Points);
-            _Angle = SetInputAngle(Points);
-            _Scale = SetInputScale(Points);
+            //_Angle = SetInputAngle(Points);
+            //_Scale = SetInputScale(Points);
         }
 
         public string TypeName => "Square";
@@ -45,23 +45,16 @@ namespace GrRed.Geometry.Domain
 
         public void Draw(IGraphic graphic)
         {
-
-        }
-
-        private Vector SetInputScale(IEnumerable<Vector> Points)
-        {
-            Vector p1 = Points.ElementAt(0);
-            Vector p2 = Points.ElementAt(1);
-            Vector p3 = Points.ElementAt(2);
-
-            return new Vector(Math.Abs(p1.X - p2.X), Math.Abs(p2.Y - p3.Y));
-        }
-
-        private double SetInputAngle(IEnumerable<Vector> Points)
-        {
-            Vector p1 = Points.ElementAt(1);
-            Vector p2 = Points.ElementAt(2);
-            return Math.Asin((p2.Y - p1.Y) / Math.Sqrt(Math.Pow(p2.X - p1.X, 2) + Math.Pow(p2.Y - p1.X, 2)));
+            List<Vector> vector1 = new List<GrRed.Vector>();
+            double h_X = _Center.X + _Scale.X * Math.Cos(_Angle);
+            double h_Y = _Center.Y - _Scale.X * Math.Sin(_Angle);
+            double v_X = _Center.X + _Scale.Y * Math.Sin(_Angle);
+            double v_Y = _Center.Y + _Scale.Y * Math.Cos(_Angle);
+            vector1.Add(new GrRed.Vector(h_X, h_Y));
+            vector1.Add(new GrRed.Vector(v_X, v_Y));
+            vector1.Add(new GrRed.Vector(_Center.X - Math.Abs(_Center.X - h_X), _Center.Y - Math.Abs(_Center.Y - h_Y)));
+            vector1.Add(new GrRed.Vector(_Center.X - Math.Abs(_Center.X - v_X), _Center.Y - Math.Abs(_Center.Y - v_Y)));
+            graphic.AddLines(vector1);
         }
 
         private Vector SetInputCenter(IEnumerable<Vector> Points)
