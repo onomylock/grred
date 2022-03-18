@@ -59,6 +59,7 @@ namespace gui
         private ICommand mouseUp = null;
         private ICommand mouseMove = null;
         private ICommand selectionCommand = null;
+        private ICommand clearCanvasCommand = null;
 
         //private ICommand YkazButton = null;
         //private ICommand MysorButton = null;
@@ -187,6 +188,7 @@ namespace gui
                 return mouseUp;
             }
         }
+
         public ICommand ClearCanvasCommand
         {
             get
@@ -194,13 +196,6 @@ namespace gui
                 clearCanvasCommand = new ActionCommand(ClearCanvas, param => true);
                 return clearCanvasCommand;
             }
-        }
-        private void ClearCanvas(object obj)
-        {
-            paintingCanvas.Strokes.Clear();
-            actionCommands.Clear();
-            figureList.Clear();
-            selectedFigures.Clear();
         }
 
         public ICommand MouseMove
@@ -223,6 +218,13 @@ namespace gui
                 return selectionCommand;
             }
         }
+        private void ClearCanvas(object obj)
+        {
+            paintingCanvas.Strokes.Clear();
+            actionCommands.Clear();
+            figureDict.Clear();
+            selectedFigures.Clear();
+    }
 
         private IFigure createTriangle(GrRed.Vector start, GrRed.Vector scale)
         {
