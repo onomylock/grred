@@ -13,15 +13,17 @@ namespace GrRed.Geometry.Domain
         private readonly Vector _Center = new(1.0, 1.0);
         private readonly double _Angle = 0.0;
         private readonly Vector _Scale = new(1.0, 1.0);
+        private readonly bool _Flag90 = false;
 
         public Ellipse() { }
 
         [JsonConstructor]
-        public Ellipse(double Angle, Vector Center, Vector Scale)
+        public Ellipse(double Angle, Vector Center, Vector Scale, bool Flag90)
         {
             _Center = Center;
             _Angle = Angle;
             _Scale = Scale;
+            _Flag90 = Flag90;
         }
 
         public Ellipse(IEnumerable<Vector> Points)
@@ -80,15 +82,23 @@ namespace GrRed.Geometry.Domain
             double AxisY;
 
             // Вычисляем полуоси повёрнутого эллипса
-            if (Math.Abs(Angle) % Math.PI / 2.0 <= eps) // Случай, когда угол кратен пи/2 
+            if(Math.Abs(Math.PI / 2.0 + Angle) % Math.PI <= eps) // Случай, когда угол кратен пи/2
             {
                 AxisY = Scale.X;
                 AxisX = Scale.Y;
             }
             else                                      // Любой другой случай
             {
-                AxisX = Scale.X / Math.Cos(Angle);
-                AxisY = Scale.Y / Math.Cos(Angle);
+                if (_Flag90)
+                {
+                    AxisY = Scale.X / Math.Cos(Angle);
+                    AxisX = Scale.Y / Math.Cos(Angle);
+                }
+                else
+                {
+                    AxisX = Scale.X / Math.Cos(Angle);
+                    AxisY = Scale.Y / Math.Cos(Angle);
+                }
             }
 
             // Проверяем (x-x0)^2/a^2 + (y-y0)^2/b^2 +- eps <= 1, но для повёрнутого эллипса (немного другая формула для более общего случая)
@@ -104,7 +114,7 @@ namespace GrRed.Geometry.Domain
         public IFigure Move(Vector delta)
         {
             Vector deltaCenter = Center + delta;
-            return new Ellipse(Angle, deltaCenter, Scale);
+            return new Ellipse(Angle, deltaCenter, Scale, _Flag90);
         }
 
         public IFigure Reflection(bool axe)
@@ -120,10 +130,10 @@ namespace GrRed.Geometry.Domain
             double AxisX;
             double AxisY;
 
-            if (Math.Abs(Math.PI / 2.0 + Angle) % Math.PI <= eps) // Случай, когда угол кратен пи/2
+            if (Math.Abs(Math.PI / 2.0 + Angle) % Math.PI <= eps/1000) // Случай, когда угол кратен пи/2
             {
-                AxisY = Scale.Y;
                 AxisX = Scale.X;
+                AxisY = Scale.Y;
             }
             else                                      // Любой другой случай
             {
@@ -131,22 +141,35 @@ namespace GrRed.Geometry.Domain
                 AxisY = Scale.Y / Math.Cos(Angle);
             }
 
-            if (Math.Abs(Math.PI / 2.0 + newAngle) % Math.PI <= eps) // Случай, когда угол кратен пи/2 
+            if (Math.Abs(Math.PI / 2.0 + newAngle) % Math.PI <= eps/1000) // Случай, когда новый угол кратен пи/2 
             {
-                newScale = new(AxisY, AxisX);
-                return new Ellipse(newAngle, Center, newScale);
+                if (_Flag90)
+                    newScale = new(AxisX, AxisY);
+                else
+                    newScale = new(AxisY, AxisX);
+
+                return new Ellipse(newAngle, Center, newScale, true);
+            }
+            else if (Math.Abs(newAngle) % Math.PI <= eps/1000) // Случай, когда новый угол кратен пи
+            {
+                if (!_Flag90)
+                    newScale = new(AxisX, AxisY);
+                else
+                    newScale = new(AxisY, AxisX);
+
+                return new Ellipse(newAngle, Center, newScale, false);
             }
             else
             {
                 newScale = new(AxisX * Math.Cos(newAngle), AxisY * Math.Cos(newAngle));
-                return new Ellipse(newAngle, Center, newScale);
+                return new Ellipse(newAngle, Center, newScale, _Flag90);
             }
         }
 
         public IFigure SetScale(double dx, double dy)
         {
             Vector newScale = new(Scale.X + dx / 2.0, Scale.Y + dy / 2.0);
-            return new Ellipse(Angle, Center, newScale);
+            return new Ellipse(Angle, Center, newScale, _Flag90);
         }
 
         public IFigure Subtruct(IFigure fig2)
