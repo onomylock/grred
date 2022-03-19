@@ -1,22 +1,17 @@
 ﻿using GrRed;
 using GrRed.Geometry.Factory;
 using System.Collections.Generic;
-using System.Linq;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
-using GrRed;
-using GrRed.Geometry.Factory;
+using System.Diagnostics;
+using System;
+using GrRed.IO;
+using System.Linq;
 
 namespace gui
 {
@@ -37,12 +32,12 @@ namespace gui
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private Dictionary<Path, IFigure> figureDict = new Dictionary<Path, IFigure>();
+        public Dictionary<Path, IFigure> figureDict = new Dictionary<Path, IFigure>();
         private List<IFigure> selectedFigures = new List<IFigure>();
         private Stack<ICommand> actionCommands = new Stack<ICommand>();
         private InkCanvas paintingCanvas;
         private Brush currentBrush;
-        private Path previousPath;
+        public Path previousPath;
 
         private Mode mode = Mode.Selection;
         private bool isMouseDown = false;
@@ -60,6 +55,8 @@ namespace gui
         private ICommand mouseMove = null;
         private ICommand selectionCommand = null;
         private ICommand clearCanvasCommand = null;
+        private ICommand saveCommand;
+        private ICommand helpCommand;
 
         //private ICommand YkazButton = null;
         //private ICommand MysorButton = null;
@@ -84,6 +81,21 @@ namespace gui
         {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(prop));
+        }
+
+        public ICommand SaveCommand => saveCommand = new ActionCommand(Save, param => true);
+
+        private void Save(object obj)
+        {
+            List<IFigure> ListFig = figureDict.Values.ToList();
+            Io.Save(paintingCanvas, ListFig);
+        }
+
+        public ICommand HelpCommand => helpCommand = new ActionCommand(HelpButton, param => true);
+        
+        private void HelpButton(object obj)
+        {
+            Process.Start(new ProcessStartInfo("https://gitlab.com/egorsukhinin/grred/-/wikis/Интерфейс-приложения") { UseShellExecute = true });
         }
 
         public ICommand CreateLineCommand
@@ -220,11 +232,11 @@ namespace gui
         }
         private void ClearCanvas(object obj)
         {
-            paintingCanvas.Strokes.Clear();
             actionCommands.Clear();
             figureDict.Clear();
             selectedFigures.Clear();
-    }
+            paintingCanvas.Children.Clear();
+        }
 
         private IFigure createTriangle(GrRed.Vector start, GrRed.Vector scale)
         {
