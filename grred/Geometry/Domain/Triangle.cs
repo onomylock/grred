@@ -119,13 +119,13 @@ namespace GrRed.Geometry.Domain
 
         public IFigure Rotate(double delta)
         {
-            double newAngle = Angle + delta;
+            double newAngle = (Angle + delta) % Math.PI;
             Vector[] newPoints = new Vector[3];
 
             for (int i = 0; i < newPoints.Count(); i++)
             {
-                newPoints[0] = new Vector(Points[0].X * Math.Cos(newAngle) - Points[0].Y * Math.Sin(newAngle),
-                Points[0].X * Math.Sin(newAngle) + Points[0].Y * Math.Cos(newAngle));
+                newPoints[i] = new Vector(Points[i].X * Math.Cos(newAngle) - Points[i].Y * Math.Sin(newAngle),
+                Points[i].X * Math.Sin(newAngle) + Points[i].Y * Math.Cos(newAngle));
             }
             return new Triangle(newPoints);
         }

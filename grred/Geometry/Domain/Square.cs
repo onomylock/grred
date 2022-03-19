@@ -57,12 +57,12 @@ namespace GrRed.Geometry.Domain
             // vector1.Add(new Vector(Center.X - Math.Abs(Center.X - h_X), Center.Y - Math.Abs(Center.Y - h_Y)));
             // vector1.Add(new Vector(Center.X - Math.Abs(Center.X - v_X), Center.Y - Math.Abs(Center.Y - v_Y)));
             // graphic.AddLines(vector1);
-            List<Vector> vec = new List<Vector>();
-            vec.Add(Points[0]);
-            vec.Add(Points[1]);
-            vec.Add(Points[2]);
-            vec.Add(Points[3]);
-            graphic.AddLines(vec);
+            // List<Vector> vec = new List<Vector>();
+            // vec.Add(Points[0]);
+            // vec.Add(Points[1]);
+            // vec.Add(Points[2]);
+            // vec.Add(Points[3]);
+            graphic.AddLines(Points);
         }
 
         // Методы задания параметров класса
