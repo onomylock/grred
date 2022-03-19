@@ -10,63 +10,59 @@ namespace GrRed.Geometry.Domain
     [DataContract]
     class Ellipse : IFigure
     {
-        private readonly Vector _Center = new(1.0, 1.0);
-        private readonly double _Angle = 0.0;
-        private readonly Vector _Scale = new(1.0, 1.0);
-
+        // private readonly Vector _Center = new(1.0, 1.0);
+        // private readonly double _Angle = 0.0;
+        // private readonly Vector _Scale = new(1.0, 1.0);
         public Ellipse() { }
 
         [JsonConstructor]
-        public Ellipse(double Angle, Vector Center, Vector Scale)
+        public Ellipse(double angle, Vector center, Vector scale)
         {
-            _Center = Center;
-            _Angle = Angle;
-            _Scale = Scale;
+            Center = center;
+            Angle = angle;
+            Scale = scale;
+            Gabarit = (Center.X - Scale.X, Center.Y + Scale.Y, Center.X + Scale.X, Center.Y - Scale.Y);
+            Points = SetInputPoints();
         }
 
         public Ellipse(IEnumerable<Vector> Points)
         {
-            _Scale = new Vector(Math.Abs(Points.ElementAt(0).X), Math.Abs(Points.ElementAt(1).Y));
-            _Center = SetInputCenter(Points);
-            Vector point = Points.ElementAt(1);
-            _Angle = Math.Asin((point.Y - _Center.Y) / VectorModul(point - _Center));
+            this.Points = Points.ToArray();
+            Scale = new Vector(Math.Abs(this.Points[0].X), Math.Abs(this.Points[1].Y));
+            Center = SetInputCenter(this.Points);
+            Angle = Math.Asin((this.Points[1].Y - Center.Y) / VectorModul(this.Points[1] - this.Center));
+            Gabarit = (Center.X - Scale.X, Center.Y + Scale.Y, Center.X + Scale.X, Center.Y - Scale.Y);
         }
 
         public string TypeName => "Ellipse";
         [DataMember]
-        public double Angle => _Angle;
+        public Vector[] Points { get; }
+        public double Angle { get; }
         [DataMember]
-        public Vector Center => _Center;
+        public Vector Center { get; }
         [DataMember]
-        public Vector Scale => _Scale;
+        public Vector Scale { get; }
 
-        public (double l, double t, double r, double b) Gabarit =>
-            (Center.X - Scale.X, Center.Y + Scale.Y, Center.X + Scale.X, Center.Y - Scale.Y);
+        public (double l, double t, double r, double b) Gabarit { get; }
 
         private double VectorModul(Vector a) => Math.Sqrt(Math.Pow(a.X, 2) + Math.Pow(a.Y, 2));
 
         public void Draw(IGraphic graphic)
         {
-            //Path path = new Path();
-            //EllipseGrafic ellipseGrafic = new EllipseGrafic(paintingCanvas, path);
-            List<Vector> vector1 = new List<GrRed.Vector>();
-            vector1.Add(new GrRed.Vector(500, 500));
-            vector1.Add(new GrRed.Vector(450, 450));
-            vector1.Add(new GrRed.Vector(400, 400));
-            graphic.AddPolyArc(vector1);
-            //Brush brush1 = Brushes.BlueViolet;
-            //ellipseGrafic.FillPolygon(brush1);
-
+            graphic.AddPolyArc(new ArraySegment<Vector>(Points, 0, 3));
         }
 
-        private Vector SetInputCenter(IEnumerable<Vector> Points)
-        {
-            Vector p1 = Points.ElementAt(0);
-            Vector p2 = Points.ElementAt(1);
-            Vector p3 = Points.ElementAt(2);
-            Vector p4 = Points.ElementAt(3);
+        private Vector SetInputCenter(Vector[] Points) => new Vector(Points[2].X - Points[0].X, Points[1].Y - Points[3].Y);
 
-            return new Vector(p3.X - p1.X, p2.Y - p4.Y);
+        private Vector[] SetInputPoints()
+        {
+            Vector[] newPoints = new Vector[4];
+
+            newPoints[0] = new Vector(Center.X - (Gabarit.l * Math.Cos(Angle) - Center.Y * Math.Sin(Angle)), Center.Y - (Gabarit.l * Math.Sin(Angle) + Center.Y * Math.Cos(Angle)));
+            newPoints[1] = new Vector(Center.X - (Center.X * Math.Cos(Angle) - Gabarit.t * Math.Sin(Angle)), Center.Y + (Center.X * Math.Sin(Angle) + Gabarit.t * Math.Cos(Angle)));
+            newPoints[2] = new Vector(Center.X + (Gabarit.r * Math.Cos(Angle) - Center.Y * Math.Sin(Angle)), Center.Y + (Gabarit.r * Math.Sin(Angle) + Center.Y * Math.Cos(Angle)));
+            newPoints[3] = new Vector(Center.X + (Center.X * Math.Cos(Angle) - Gabarit.b * Math.Sin(Angle)), Center.Y - (Center.X * Math.Sin(Angle) + Gabarit.b * Math.Cos(Angle)));
+            return newPoints;
         }
 
         public IFigure Intersection(IFigure fig2)
