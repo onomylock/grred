@@ -24,6 +24,11 @@ namespace GrRed.Geometry.Domain
             _Scale = Scale;
         }
 
+        public Triangle(IEnumerable<Vector> Points)
+        {
+
+        }
+
         public string TypeName => "Triangle";
         [DataMember]
         public double Angle => _Angle;
@@ -33,7 +38,7 @@ namespace GrRed.Geometry.Domain
         public Vector Scale => _Scale;
 
         public (double l, double t, double r, double b) Gabarit =>
-            (Center.X - Scale.X,         Center.Y + Scale.Y * 2.0 / 3.0,       Center.X,       Center.Y - Scale.Y * 2.0 / 3.0);
+            (Center.X - Scale.X, Center.Y + Scale.Y * 2.0 / 3.0, Center.X, Center.Y - Scale.Y * 2.0 / 3.0);
 
 
         public void Draw(IGraphic graphic)
