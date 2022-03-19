@@ -9,6 +9,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Diagnostics;
+using System;
+using GrRed.IO;
+using System.Linq;
 
 namespace gui
 {
@@ -80,9 +83,16 @@ namespace gui
                 PropertyChanged(this, new PropertyChangedEventArgs(prop));
         }
 
-        //public ICommand SaveCommand => saveCommand = new ActionCommand(obj => Io.Save(obj?.ToString()), param => true)
-        public ICommand HelpCommand => helpCommand = new ActionCommand(HelpButton, param => true);
+        public ICommand SaveCommand => saveCommand = new ActionCommand(Save, param => true);
 
+        private void Save(object obj)
+        {
+            List<IFigure> ListFig = figureDict.Values.ToList();
+            Io.Save(paintingCanvas, ListFig);
+        }
+
+        public ICommand HelpCommand => helpCommand = new ActionCommand(HelpButton, param => true);
+        
         private void HelpButton(object obj)
         {
             Process.Start(new ProcessStartInfo("https://gitlab.com/egorsukhinin/grred/-/wikis/Интерфейс-приложения") { UseShellExecute = true });

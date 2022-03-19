@@ -54,7 +54,7 @@ namespace GrRed.IO
             File.WriteAllText(filename, outstring);
         }
 
-        private static void CanvToPNG(Canvas canvas, string filename)
+        private static void CanvToPNG(InkCanvas canvas, string filename)
         {
             canvas.LayoutTransform = null;
 
@@ -76,7 +76,7 @@ namespace GrRed.IO
             }
         }
 
-        private static void CanvasToPDF(Canvas canvas, string filename)
+        private static void CanvasToPDF(InkCanvas canvas, string filename)
         {
              RenderTargetBitmap renderBitmap = new RenderTargetBitmap((int)canvas.ActualWidth, (int)canvas.ActualHeight + 125, 96d, 96d, PixelFormats.Pbgra32);
              renderBitmap.Render(canvas);
@@ -102,7 +102,7 @@ namespace GrRed.IO
              document.Close();
         }
 
-        public static void Save(Canvas canvas, List<IFigure> figureList)
+        public static void Save(InkCanvas canvas, List<IFigure> figureList)
         {
             Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
             dlg.FileName = "Canvas";
