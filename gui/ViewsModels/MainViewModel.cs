@@ -222,10 +222,10 @@ namespace gui
         }
         private void ClearCanvas(object obj)
         {
-            paintingCanvas.Strokes.Clear();
             actionCommands.Clear();
             figureDict.Clear();
             selectedFigures.Clear();
+            paintingCanvas.Children.Clear();
         }
 
         private IFigure createTriangle(GrRed.Vector start, GrRed.Vector scale)
