@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using System.Runtime.Serialization;
 using System.Collections.Generic;
 using System.Linq;
+
 namespace GrRed.Geometry.Domain
 {
     [DataContract]
@@ -25,9 +26,9 @@ namespace GrRed.Geometry.Domain
 
         public Square(IEnumerable<Vector> Points)
         {
-            _Center = SetInputCentr(Points);
-            _Angle = SetInputAngle(Points);
-
+            _Center = SetInputCenter(Points);
+            //_Angle = SetInputAngle(Points);
+            //_Scale = SetInputScale(Points);
         }
 
         public string TypeName => "Square";
@@ -53,22 +54,10 @@ namespace GrRed.Geometry.Domain
             vector1.Add(new GrRed.Vector(v_X, v_Y));
             vector1.Add(new GrRed.Vector(_Center.X - Math.Abs(_Center.X - h_X), _Center.Y - Math.Abs(_Center.Y - h_Y)));
             vector1.Add(new GrRed.Vector(_Center.X - Math.Abs(_Center.X - v_X), _Center.Y - Math.Abs(_Center.Y - v_Y)));
-            graphic.AddPolyArc(vector1);
+            graphic.AddLines(vector1);
         }
 
-        // private Vector SetInputScale(IEnumerable<Vector> Points, Vector center)
-        // {
-
-        // }
-
-        private double SetInputAngle(IEnumerable<Vector> Points)
-        {
-            Vector p1 = Points.ElementAt(1);
-            Vector p2 = Points.ElementAt(2);
-            return Math.Asin((p2.Y - p1.Y) / Math.Sqrt(Math.Pow(p2.X - p1.X, 2) + Math.Pow(p2.Y - p1.X, 2)));
-        }
-
-        private Vector SetInputCentr(IEnumerable<Vector> Points)
+        private Vector SetInputCenter(IEnumerable<Vector> Points)
         {
             Vector p1 = Points.ElementAt(0);
             Vector p2 = Points.ElementAt(1);
@@ -135,27 +124,45 @@ namespace GrRed.Geometry.Domain
 
         public IFigure Reflection(bool axe)
         {
-            double newAngle;
+            // if (axe) // Вертикальное отражение
+            // {
+            //     newAngle = Math.PI - Angle;
+            //     Vector newScale = new(Scale.X, -Scale.Y);
+            //     return new Ellipse(newAngle, Center, newScale);
+            // }
+            // else // Горизонтальное отражение
+            // {
+            //     newAngle = 2.0 * Math.PI - Angle;
+            //     Vector newScale = new(-Scale.X, Scale.Y);
+            //     return new Ellipse(newAngle, Center, newScale);
+            // }
 
-            if (axe) // Вертикальное отражение
+            if (axe)
             {
-                newAngle = Math.PI - 2.0 * Angle;
-                Vector newScale = new(Scale.X, -Scale.Y);
-                return new Square(newAngle, Center, newScale);
+                return this.Rotate(-Math.PI + 2 * Angle);
             }
-            else // Горизонтальное отражение
+            else
             {
-                newAngle = 2.0 * Math.PI - 2.0 * Angle;
-                Vector newScale = new(-Scale.X, Scale.Y);
-                return new Square(newAngle, Center, newScale);
+                return this.Rotate(-2 * Angle);
             }
+
         }
 
         public IFigure Rotate(double delta)
         {
             double newAngle = Angle + delta;
-            Vector newScale = new(Scale.X * Math.Cos(newAngle), Scale.Y * Math.Cos(newAngle));
-            return new Square(newAngle, Center, newScale);
+            double eps = 0.1;
+            Vector newScale;
+            if (Math.Abs(newAngle - Math.PI / 2) < eps)
+            {
+                newScale = new(Scale.Y, Scale.X);
+                return new Square(newAngle, Center, newScale);
+            }
+            else
+            {
+                newScale = new(Scale.X * Math.Cos(newAngle), Scale.Y * Math.Cos(newAngle));
+                return new Square(newAngle, Center, newScale);
+            }
         }
 
         public IFigure SetScale(double dx, double dy)

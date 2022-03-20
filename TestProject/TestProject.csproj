@@ -1,10 +1,16 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net5.0-windows</TargetFramework>
 
     <IsPackable>false</IsPackable>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="FakesAssemblies\**" />
+    <EmbeddedResource Remove="FakesAssemblies\**" />
+    <None Remove="FakesAssemblies\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
@@ -15,6 +21,11 @@
 
 	<ItemGroup>
     <ProjectReference Include="..\GrRed\GrRed.csproj" />
+    <ProjectReference Include="..\gui\gui.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <AdditionalDesignTimeBuildInput Remove="FakesAssemblies\**" />
 	</ItemGroup>
 
 </Project>

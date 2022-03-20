@@ -5,8 +5,10 @@ using System.Windows.Input;
 
 namespace gui
 {
+
     public class ActionCommand : ICommand
     {
+
         private Action<object> execute;
 
         private Predicate<object> canExecute;
