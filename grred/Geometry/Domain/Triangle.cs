@@ -17,7 +17,7 @@ namespace GrRed.Geometry.Domain
             Center = center;
             Angle = angle;
             Scale = scale;
-            //Points = 
+            Points = SetInputPoints();
         }
 
         public Triangle(IEnumerable<Vector> Points)
@@ -55,6 +55,14 @@ namespace GrRed.Geometry.Domain
             //graphic.FillPolygon(brush2);
         }
 
+        private Vector[] SetInputPoints()
+        {
+            Vector[] newPoints = new Vector[3];
+            newPoints[0] = Scale;
+            newPoints[1] = Center;
+            newPoints[2] = new Vector(Scale.X, Center.Y);
+            return newPoints;
+        }
         private double SetInputAngle(Vector[] Points) => Math.Asin((Points[2].Y - Points[0].Y) / VectorModul(Points[2] - Points[0]));
 
         private Vector SetInputCenter(Vector[] Points) => (Points[0] + Points[1] + Points[2]) / 3.0;
@@ -66,9 +74,9 @@ namespace GrRed.Geometry.Domain
 
         public bool IsIn(Vector p, double eps)
         {
-            Vector p1 = Points.ElementAt(0);
-            Vector p2 = Points.ElementAt(1);
-            Vector p3 = Points.ElementAt(2);
+            Vector p1 = Points[0];
+            Vector p2 = Points[1];
+            Vector p3 = Points[2];
 
             double Sabc = (p2.X - p1.X) * (p3.Y - p1.Y) - (p3.X - p1.X) * (p2.Y - p1.Y);
             double Sabp = (p2.X - p1.X) * (p.Y - p1.Y) - (p.X - p1.X) * (p2.Y - p1.Y);

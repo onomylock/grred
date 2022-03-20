@@ -174,10 +174,10 @@ namespace GrRed.Geometry.Domain
 
         public IFigure Rotate(double delta)
         {
-            double newAngle = Angle + delta;
+            double newAngle = (Angle + delta) % Math.PI;
             double eps = 0.1;
             Vector newScale;
-            if (Math.Abs(newAngle - Math.PI / 2) < eps)
+            if (Math.Abs(newAngle) % Math.PI / 2 < eps)
             {
                 newScale = new(Scale.Y, Scale.X);
                 return new Square(newAngle, Center, newScale);
