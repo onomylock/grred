@@ -10,59 +10,82 @@ namespace GrRed.Geometry.Domain
     [DataContract]
     class Square : IFigure
     {
-        private readonly Vector _Center = new(1.0, 1.0);
-        private readonly double _Angle = 0.0;
-        private readonly Vector _Scale = new(1.0, 1.0);
+        // private readonly Vector _Center = new(1.0, 1.0);
+        // private readonly double _Angle = 0.0;
+        // private readonly Vector _Scale = new(1.0, 1.0); 
 
         public Square() { }
 
         [JsonConstructor]
-        public Square(double Angle, Vector Center, Vector Scale)
+        public Square(double angle, Vector center, Vector scale)
         {
-            _Center = Center;
-            _Angle = Angle;
-            _Scale = Scale;
+            Center = center;
+            Angle = angle;
+            Scale = scale;
+            Gabarit = (Center.X - Scale.X, Center.Y + Scale.Y, Center.X + Scale.X, Center.Y - Scale.Y);
+            Points = SetInputPoints();
         }
 
         public Square(IEnumerable<Vector> Points)
         {
-            _Center = SetInputCenter(Points);
-            //_Angle = SetInputAngle(Points);
-            //_Scale = SetInputScale(Points);
+            this.Points = Points.ToArray();
+            Center = SetInputCenter(this.Points);
+            Angle = SetInputAngle(this.Points);
+            Scale = SetInputScale(this.Points);
+            Gabarit = (Center.X - Scale.X, Center.Y + Scale.Y, Center.X + Scale.X, Center.Y - Scale.Y);
         }
 
         public string TypeName => "Square";
         [DataMember]
-        public double Angle => _Angle;
+        public Vector[] Points { get; }
+        public double Angle { get; }
         [DataMember]
-        public Vector Center => _Center;
+        public Vector Center { get; }
         [DataMember]
-        public Vector Scale => _Scale;
-
-        public (double l, double t, double r, double b) Gabarit =>
-            (Center.X - Scale.X, Center.Y + Scale.Y, Center.X + Scale.X, Center.Y - Scale.Y);
-
+        public Vector Scale { get; }
+        public (double l, double t, double r, double b) Gabarit { get; }
 
         public void Draw(IGraphic graphic)
         {
-            List<Vector> vector1 = new List<GrRed.Vector>();
-            double h_X = _Center.X + _Scale.X * Math.Cos(_Angle);
-            double h_Y = _Center.Y - _Scale.X * Math.Sin(_Angle);
-            double v_X = _Center.X + _Scale.Y * Math.Sin(_Angle);
-            double v_Y = _Center.Y + _Scale.Y * Math.Cos(_Angle);
-            vector1.Add(new GrRed.Vector(h_X, h_Y));
-            vector1.Add(new GrRed.Vector(v_X, v_Y));
-            vector1.Add(new GrRed.Vector(_Center.X - Math.Abs(_Center.X - h_X), _Center.Y - Math.Abs(_Center.Y - h_Y)));
-            vector1.Add(new GrRed.Vector(_Center.X - Math.Abs(_Center.X - v_X), _Center.Y - Math.Abs(_Center.Y - v_Y)));
-            graphic.AddLines(vector1);
+            // List<Vector> vector1 = new List<GrRed.Vector>();
+            // double h_X = Center.X + Scale.X * Math.Cos(Angle);
+            // double h_Y = Center.Y - Scale.X * Math.Sin(Angle);
+            // double v_X = Center.X + Scale.Y * Math.Sin(Angle);
+            // double v_Y = Center.Y + Scale.Y * Math.Cos(Angle);
+            // vector1.Add(new Vector(h_X, h_Y));
+            // vector1.Add(new Vector(v_X, v_Y));
+            // vector1.Add(new Vector(Center.X - Math.Abs(Center.X - h_X), Center.Y - Math.Abs(Center.Y - h_Y)));
+            // vector1.Add(new Vector(Center.X - Math.Abs(Center.X - v_X), Center.Y - Math.Abs(Center.Y - v_Y)));
+            // graphic.AddLines(vector1);
+            // List<Vector> vec = new List<Vector>();
+            // vec.Add(Points[0]);
+            // vec.Add(Points[1]);
+            // vec.Add(Points[2]);
+            // vec.Add(Points[3]);
+            graphic.AddLines(Points);
         }
 
-        private Vector SetInputCenter(IEnumerable<Vector> Points)
+        // Методы задания параметров класса
+
+        private Vector[] SetInputPoints()
         {
-            Vector p1 = Points.ElementAt(0);
-            Vector p2 = Points.ElementAt(1);
-            Vector p3 = Points.ElementAt(2);
-            Vector p4 = Points.ElementAt(3);
+            Vector[] newPoints = new Vector[4];
+
+            newPoints[0] = new Vector(Center.X - (Gabarit.l * Math.Cos(Angle) - Gabarit.b * Math.Sin(Angle)), Center.Y - (Gabarit.l * Math.Sin(Angle) + Gabarit.b * Math.Cos(Angle)));
+            newPoints[1] = new Vector(Center.X - (Gabarit.l * Math.Cos(Angle) - Gabarit.t * Math.Sin(Angle)), Center.Y + (Gabarit.l * Math.Sin(Angle) + Gabarit.t * Math.Cos(Angle)));
+            newPoints[2] = new Vector(Center.X + (Gabarit.r * Math.Cos(Angle) - Gabarit.t * Math.Sin(Angle)), Center.Y + (Gabarit.r * Math.Sin(Angle) + Gabarit.t * Math.Cos(Angle)));
+            newPoints[3] = new Vector(Center.X + (Gabarit.r * Math.Cos(Angle) - Gabarit.b * Math.Sin(Angle)), Center.Y - (Gabarit.r * Math.Sin(Angle) + Gabarit.b * Math.Cos(Angle)));
+            return newPoints;
+        }
+        private Vector SetInputScale(Vector[] Points) => new Vector(Center.X - (Points[1] - Points[0]).X / 2, (Points[2] - Points[1]).Y / 2 - Center.Y);
+        private double SetInputAngle(Vector[] Points) => Math.Asin((Points[1].X - Points[0].X) / VectorModul(Points[1] - Points[0]));
+        private double VectorModul(Vector a) => Math.Sqrt(Math.Pow(a.X, 2) + Math.Pow(a.Y, 2));
+        private Vector SetInputCenter(Vector[] Points)
+        {
+            Vector p1 = Points[0];
+            Vector p2 = Points[1];
+            Vector p3 = Points[2];
+            Vector p4 = Points[3];
 
             double n = 0;
             if ((p2.Y - p1.Y) != 0)
@@ -79,6 +102,7 @@ namespace GrRed.Geometry.Domain
             return new Vector(p2.X + (p4.X - p2.X) * n, p2.Y + (p4.Y - p2.X) * n);
         }
 
+        // Внешние методы класса
         public IFigure Intersection(IFigure fig2)
         {
             throw new NotImplementedException();
