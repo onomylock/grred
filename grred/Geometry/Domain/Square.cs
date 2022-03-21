@@ -138,6 +138,9 @@ namespace GrRed.Geometry.Domain
                 return true;
             else
                 return false;
+
+            // //Vector RotatePoint = new Vector(p.X * Math.Cos(Angle) + p.Y * Math.Sin(Angle), -p.X * Math.Sin(Angle) + p.Y * Math.Cos(Angle));
+            // if (Math.Abs(Gabarit.l - RotatePoint.X) < eps && Math.Abs(Gabarit.r - RotatePoint.X) < eps &&)
         }
 
         public IFigure Move(Vector delta)
@@ -174,10 +177,10 @@ namespace GrRed.Geometry.Domain
 
         public IFigure Rotate(double delta)
         {
-            double newAngle = Angle + delta;
+            double newAngle = (Angle + delta) % Math.PI;
             double eps = 0.1;
             Vector newScale;
-            if (Math.Abs(newAngle - Math.PI / 2) < eps)
+            if (Math.Abs(newAngle) % Math.PI / 2 < eps)
             {
                 newScale = new(Scale.Y, Scale.X);
                 return new Square(newAngle, Center, newScale);
