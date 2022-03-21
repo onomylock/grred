@@ -59,9 +59,6 @@ namespace gui
         private ICommand saveCommand;
         private ICommand helpCommand;
 
-        //private ICommand YkazButton = null;
-        //private ICommand MysorButton = null;
-        //private ICommand FillButton = null;
         //private ICommand ApproximationButton = null;
         //private ICommand DistanceButton = null;
         //private ICommand NextButton = null;
@@ -73,10 +70,6 @@ namespace gui
             this.paintingCanvas = canvas;
         }
 
-        public void InOrenge(object obj)
-        {
-
-        }
 
         public void OnPropertyChanged([CallerMemberName] string prop = "")
         {
@@ -86,18 +79,9 @@ namespace gui
 
         public ICommand SaveCommand => saveCommand = new ActionCommand(Save, param => true);
 
-        private void Save(object obj)
-        {
-            List<IFigure> ListFig = figureDict.Values.ToList();
-            Io.Save(paintingCanvas, ListFig);
-        }
 
         public ICommand HelpCommand => helpCommand = new ActionCommand(HelpButton, param => true);
         
-        private void HelpButton(object obj)
-        {
-            Process.Start(new ProcessStartInfo("https://gitlab.com/egorsukhinin/grred/-/wikis/Интерфейс-приложения") { UseShellExecute = true });
-        }
 
         public ICommand CreateLineCommand
         {
@@ -121,7 +105,6 @@ namespace gui
                     mode = Mode.Triangle;
                     paintingCanvas.EditingMode = InkCanvasEditingMode.None;
                 }, param => true);
-                bool res = createTriangleCommand.CanExecute(false);
                 return createTriangleCommand;
             }
         }
@@ -235,6 +218,17 @@ namespace gui
                 }, param => true);
                 return selectionCommand;
             }
+        }
+
+        private void HelpButton(object obj)
+        {
+            Process.Start(new ProcessStartInfo("https://gitlab.com/egorsukhinin/grred/-/wikis/Интерфейс-приложения") { UseShellExecute = true });
+        }
+
+        private void Save(object obj)
+        {
+            List<IFigure> ListFig = figureDict.Values.ToList();
+            Io.Save(paintingCanvas, ListFig);
         }
         private void ClearCanvas(object obj)
         {
@@ -390,26 +384,7 @@ namespace gui
             switch (mode)
             {
                 case Mode.Selection:
-                    if (selectedFigures.Count > 0)
-                    {
-                        Dictionary<IFigure, Path> dictByFigure = figureDict.ToDictionary(keys => keys.Value, values => values.Key);
-                        for (int i = 0; i< selectedFigures.Count; i++)
-                        {
-                            IFigure fig = selectedFigures[i];
-                            IFigure newFig = fig.Move(mousePos - previousPostition);
-                            previousPostition = mousePos;
-                            Path oldPath = dictByFigure.GetValueOrDefault(fig);
-                            paintingCanvas.Children.Remove(oldPath);
-                            figureDict.Remove(oldPath);
-                            Path path = new Path();
-                            path.Stroke = Brushes.Aqua;
-                            IGraphic graphic = GraphicFabric.GetFactory(newFig.TypeName, paintingCanvas, path);
-                            newFig.Draw(graphic);
-                            figureDict.Add(path, newFig);
-                            selectedFigures.Remove(fig);
-                            selectedFigures.Add(newFig);
-                        }
-                    }
+                    moveSelectedFigures(mousePos);
                     break;
                 case Mode.Rectangle:
                     IFigure square = createRectangle(scale, mousePos - scale);
@@ -450,22 +425,26 @@ namespace gui
             }
         }
 
-        private void moveSelectedFigures()
+        private void moveSelectedFigures(GrRed.Vector mousePos)
         {
-
-            // Not working
-            if (isMouseDown && selectedFigures.Count != 0)
+            if (selectedFigures.Count > 0)
             {
-                Point position = Mouse.GetPosition(paintingCanvas);
-                GrRed.Vector mousePos = new GrRed.Vector(position.X, position.Y);
-
-                foreach (var fig in selectedFigures)
+                Dictionary<IFigure, Path> dictByFigure = figureDict.ToDictionary(keys => keys.Value, values => values.Key);
+                for (int i = 0; i < selectedFigures.Count; i++)
                 {
-                    GrRed.Vector delta = fig.Center + mousePos;
-                    IFigure newFig = fig.Move(delta);
+                    IFigure fig = selectedFigures[i];
+                    IFigure newFig = fig.Move(mousePos - previousPostition);
+                    previousPostition = mousePos;
+                    Path oldPath = dictByFigure.GetValueOrDefault(fig);
+                    paintingCanvas.Children.Remove(oldPath);
+                    figureDict.Remove(oldPath);
                     Path path = new Path();
-                    TriangleGrafic triangleGrafic = new TriangleGrafic(paintingCanvas, path);
-                    newFig.Draw(triangleGrafic);
+                    path.Stroke = Brushes.Aqua;
+                    IGraphic graphic = GraphicFabric.GetFactory(newFig.TypeName, paintingCanvas, path);
+                    newFig.Draw(graphic);
+                    figureDict.Add(path, newFig);
+                    selectedFigures.Remove(fig);
+                    selectedFigures.Add(newFig);
                 }
             }
         }
