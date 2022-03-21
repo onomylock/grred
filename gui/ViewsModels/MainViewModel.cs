@@ -404,7 +404,7 @@ namespace gui
 
         private void mouseMoveSwitch(GrRed.Vector mousePos, GrRed.Vector scale)
         {
-            if (mode != Mode.Selection)
+            if (mode != Mode.Selection && mode != Mode.Brush && mode != Mode.Pencil)
             {
                 IFigure figure;
                 IGraphic graphic = GraphicFabric.GetFactory(Enum.GetName(mode), paintingCanvas);
