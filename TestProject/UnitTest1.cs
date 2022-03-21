@@ -46,9 +46,14 @@ namespace TestProject
     public class Triangle_test
     {
         [Test]
-        public void IsIn_triangle1() //внутри
+        public void IsIn_triangle_in()
         {
-            var triangle = new TriangleFactory().GetFigure(0, new GrRed.Vector(0, 0), new GrRed.Vector(10, 5));
+            Vector[] points = new Vector[3];
+            points[0] = new Vector(0, 0);
+            points[1] = new Vector(0, 8);
+            points[2] = new Vector(10, 0);
+            var triangle = new TriangleFactory().GetFigure(points);
+
             var point1 = new GrRed.Vector(1, 0);
             var point2 = new GrRed.Vector(0, 1);
             double eps = 0.1;
@@ -56,24 +61,16 @@ namespace TestProject
             Assert.AreEqual(true, triangle.IsIn(point1, eps));
             Assert.AreEqual(true, triangle.IsIn(point2, eps));
 
-            //Vector[] points = new Vector[3];
-            //points[0] = new Vector(0, 0);
-            //points[1] = new Vector(0, 8);
-            //points[2] = new Vector(10, 0);
-            //var triangle = new TriangleFactory().GetFigure(points);
-
-            //var point1 = new GrRed.Vector(1, 0);
-            //var point2 = new GrRed.Vector(0, 1);
-            //double eps = 0.1;
-
-            //Assert.AreEqual(true, triangle.IsIn(point1, eps));
-
-
         }
         [Test]
-        public void IsIn_triangle2() //снаружи
+        public void IsIn_triangle_out()
         {
-            var triangle = new TriangleFactory().GetFigure(0, new GrRed.Vector(0, 0), new GrRed.Vector(10, 5));
+            Vector[] points = new Vector[3];
+            points[0] = new Vector(0, 0);
+            points[1] = new Vector(0, 8);
+            points[2] = new Vector(10, 0);
+            var triangle = new TriangleFactory().GetFigure(points);
+
             var point1 = new GrRed.Vector(15, 0);
             var point2 = new GrRed.Vector(0, 10);
             double eps = 0.1;
@@ -83,7 +80,7 @@ namespace TestProject
         }
 
         [Test]
-        public void Rotate_triangle()
+        public void Rotate_triangle_360_points()
         {
             Vector[] points = new Vector[3];
             points[0] = new Vector(0, 0);
@@ -92,19 +89,55 @@ namespace TestProject
             var triangle = new TriangleFactory().GetFigure(points);
             var triangle2 = triangle.Rotate(2 * Math.PI);
 
-            Assert.AreEqual(triangle.Center.X, triangle2.Center.X);
-            Assert.AreEqual(triangle.Center.Y, triangle2.Center.Y);
+            for (int i = 0; i < 3; i++)
+            {
+                Assert.AreEqual(triangle.Points[i].X, triangle2.Points[i].X);
+                Assert.AreEqual(triangle.Points[i].Y, triangle2.Points[i].Y);
+            }
+        }
+
+        [Test]
+        public void Rotate_triangle_360_angle()
+        {
+            Vector[] points = new Vector[3];
+            points[0] = new Vector(0, 0);
+            points[1] = new Vector(6, 8);
+            points[2] = new Vector(10, 0);
+            var triangle = new TriangleFactory().GetFigure(points);
+            var triangle2 = triangle.Rotate(2 * Math.PI);
+
             Assert.AreEqual(triangle.Angle, triangle2.Angle);
         }
 
         [Test]
-        public void Reflection_triangle_goriz()
+        public void Rotate_triangle_360_center()
         {
-            //var triangle = new TriangleFactory().GetFigure(0, new GrRed.Vector(0, 0), new GrRed.Vector(15, 5));
-            //var triangle2 = triangle.Reflection(false); // 1 otr
-            //triangle2 = triangle2.Reflection(false); // 2 otr
+            Vector[] points = new Vector[3];
+            points[0] = new Vector(0, 0);
+            points[1] = new Vector(6, 8);
+            points[2] = new Vector(10, 0);
+            var triangle = new TriangleFactory().GetFigure(points);
+            var triangle2 = triangle.Rotate(2 * Math.PI);
 
-            //Assert.AreEqual(triangle.Angle, triangle2.Angle);
+            Assert.AreEqual(triangle.Center, triangle2.Center);
+        }
+
+        [Test]
+        public void Rotate_triangle_pi_na_3()
+        {
+            Vector[] points = new Vector[3];
+            points[0] = new Vector(0, 0);
+            points[1] = new Vector(6, 8);
+            points[2] = new Vector(10, 0);
+            var triangle = new TriangleFactory().GetFigure(points);
+            var triangle2 = triangle.Rotate(Math.PI / 3);
+
+            Assert.AreEqual(Math.PI / 3, triangle2.Angle);
+        }
+
+        [Test]
+        public void Reflection_triangle_goriz_2x()
+        {
             Vector[] points = new Vector[3];
             points[0] = new Vector(0, 0);
             points[1] = new Vector(0, 8);
@@ -115,20 +148,17 @@ namespace TestProject
             var triangle2 = triangle.Reflection(false);
             triangle2 = triangle2.Reflection(false);
 
-            Assert.AreEqual(triangle.Points[0].X, triangle2.Points[0].X);
-            Assert.AreEqual(triangle.Points[0].Y, triangle2.Points[0].Y);
+            for (int i = 0; i < 3; i++)
+            {
+                Assert.AreEqual(triangle.Points[i].X, triangle2.Points[i].X);
+                Assert.AreEqual(triangle.Points[i].Y, triangle2.Points[i].Y);
+            }
             Assert.AreEqual(triangle.Angle, triangle2.Angle);
         }
 
         [Test]
-        public void Reflection_triangle_vert()
+        public void Reflection_triangle_vert_2x()
         {
-            //var triangle = new TriangleFactory().GetFigure(0, new GrRed.Vector(0, 0), new GrRed.Vector(15, 5));
-            //var triangle2 = triangle.Reflection(true); // 1 otr
-            //triangle2 = triangle2.Reflection(true); // 2 otr
-
-            //Assert.AreEqual(triangle.Angle, triangle2.Angle);
-
             Vector[] points = new Vector[3];
             points[0] = new Vector(0, 0);
             points[1] = new Vector(0, 8);
@@ -139,13 +169,16 @@ namespace TestProject
             var triangle2 = triangle.Reflection(true);
             triangle2 = triangle2.Reflection(true);
 
-            Assert.AreEqual(triangle.Points[0].X, triangle2.Points[0].X);
-            Assert.AreEqual(triangle.Points[0].Y, triangle2.Points[0].Y);
+            for (int i = 0; i < 3; i++)
+            {
+                Assert.AreEqual(triangle.Points[i].X, triangle2.Points[i].X);
+                Assert.AreEqual(triangle.Points[i].Y, triangle2.Points[i].Y);
+            }
             Assert.AreEqual(triangle.Angle, triangle2.Angle);
         }
 
         [Test]
-        public void Move_triangle()
+        public void Move_triangle_1x1()
         {
             var triangle1 = new EllipseFactory().GetFigure(0, new GrRed.Vector(0, 0), new GrRed.Vector(5, 5));
             var delta = new GrRed.Vector(1, 1);
@@ -154,13 +187,34 @@ namespace TestProject
 
             Assert.AreEqual(delta, triangle2.Center);
         }
+
+        [Test]
+        public void SetScale_triangle()
+        {
+            var triangle = new TriangleFactory().GetFigure(0, new GrRed.Vector(0, 0), new GrRed.Vector(15, 5));
+            var triangle2 = triangle.SetScale(15, 5);
+            var scale1 = new GrRed.Vector(22.5, 7.5);
+
+            Assert.AreEqual(scale1, triangle2.Scale);
+        }
+
+        [Test]
+        public void SetScale_triangle_ishod()
+        {
+            var triangle = new TriangleFactory().GetFigure(0, new GrRed.Vector(0, 0), new GrRed.Vector(10, 5));
+            var triangle2 = triangle.SetScale(10, 5);
+            triangle2 = triangle2.SetScale(-10, -5);
+
+            Assert.AreEqual(triangle.Scale.X, triangle2.Scale.X);
+            Assert.AreEqual(triangle.Scale.Y, triangle2.Scale.Y);
+        }
     }
 
     public class Ellipse_test
     {
 
         [Test]
-        public void IsIn_ellips_1() // внутри. 
+        public void IsIn_ellips_in() // внутри. 
         {
             var elipse = new EllipseFactory().GetFigure(0, new GrRed.Vector(0, 0), new GrRed.Vector(15, 5));
             var point1 = new GrRed.Vector(12, 0);
@@ -171,7 +225,7 @@ namespace TestProject
             Assert.AreEqual(true, elipse.IsIn(point2, eps));
         }
         [Test]
-        public void IsIn_ellips_2() // снаружи
+        public void IsIn_ellips_out() // снаружи
         {
             var elipse = new EllipseFactory().GetFigure(0, new GrRed.Vector(0, 0), new GrRed.Vector(15, 5));
             var point1 = new GrRed.Vector(16, 0);
@@ -182,7 +236,7 @@ namespace TestProject
             Assert.AreEqual(false, elipse.IsIn(point2, eps));
         }
         [Test]
-        public void IsIn_ellips_3() // на границе
+        public void IsIn_ellips_granic() // на границе
         {
             var elipse = new EllipseFactory().GetFigure(0, new GrRed.Vector(0, 0), new GrRed.Vector(15, 5));
             var point1 = new GrRed.Vector(15, 0);
@@ -195,13 +249,13 @@ namespace TestProject
 
 
         [Test]
-        public void Reflection_ellips_vert()
+        public void Reflection_ellips_vert_2x()
         {
             var elipse = new EllipseFactory().GetFigure(0, new GrRed.Vector(0, 0), new GrRed.Vector(15, 5));
             var elipse2 = elipse.Reflection(true); // 1 otr
             elipse2 = elipse2.Reflection(true); // 2 otr
 
-            Assert.AreEqual(elipse.Angle, elipse2.Angle);
+            Assert.AreEqual(Math.Round(elipse.Angle, 2), Math.Round(elipse2.Angle, 10));
         }
 
         [Test]
@@ -211,34 +265,29 @@ namespace TestProject
             var elipse2 = elipse.Reflection(true); // 1 otr
 
             Assert.AreEqual(-Math.PI / 4, elipse2.Angle);
-            Assert.AreEqual(elipse.Scale.X, elipse2.Scale.X);
-            Assert.AreEqual(elipse.Scale.Y, elipse2.Scale.Y);
         }
 
         [Test]
-        public void Reflection_ellips_goriz()
+        public void Reflection_ellips_goriz_2x()
         {
             var elipse = new EllipseFactory().GetFigure(0, new GrRed.Vector(0, 0), new GrRed.Vector(15, 5));
             var elipse2 = elipse.Reflection(false); // 1 otr
             elipse2 = elipse2.Reflection(false); // 2 otr
 
-            Assert.AreEqual(elipse.Angle, elipse2.Angle);
+            Assert.AreEqual(Math.Round(elipse.Angle, 2), Math.Round(elipse2.Angle, 10));
         }
 
         [Test]
-        public void Reflection_ellips_goriz_pi4() // вращение по часовой или против????
+        public void Reflection_ellips_goriz_pi4()
         {
             var elipse = new EllipseFactory().GetFigure(Math.PI / 4, new GrRed.Vector(0, 0), new GrRed.Vector(15, 5));
             var elipse2 = elipse.Reflection(false); // 1 otr
 
             Assert.AreEqual(3 * Math.PI / 4, elipse2.Angle);
-
-            //Assert.AreEqual(elipse.Scale.X, elipse2.Scale.X);
-            //Assert.AreEqual(elipse.Scale.Y, elipse2.Scale.Y);
         }
 
         [Test]
-        public void Move_ellips()
+        public void Move_ellips_1х1()
         {
             var elipse1 = new EllipseFactory().GetFigure(0, new GrRed.Vector(0, 0), new GrRed.Vector(5, 5));
             var delta = new GrRed.Vector(1, 1);
@@ -249,7 +298,7 @@ namespace TestProject
         }
 
         [Test]
-        public void Rotate_ellips()
+        public void Rotate_ellips_360_center()
         {
             var elipse = new EllipseFactory().GetFigure(0, new GrRed.Vector(0, 0), new GrRed.Vector(15, 5));
             var elipse2 = elipse.Rotate(2 * Math.PI);
@@ -257,16 +306,41 @@ namespace TestProject
             GrRed.Vector centr1 = elipse.Center;
             GrRed.Vector centr2 = elipse2.Center;
 
+            Assert.AreEqual(centr1, centr2);
+        }
+        [Test]
+        public void Rotate_ellips_360_scale()
+        {
+            var elipse = new EllipseFactory().GetFigure(0, new GrRed.Vector(0, 0), new GrRed.Vector(15, 5));
+            var elipse2 = elipse.Rotate(2 * Math.PI);
+
             GrRed.Vector scale1 = elipse.Scale;
             GrRed.Vector scale2 = elipse2.Scale;
+
+            Assert.AreEqual(scale1.X, scale2.X);
+            Assert.AreEqual(scale1.Y, scale2.Y);
+        }
+        [Test]
+        public void Rotate_ellips_360_angle()
+        {
+            var elipse = new EllipseFactory().GetFigure(0, new GrRed.Vector(0, 0), new GrRed.Vector(15, 5));
+            var elipse2 = elipse.Rotate(2 * Math.PI);
 
             double angle1 = elipse.Angle;
             double angle2 = elipse2.Angle;
 
-
-            Assert.AreEqual(centr1, centr2);
-            Assert.AreEqual(scale1, scale2);
             Assert.AreEqual(angle1, angle2);
+        }
+        [Test]
+        public void Rotate_ellips_pi_na_3()
+        {
+            var elipse = new EllipseFactory().GetFigure(0, new GrRed.Vector(0, 0), new GrRed.Vector(15, 5));
+            var elipse2 = elipse.Rotate(Math.PI / 3);
+
+            double angle1 = elipse.Angle;
+            double angle2 = elipse2.Angle;
+
+            Assert.AreEqual(Math.PI / 3, angle2);
         }
 
         [Test]
@@ -280,7 +354,7 @@ namespace TestProject
         }
 
         [Test]
-        public void SetScale_ellips_2()
+        public void SetScale_ellips_ishod() 
         {
             var elipse = new EllipseFactory().GetFigure(0, new GrRed.Vector(0, 0), new GrRed.Vector(10, 5));
             var elipse2 = elipse.SetScale(10, 5);
@@ -295,7 +369,7 @@ namespace TestProject
     public class Square_test
     {
         [Test]
-        public void IsIn_square1() //внутри
+        public void IsIn_square_in()
         {
             var square = new SquareFactory().GetFigure(0, new GrRed.Vector(0, 0), new GrRed.Vector(10, 5));
             var point1 = new GrRed.Vector(8, 0);
@@ -307,7 +381,7 @@ namespace TestProject
         }
 
         [Test]
-        public void IsIn_square2() //снаружи
+        public void IsIn_square_out()
         {
             var square = new SquareFactory().GetFigure(0, new GrRed.Vector(0, 0), new GrRed.Vector(10, 5));
             var point1 = new GrRed.Vector(12, 0);
@@ -319,13 +393,8 @@ namespace TestProject
         }
 
         [Test]
-        public void Reflection_square_goriz()
+        public void Reflection_square_goriz_2x()
         {
-            //var square = new SquareFactory().GetFigure(0, new GrRed.Vector(0, 0), new GrRed.Vector(15, 5));
-            //var square2 = square.Reflection(false); // 1 otr
-            //square2 = square2.Reflection(false); // 2 otr
-
-            //Assert.AreEqual(square.Angle, square2.Angle);
             Vector[] points = new Vector[4];
             points[0] = new Vector(0, 0);
             points[1] = new Vector(0, 10);
@@ -346,13 +415,9 @@ namespace TestProject
         }
 
         [Test]
-        public void Reflection_square_vert()
+        public void Reflection_square_vert_2x()
         {
-            //var square = new SquareFactory().GetFigure(0, new GrRed.Vector(0, 0), new GrRed.Vector(15, 5));
-            //var square2 = square.Reflection(false); // 1 otr
-            //square2 = square2.Reflection(false); // 2 otr
 
-            //Assert.AreEqual(square.Angle, square2.Angle);
             Vector[] points = new Vector[4];
             points[0] = new Vector(0, 0);
             points[1] = new Vector(0, 10);
@@ -374,7 +439,7 @@ namespace TestProject
         }
 
         [Test]
-        public void Move_square()
+        public void Move_square_1x1()
         {
             var square1 = new SquareFactory().GetFigure(0, new GrRed.Vector(0, 0), new GrRed.Vector(5, 5));
             var delta = new GrRed.Vector(1, 1);
@@ -385,7 +450,7 @@ namespace TestProject
         }
 
         [Test]
-        public void Rotate_square()
+        public void Rotate_square_360_angle()
         {
             Vector[] points = new Vector[4];
             points[0] = new Vector(0, 0);
@@ -396,9 +461,77 @@ namespace TestProject
             var square = new SquareFactory().GetFigure(points);
             var square2 = square.Rotate(2 * Math.PI);
 
-            Assert.AreEqual(square.Center.X, square2.Center.X);
-            Assert.AreEqual(square.Center.Y, square2.Center.Y);
-            Assert.AreEqual(square.Angle, square2.Angle); // не работает
+            Assert.AreEqual(square.Angle, square2.Angle);
+        }
+
+        [Test]
+        public void Rotate_square_360_center()
+        {
+            Vector[] points = new Vector[4];
+            points[0] = new Vector(0, 0);
+            points[1] = new Vector(0, 10);
+            points[2] = new Vector(10, 10);
+            points[2] = new Vector(10, 0);
+
+            var square = new SquareFactory().GetFigure(points);
+            var square2 = square.Rotate(2 * Math.PI);
+
+            Assert.AreEqual(square.Center, square2.Center);
+        }
+
+        [Test]
+        public void Rotate_square_360_points()
+        {
+            Vector[] points = new Vector[4];
+            points[0] = new Vector(0, 0);
+            points[1] = new Vector(0, 10);
+            points[2] = new Vector(10, 10);
+            points[2] = new Vector(10, 0);
+
+            var square = new SquareFactory().GetFigure(points);
+            var square2 = square.Rotate(2 * Math.PI);
+
+            for (int i = 0; i < 4; i++)
+            {
+                Assert.AreEqual(square.Points[i].X, square2.Points[i].X);
+                Assert.AreEqual(square.Points[i].Y, square2.Points[i].Y);
+            }
+        }
+
+        [Test]
+        public void Rotate_square_pi_na_3()
+        {
+            Vector[] points = new Vector[4];
+            points[0] = new Vector(0, 0);
+            points[1] = new Vector(0, 10);
+            points[2] = new Vector(10, 10);
+            points[2] = new Vector(10, 0);
+
+            var square = new SquareFactory().GetFigure(points);
+            var square2 = square.Rotate(Math.PI / 3);
+
+            Assert.AreEqual(Math.PI / 3, square2.Angle);
+        }
+
+        [Test]
+        public void SetScale_square()
+        {
+            var square = new SquareFactory().GetFigure(0, new GrRed.Vector(0, 0), new GrRed.Vector(15, 5));
+            var square2 = square.SetScale(15, 5);
+            var scale1 = new GrRed.Vector(22.5, 7.5);
+
+            Assert.AreEqual(scale1, square2.Scale);
+        }
+
+        [Test]
+        public void SetScale_square_ishod()
+        {
+            var square = new SquareFactory().GetFigure(0, new GrRed.Vector(0, 0), new GrRed.Vector(10, 5));
+            var square2 = square.SetScale(10, 5);
+            square2 = square2.SetScale(-10, -5);
+
+            Assert.AreEqual(square.Scale.X, square2.Scale.X);
+            Assert.AreEqual(square.Scale.Y, square2.Scale.Y);
         }
     }
 }
