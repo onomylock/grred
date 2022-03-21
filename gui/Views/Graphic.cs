@@ -89,7 +89,8 @@ namespace gui
             pathGeom.Figures.Add(pathFig);
 
             path.Data = pathGeom;
-            path.Stroke = Brushes.Black;
+            if (path.Stroke != Brushes.Black)
+                path.Stroke = Brushes.Black;
             //path.StrokeThickness = thickness;
             //path.Fill = fillColor;
 
@@ -168,7 +169,7 @@ namespace gui
             path.Data = pathGeom;
             path.Stroke = Brushes.Black;
             //path.StrokeThickness = thickness;
-            path.Fill = Brushes.Red;
+            //path.Fill = Brushes.Red;
 
             canvas.Children.Add(path);
         }

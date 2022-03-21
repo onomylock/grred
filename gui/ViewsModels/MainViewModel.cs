@@ -23,7 +23,6 @@ namespace gui
         Ellipse,
         Triangle,
         Pencil,
-        OpenFile,
         Brush
     }
 
@@ -33,15 +32,17 @@ namespace gui
         public event PropertyChangedEventHandler PropertyChanged;
 
         public Dictionary<Path, IFigure> figureDict = new Dictionary<Path, IFigure>();
-        private List<IFigure> selectedFigures = new List<IFigure>();
-        private Stack<ICommand> actionCommands = new Stack<ICommand>();
-        private InkCanvas paintingCanvas;
-        private Brush currentBrush;
         public Path previousPath;
 
         private Mode mode = Mode.Selection;
         private bool isMouseDown = false;
         private ICommand lastCommand;
+
+        private Stack<ICommand> actionCommands = new Stack<ICommand>();
+        private InkCanvas paintingCanvas;
+        private List<IFigure> selectedFigures = new List<IFigure>();
+        private Brush currentBrush;
+        private GrRed.Vector previousPostition;
 
         private ICommand createLineCommand = null;
         private ICommand createTriangleCommand = null;
@@ -105,6 +106,7 @@ namespace gui
                 createLineCommand = new ActionCommand(obj =>
                 {
                     mode = Mode.Line;
+                    paintingCanvas.EditingMode = InkCanvasEditingMode.None;
                 }, param => true);
                 return createLineCommand;
             }
@@ -117,6 +119,7 @@ namespace gui
                 createTriangleCommand = new ActionCommand(obj =>
                 {
                     mode = Mode.Triangle;
+                    paintingCanvas.EditingMode = InkCanvasEditingMode.None;
                 }, param => true);
                 bool res = createTriangleCommand.CanExecute(false);
                 return createTriangleCommand;
@@ -131,6 +134,7 @@ namespace gui
                 createRectangleCommand = new ActionCommand(obj =>
                 {
                     mode = Mode.Rectangle;
+                    paintingCanvas.EditingMode = InkCanvasEditingMode.None;
                 }, param => true);
                 return createRectangleCommand;
             }
@@ -144,6 +148,7 @@ namespace gui
                 createEllipseCommand = new ActionCommand(obj =>
                 {
                     mode = Mode.Ellipse;
+                    paintingCanvas.EditingMode = InkCanvasEditingMode.None;
                 }, param => true);
                 return createEllipseCommand;
             }
@@ -226,6 +231,7 @@ namespace gui
                 selectionCommand = new ActionCommand(obj =>
                 {
                     mode = Mode.Selection;
+                    paintingCanvas.EditingMode = InkCanvasEditingMode.None;
                 }, param => true);
                 return selectionCommand;
             }
@@ -254,6 +260,13 @@ namespace gui
             return square;
         }
 
+        private IFigure createRectangle(GrRed.Vector[] points)
+        {
+            FigureFactory figureFactory = FigureFabric.GetFactory("Square");
+            IFigure square = figureFactory.GetFigure(points);
+            lastCommand = createRectangleCommand;
+            return square;
+        }
 
         private IFigure createEllipse(GrRed.Vector start, GrRed.Vector scale)
         {
@@ -282,15 +295,31 @@ namespace gui
                 case Mode.Selection:
                     if (figureDict.Count != 0)
                     {
+                        Dictionary<IFigure, Path> dictByFigure = figureDict.ToDictionary(keys => keys.Value, values => values.Key);
+                        Path selectedPath = null;
                         IFigure selected = FindFigure(new GrRed.Vector(position.X, position.Y));
-                        //paintingCanvas.Children.
-                        selectedFigures.Add(selected);
+                        if (selected != null)
+                        {
+                            if (!selectedFigures.Contains(selected))
+                            {
+                                selectedPath = dictByFigure.GetValueOrDefault(selected);
+                                selectedPath.Stroke = Brushes.Aqua;
+                                selectedFigures.Add(selected);
+                            }
+                        }
+                        else
+                        {
+                            foreach (var fig in selectedFigures)
+                            {
+                                selectedPath = dictByFigure.GetValueOrDefault(fig);
+                                selectedPath.Stroke = Brushes.Black;
+                            }
+                            selectedFigures.Clear();
+                        }
                     }
                     break;
                 case Mode.Pencil:
                     activatePen();
-                    break;
-                case Mode.OpenFile:
                     break;
                 case Mode.Brush:
                     if (figureDict.Count != 0)
@@ -311,7 +340,7 @@ namespace gui
         {
             IFigure res = null;
             foreach (var fig in figureDict.Values)
-                if (fig.IsIn(p, 1E-2))
+                if (fig.IsIn(p, 0.1))
                     res = fig;
             return res;
         }
@@ -330,6 +359,7 @@ namespace gui
             isMouseDown = false;
             actionCommands.Push(lastCommand);
             previousPath = null;
+            previousPostition = new GrRed.Vector(-1, -1);
         }
 
         private void onMouseMove(object obj)
@@ -349,6 +379,8 @@ namespace gui
             Point position = Mouse.GetPosition(paintingCanvas);
             GrRed.Vector mousePos = new GrRed.Vector(position.X, position.Y);
             GrRed.Vector scale = mousePos;
+            if (previousPostition.X == -1)
+                previousPostition = mousePos;
             if (previousPath != null)
             {
                 paintingCanvas.Children.Remove(previousPath);
@@ -358,9 +390,29 @@ namespace gui
             switch (mode)
             {
                 case Mode.Selection:
+                    if (selectedFigures.Count > 0)
+                    {
+                        Dictionary<IFigure, Path> dictByFigure = figureDict.ToDictionary(keys => keys.Value, values => values.Key);
+                        for (int i = 0; i< selectedFigures.Count; i++)
+                        {
+                            IFigure fig = selectedFigures[i];
+                            IFigure newFig = fig.Move(mousePos - previousPostition);
+                            previousPostition = mousePos;
+                            Path oldPath = dictByFigure.GetValueOrDefault(fig);
+                            paintingCanvas.Children.Remove(oldPath);
+                            figureDict.Remove(oldPath);
+                            Path path = new Path();
+                            path.Stroke = Brushes.Aqua;
+                            IGraphic graphic = GraphicFabric.GetFactory(newFig.TypeName, paintingCanvas, path);
+                            newFig.Draw(graphic);
+                            figureDict.Add(path, newFig);
+                            selectedFigures.Remove(fig);
+                            selectedFigures.Add(newFig);
+                        }
+                    }
                     break;
                 case Mode.Rectangle:
-                    IFigure square = createRectangle(mousePos, scale);
+                    IFigure square = createRectangle(scale, mousePos - scale);
                     Path path_square = new();
                     RectangleGrafic squareGrafic = new RectangleGrafic(paintingCanvas, path_square);
                     square.Draw(squareGrafic);
@@ -378,7 +430,7 @@ namespace gui
                     previousPath = lineGrafic.path;
                     break;
                 case Mode.Ellipse:
-                    IFigure ellipse = createEllipse(mousePos, scale);
+                    IFigure ellipse = createEllipse(scale, mousePos);
                     Path path_ellipse = new();
                     EllipseGrafic ellipseGrafic = new EllipseGrafic(paintingCanvas, path_ellipse);
                     ellipse.Draw(ellipseGrafic);
@@ -417,19 +469,5 @@ namespace gui
                 }
             }
         }
-
-        // Функция для отрисовки и перерисовки
-        //private void reDraw(IFigure figure)
-        //{
-        //    Path path = new Path();
-        //    IGraphic triangleGrafic = GraphicFabric.GetFactory(figure.TypeName, paintingCanvas, path);
-        //    IFigure current = figureDict.Last();
-        //    figureDict.Remove(figure);
-        //    figureDict.Add(current);
-        //    paintingCanvas.Children.Remove(previousPath);
-        //    current.Draw(triangleGrafic);
-        //    previousPath = triangleGrafic.path;
-        //}
-
     }
 }
