@@ -123,11 +123,11 @@ namespace GrRed.Geometry.Domain
             double newAngle = 0;
             if (axe) // Вертикально
             {
-                newAngle = (Angle + Math.PI / 2) % (2 * Math.PI);
+                newAngle = (Angle - Math.PI / 2) % Math.PI;
             }
             else // Горизонтально
             {
-                newAngle = (Angle - Math.PI / 2) % (2 * Math.PI);
+                newAngle = (Angle + Math.PI / 2) % Math.PI;
             }
             Vector newScale = new Vector(Scale.X * Math.Cos(newAngle) + Scale.Y * Math.Sin(newAngle),
             Scale.X * Math.Sin(newAngle) + Scale.Y * Math.Cos(newAngle));

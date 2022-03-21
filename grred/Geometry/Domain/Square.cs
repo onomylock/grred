@@ -78,7 +78,13 @@ namespace GrRed.Geometry.Domain
             return newPoints;
         }
         private Vector SetInputScale(Vector[] Points) => new Vector(Center.X - (Points[1] - Points[0]).X / 2, (Points[2] - Points[1]).Y / 2 - Center.Y);
-        private double SetInputAngle(Vector[] Points) => Math.Asin((Points[1].X - Points[0].X) / VectorModul(Points[1] - Points[0]));
+        //private double SetInputAngle(Vector[] Points) => Math.Acos((Points[3].X - Points[0].X) / VectorModul(Points[1] - Points[0]));
+
+        private double SetInputAngle(Vector[] Points)
+        {
+            if (Points[3].Y >= Points[0].Y) return Math.Acos((Points[3].X - Points[0].X) / VectorModul(Points[3] - Points[0]));
+            else return -Math.Acos((Points[3].X - Points[0].X) / VectorModul(Points[3] - Points[0]));
+        }
         private double VectorModul(Vector a) => Math.Sqrt(Math.Pow(a.X, 2) + Math.Pow(a.Y, 2));
         private Vector SetInputCenter(Vector[] Points)
         {
@@ -110,37 +116,39 @@ namespace GrRed.Geometry.Domain
 
         public bool IsIn(Vector p, double eps)
         {
-            double side_A;
-            double side_B;
+            // double side_A;
+            // double side_B;
 
-            if (Math.Abs(Math.PI + Angle) % 2.0 * Math.PI <= eps) // Случай, когда угол кратен пи
-            {
-                side_B = Scale.X;
-                side_A = Scale.Y;
-            }
-            else if (Math.Abs(Angle) % 2.0 * Math.PI <= eps) // Случай, когда угол кратен 2пи (0, в частности)
-            {
-                side_A = Scale.X;
-                side_B = Scale.Y;
-            }
-            else                                          // Любой другой случай
-            {
-                side_B = Math.Sqrt(Math.Pow((Gabarit.r - Gabarit.l), 2) + Math.Pow((Gabarit.t - Gabarit.b), 2));
-                side_A = Math.Sqrt((4.0 * Scale.Y * Scale.Y) / (Math.Sin(Angle) * Math.Sin(Angle)) - side_B * side_B);
-            }
+            // if (Math.Abs(Math.PI + Angle) % 2.0 * Math.PI <= eps) // Случай, когда угол кратен пи
+            // {
+            //     side_B = Scale.X;
+            //     side_A = Scale.Y;
+            // }
+            // else if (Math.Abs(Angle) % 2.0 * Math.PI <= eps) // Случай, когда угол кратен 2пи (0, в частности)
+            // {
+            //     side_A = Scale.X;
+            //     side_B = Scale.Y;
+            // }
+            // else                                          // Любой другой случай
+            // {
+            //     side_B = Math.Sqrt(Math.Pow((Gabarit.r - Gabarit.l), 2) + Math.Pow((Gabarit.t - Gabarit.b), 2));
+            //     side_A = Math.Sqrt((4.0 * Scale.Y * Scale.Y) / (Math.Sin(Angle) * Math.Sin(Angle)) - side_B * side_B);
+            // }
 
-            double A_bigger_2 = Math.Abs(side_A) / 2.0;
-            double B_bigger_2 = Math.Abs(side_B) / 2.0;
+            // double A_bigger_2 = Math.Abs(side_A) / 2.0;
+            // double B_bigger_2 = Math.Abs(side_B) / 2.0;
 
-            double IsInCheck = Math.Abs((p.X - Center.X) * Math.Cos(Math.PI / 4.0 + Angle) / A_bigger_2 + (p.Y - Center.Y) * Math.Sin(Math.PI / 4.0 + Angle) / B_bigger_2) + Math.Abs((p.X - Center.X) * Math.Sin(Math.PI / 4.0 + Angle) / (-A_bigger_2) + (p.Y - Center.Y) * Math.Cos(Math.PI / 4.0 + Angle) / B_bigger_2);
+            // double IsInCheck = Math.Abs((p.X - Center.X) * Math.Cos(Math.PI / 4.0 + Angle) / A_bigger_2 + (p.Y - Center.Y) * Math.Sin(Math.PI / 4.0 + Angle) / B_bigger_2) + Math.Abs((p.X - Center.X) * Math.Sin(Math.PI / 4.0 + Angle) / (-A_bigger_2) + (p.Y - Center.Y) * Math.Cos(Math.PI / 4.0 + Angle) / B_bigger_2);
 
-            if (IsInCheck + eps <= Math.Sqrt(2.0) || IsInCheck - eps <= Math.Sqrt(2.0))
+            // if (IsInCheck + eps <= Math.Sqrt(2.0) || IsInCheck - eps <= Math.Sqrt(2.0))
+            //     return true;
+            // else
+            //     return false;
+
+            Vector RotatePoint = new Vector(p.X * Math.Cos(Angle) + p.Y * Math.Sin(Angle), -p.X * Math.Sin(Angle) + p.Y * Math.Cos(Angle));
+            if (Gabarit.l - RotatePoint.X < eps && Gabarit.r - RotatePoint.X > eps && Gabarit.t - RotatePoint.Y > eps && Gabarit.b - RotatePoint.Y < eps)
                 return true;
-            else
-                return false;
-
-            // //Vector RotatePoint = new Vector(p.X * Math.Cos(Angle) + p.Y * Math.Sin(Angle), -p.X * Math.Sin(Angle) + p.Y * Math.Cos(Angle));
-            // if (Math.Abs(Gabarit.l - RotatePoint.X) < eps && Math.Abs(Gabarit.r - RotatePoint.X) < eps &&)
+            else return false;
         }
 
         public IFigure Move(Vector delta)
@@ -164,32 +172,51 @@ namespace GrRed.Geometry.Domain
             //     return new Ellipse(newAngle, Center, newScale);
             // }
 
-            if (axe)
+            // if (axe)
+            // {
+            //     return this.Rotate(-Math.PI + 2 * Angle);
+            // }
+            // else
+            // {
+            //     return this.Rotate(-2 * Angle);
+            // }
+            double newAngle = 0;
+            if (axe) // Вертикально
             {
-                return this.Rotate(-Math.PI + 2 * Angle);
+                newAngle = (Angle - Math.PI / 2) % Math.PI;
             }
-            else
+            else // Горизонтально
             {
-                return this.Rotate(-2 * Angle);
+                newAngle = (Angle + Math.PI / 2) % Math.PI;
             }
+            Vector newScale = new Vector(Scale.X * Math.Cos(newAngle) + Scale.Y * Math.Sin(newAngle),
+            Scale.X * Math.Sin(newAngle) + Scale.Y * Math.Cos(newAngle));
 
+            return new Square(newAngle, Center, newScale);
         }
 
         public IFigure Rotate(double delta)
         {
-            double newAngle = (Angle + delta) % Math.PI;
-            double eps = 0.1;
-            Vector newScale;
-            if (Math.Abs(newAngle) % Math.PI / 2 < eps)
-            {
-                newScale = new(Scale.Y, Scale.X);
-                return new Square(newAngle, Center, newScale);
-            }
-            else
-            {
-                newScale = new(Scale.X * Math.Cos(newAngle), Scale.Y * Math.Cos(newAngle));
-                return new Square(newAngle, Center, newScale);
-            }
+            // double newAngle = (Angle + delta) % Math.PI;
+            // double eps = 0.1;
+            // Vector newScale;
+            // if (Math.Abs(newAngle) % Math.PI / 2 < eps)
+            // {
+            //     newScale = new(Scale.Y, Scale.X);
+            //     return new Square(newAngle, Center, newScale);
+            // }
+            // else
+            // {
+            //     newScale = new(Scale.X * Math.Cos(newAngle), Scale.Y * Math.Cos(newAngle));
+            //     return new Square(newAngle, Center, newScale);
+            // }
+            double newAngle = (Angle + delta) % (2 * Math.PI);
+            //if (Math.Abs(newAngle) > 2 * Math.PI) newAngle = newAngle % (2 * Math.PI);
+            //else if (Math.Abs(newAngle) == 2 * Math.PI) return new Square(Angle, Center, Scale);
+            Vector newScale = new Vector(Scale.X * Math.Cos(newAngle) + Scale.Y * Math.Sin(newAngle),
+            Scale.X * Math.Sin(newAngle) + Scale.Y * Math.Cos(newAngle));
+
+            return new Square(newAngle, Center, newScale);
         }
 
         public IFigure SetScale(double dx, double dy)

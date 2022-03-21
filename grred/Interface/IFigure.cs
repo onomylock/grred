@@ -23,6 +23,12 @@ namespace GrRed
             Y = y;
         }
 
+        public Vector(Vector a)
+        {
+            X = a.X;
+            Y = a.Y;
+        }
+
         public static Vector operator +(Vector a, Vector b)
             => new Vector(a.X + b.X, a.Y + b.Y);
 
@@ -70,6 +76,7 @@ namespace GrRed
                 "Ellipse" => new EllipseFactory(),
                 "Triangle" => new TriangleFactory(),
                 "Square" => new SquareFactory(),
+                "Line" => new LineFactory(),
                 _ => null,
             };
         }

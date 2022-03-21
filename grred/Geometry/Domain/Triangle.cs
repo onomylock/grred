@@ -58,9 +58,15 @@ namespace GrRed.Geometry.Domain
         private Vector[] SetInputPoints()
         {
             Vector[] newPoints = new Vector[3];
-            newPoints[0] = Scale;
-            newPoints[1] = Center;
-            newPoints[2] = new Vector(Scale.X, Center.Y);
+            // newPoints[0] = Scale;
+            // newPoints[1] = Center;
+            // newPoints[2] = new Vector(Scale.X, Center.Y);
+            newPoints[0] = new Vector(Scale.X * Math.Cos(Angle) - Scale.Y * Math.Sin(Angle),
+            Scale.X * Math.Sin(Angle) + Scale.Y * Math.Cos(Angle));
+            newPoints[1] = new Vector(Center.X * Math.Cos(Angle) - Center.Y * Math.Sin(Angle),
+            Center.X * Math.Sin(Angle) + Center.Y * Math.Cos(Angle));
+            newPoints[2] = new Vector(Scale.X * Math.Cos(Angle) - Center.Y * Math.Sin(Angle),
+            Scale.X * Math.Sin(Angle) + Center.Y * Math.Cos(Angle));
             return newPoints;
         }
         private double SetInputAngle(Vector[] Points) => Math.Asin((Points[2].Y - Points[0].Y) / VectorModul(Points[2] - Points[0]));
@@ -84,8 +90,8 @@ namespace GrRed.Geometry.Domain
             double Sacp = (p.X - p1.X) * (p3.Y - p1.Y) - (p3.X - p1.X) * (p.Y - p1.Y);
             double sum = Sabp + Sbcp + Sacp;
 
-            if (Sabc - sum < eps) return false;
-            else return true;
+            if (Math.Abs(Sabc - sum) < eps || Sabc > sum) return true;
+            else return false;
         }
 
         public IFigure Move(Vector delta)
