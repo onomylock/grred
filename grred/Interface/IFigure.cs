@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GrRed.Geometry.Factory;
 using System.Runtime.Serialization;
+using System.IO;
 
 namespace GrRed
 {
@@ -60,6 +61,10 @@ namespace GrRed
 
     public interface IGraphic
     {
+        object path { get; }
+        object conturColor { get; set; } 
+        object fillColor { get; set; }
+        double thickness { get; set; }
         void AddLines(IEnumerable<Vector> lines);
         void FillPolygon(object color);
         void AddPolyArc(IEnumerable<Vector> lines);// каждые 3 точки -- дуга окружности
