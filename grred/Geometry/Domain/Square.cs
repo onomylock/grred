@@ -138,6 +138,9 @@ namespace GrRed.Geometry.Domain
                 return true;
             else
                 return false;
+
+            // //Vector RotatePoint = new Vector(p.X * Math.Cos(Angle) + p.Y * Math.Sin(Angle), -p.X * Math.Sin(Angle) + p.Y * Math.Cos(Angle));
+            // if (Math.Abs(Gabarit.l - RotatePoint.X) < eps && Math.Abs(Gabarit.r - RotatePoint.X) < eps &&)
         }
 
         public IFigure Move(Vector delta)

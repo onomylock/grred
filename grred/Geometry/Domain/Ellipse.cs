@@ -99,9 +99,11 @@ namespace GrRed.Geometry.Domain
             Vector RotatePoint = new Vector(p.X * Math.Cos(Angle) + p.Y * Math.Sin(Angle), -p.X * Math.Sin(Angle) + p.Y * Math.Cos(Angle));
             double a = Math.Sqrt(Math.Pow(Center.X - Points[0].X, 2) + Math.Pow(Center.Y - Points[0].Y, 2));
             double b = Math.Sqrt(Math.Pow(Center.X - Points[1].X, 2) + Math.Pow(Center.Y - Points[1].Y, 2));
+            //double a = Scale.X;
+            //double b = Scale.Y;
             double ellipseEq = Math.Pow(RotatePoint.X / a, 2) + Math.Pow(RotatePoint.Y / b, 2);
 
-            if (Math.Abs(ellipseEq - 1) <= eps) return true;
+            if (ellipseEq - 1 <= eps) return true;
             else return false;
         }
 
@@ -146,7 +148,8 @@ namespace GrRed.Geometry.Domain
             //     return new Ellipse(newAngle, Center, newScale);
             // }
 
-            double newAngle = (Angle + delta) % Math.PI;
+            double newAngle = (Angle + delta);
+            if (Math.Abs(newAngle) >= 2 * Math.PI) newAngle = newAngle % 2 * Math.PI;
             Vector[] newPoints = new Vector[4];
             for (int i = 0; i < Points.Count(); i++)
             {
