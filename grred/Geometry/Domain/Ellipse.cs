@@ -30,7 +30,7 @@ namespace GrRed.Geometry.Domain
             this.Points = Points.ToArray();
             Scale = new Vector(Math.Abs(this.Points[0].X), Math.Abs(this.Points[1].Y));
             Center = SetInputCenter(this.Points);
-            Angle = Math.Asin((this.Points[1].Y - Center.Y) / VectorModul(this.Points[1] - this.Center));
+            Angle = SetInputAngle();
             Gabarit = (Center.X - Scale.X, Center.Y + Scale.Y, Center.X + Scale.X, Center.Y - Scale.Y);
         }
 
@@ -52,6 +52,11 @@ namespace GrRed.Geometry.Domain
             graphic.AddPolyArc(new ArraySegment<Vector>(Points, 0, 3));
         }
 
+        private double SetInputAngle()
+        {
+            if (Points[1].X <= Center.X) return Math.Asin((this.Points[1].Y - Center.Y) / VectorModul(this.Points[1] - this.Center));
+            else return -Math.Asin((this.Points[1].Y - Center.Y) / VectorModul(this.Points[1] - this.Center));
+        }
         private Vector SetInputCenter(Vector[] Points) => new Vector(Points[2].X - Points[0].X, Points[1].Y - Points[3].Y);
 
         private Vector[] SetInputPoints()
@@ -115,7 +120,20 @@ namespace GrRed.Geometry.Domain
 
         public IFigure Reflection(bool axe)
         {
-            return this.Rotate(-2.0 * Angle);
+            double newAngle = 0;
+            if (axe) // Вертикально
+            {
+                newAngle = (Angle + Math.PI / 2) % (2 * Math.PI);
+            }
+            else // Горизонтально
+            {
+                newAngle = (Angle - Math.PI / 2) % (2 * Math.PI);
+            }
+            Vector newScale = new Vector(Scale.X * Math.Cos(newAngle) + Scale.Y * Math.Sin(newAngle),
+            Scale.X * Math.Sin(newAngle) + Scale.Y * Math.Cos(newAngle));
+
+            return new Ellipse(newAngle, Center, newScale);
+
         }
 
         public IFigure Rotate(double delta)
@@ -148,15 +166,21 @@ namespace GrRed.Geometry.Domain
             //     return new Ellipse(newAngle, Center, newScale);
             // }
 
-            double newAngle = (Angle + delta);
-            if (Math.Abs(newAngle) >= 2 * Math.PI) newAngle = newAngle % 2 * Math.PI;
-            Vector[] newPoints = new Vector[4];
-            for (int i = 0; i < Points.Count(); i++)
-            {
-                newPoints[i] = new Vector(Points[i].X * Math.Cos(newAngle) + Points[i].Y * Math.Sin(newAngle),
-                -Points[i].X * Math.Sin(newAngle) + Points[i].Y * Math.Cos(newAngle));
-            }
-            return new Ellipse(newPoints);
+            // double newAngle = Angle + delta;
+            // if (Math.Abs(newAngle) >= 2 * Math.PI) newAngle = newAngle % (2 * Math.PI);
+            // Vector[] newPoints = new Vector[4];
+            // for (int i = 0; i < Points.Count(); i++)
+            // {
+            //     newPoints[i] = new Vector(Points[i].X * Math.Cos(newAngle) + Points[i].Y * Math.Sin(newAngle),
+            //     -Points[i].X * Math.Sin(newAngle) + Points[i].Y * Math.Cos(newAngle));
+            // }
+            // return new Ellipse(newPoints);
+            double newAngle = Angle + delta;
+            if (Math.Abs(newAngle) >= 2 * Math.PI) newAngle = newAngle % (2 * Math.PI);
+            Vector newScale = new Vector(Scale.X * Math.Cos(newAngle) + Scale.Y * Math.Sin(newAngle),
+            Scale.X * Math.Sin(newAngle) + Scale.Y * Math.Cos(newAngle));
+
+            return new Ellipse(newAngle, Center, newScale);
         }
 
         public IFigure SetScale(double dx, double dy)
