@@ -8,6 +8,10 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using System.Diagnostics;
+using System;
+using GrRed.IO;
+using System.Linq;
 
 namespace gui
 {
@@ -28,12 +32,12 @@ namespace gui
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private Dictionary<Path, IFigure> figureDict = new Dictionary<Path, IFigure>();
+        public Dictionary<Path, IFigure> figureDict = new Dictionary<Path, IFigure>();
         private List<IFigure> selectedFigures = new List<IFigure>();
         private Stack<ICommand> actionCommands = new Stack<ICommand>();
         private InkCanvas paintingCanvas;
         private Brush currentBrush;
-        private Path previousPath;
+        public Path previousPath;
 
         private Mode mode = Mode.Selection;
         private bool isMouseDown = false;
@@ -50,6 +54,9 @@ namespace gui
         private ICommand mouseUp = null;
         private ICommand mouseMove = null;
         private ICommand selectionCommand = null;
+        private ICommand clearCanvasCommand = null;
+        private ICommand saveCommand;
+        private ICommand helpCommand;
 
         //private ICommand YkazButton = null;
         //private ICommand MysorButton = null;
@@ -74,6 +81,21 @@ namespace gui
         {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(prop));
+        }
+
+        public ICommand SaveCommand => saveCommand = new ActionCommand(Save, param => true);
+
+        private void Save(object obj)
+        {
+            List<IFigure> ListFig = figureDict.Values.ToList();
+            Io.Save(paintingCanvas, ListFig);
+        }
+
+        public ICommand HelpCommand => helpCommand = new ActionCommand(HelpButton, param => true);
+        
+        private void HelpButton(object obj)
+        {
+            Process.Start(new ProcessStartInfo("https://gitlab.com/egorsukhinin/grred/-/wikis/Интерфейс-приложения") { UseShellExecute = true });
         }
 
         public ICommand CreateLineCommand
@@ -179,6 +201,15 @@ namespace gui
             }
         }
 
+        public ICommand ClearCanvasCommand
+        {
+            get
+            {
+                clearCanvasCommand = new ActionCommand(ClearCanvas, param => true);
+                return clearCanvasCommand;
+            }
+        }
+
         public ICommand MouseMove
         {
             get
@@ -198,6 +229,13 @@ namespace gui
                 }, param => true);
                 return selectionCommand;
             }
+        }
+        private void ClearCanvas(object obj)
+        {
+            actionCommands.Clear();
+            figureDict.Clear();
+            selectedFigures.Clear();
+            paintingCanvas.Children.Clear();
         }
 
         private IFigure createTriangle(GrRed.Vector start, GrRed.Vector scale)

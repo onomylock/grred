@@ -42,6 +42,7 @@ namespace GrRed
     public interface IFigure
     {
         string TypeName { get; }
+        public Vector[] Points { get; }
         Vector Center { get; } //Центр фигуры
         double Angle { get; }  //Угол поворота
         Vector Scale { get; } //для шаблона

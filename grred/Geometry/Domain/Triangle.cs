@@ -9,36 +9,33 @@ namespace GrRed.Geometry.Domain
     [DataContract]
     public class Triangle : IFigure
     {
-
-        private readonly Vector _Center = new(1.0, 1.0); // Центр тяжести
-        private readonly double _Angle = 0.0;
-        private readonly Vector _Scale = new(0.866, 0.75);
-        private IEnumerable<Vector> _Points;
-
         public Triangle() { }
 
         [JsonConstructor]
-        public Triangle(double Angle, Vector Center, Vector Scale)
+        public Triangle(double angle, Vector center, Vector scale)
         {
-            _Center = Center;
-            _Angle = Angle;
-            _Scale = Scale;
+            Center = center;
+            Angle = angle;
+            Scale = scale;
+            //Points = 
         }
 
         public Triangle(IEnumerable<Vector> Points)
         {
-            _Points = Points;
-            _Center = SetInputCenter(Points);
-            _Angle = SetInputAngle(Points);
+            this.Points = Points.ToArray();
+            Scale = new Vector(this.Points[2].X - this.Points[0].X, this.Points[1].Y - this.Points[2].Y);
+            Center = SetInputCenter(this.Points);
+            Angle = SetInputAngle(this.Points);
         }
 
         public string TypeName => "Triangle";
         [DataMember]
-        public double Angle => _Angle;
+        public Vector[] Points { get; }
+        public double Angle { get; }
         [DataMember]
-        public Vector Center => _Center;
+        public Vector Center { get; }
         [DataMember]
-        public Vector Scale => _Scale;
+        public Vector Scale { get; }
 
         public (double l, double t, double r, double b) Gabarit =>
             (Center.X - Scale.X, Center.Y + Scale.Y * 2.0 / 3.0, Center.X, Center.Y - Scale.Y * 2.0 / 3.0);
@@ -51,33 +48,16 @@ namespace GrRed.Geometry.Domain
         {
             //Path path = new Path();
             //LineGrafic lineGrafic = new LineGrafic(paintingCanvas, path);
-            List<Vector> vector2 = new List<Vector>();
-            vector2.Add(Center);
-            vector2.Add(Scale);
-            vector2.Add(new Vector(Scale.X, Center.Y));
-            graphic.AddLines(vector2);
+            graphic.AddLines(Points);
             //object brush2 = "#ffc0cb";
 
             //Brush brush2 = Brushes.Firebrick;
             //graphic.FillPolygon(brush2);
         }
 
-        private double SetInputAngle(IEnumerable<Vector> Points)
-        {
-            Vector p1 = Points.ElementAt(0);
-            Vector p2 = Points.ElementAt(2);
-            return Math.Asin((p2.Y - p1.Y) / VectorModul(p2 - p1));
-        }
+        private double SetInputAngle(Vector[] Points) => Math.Asin((Points[2].Y - Points[0].Y) / VectorModul(Points[2] - Points[0]));
 
-        private Vector SetInputCenter(IEnumerable<Vector> Points)
-        {
-            Vector p1 = Points.ElementAt(0);
-            Vector p2 = Points.ElementAt(1);
-            Vector p3 = Points.ElementAt(2);
-
-            //return new Vector((p1.X + p2.X + p3.X) / 3, (p1.Y + p2.Y + p3.X) / 3);
-            return (p1 + p2 + p3) / 3.0;
-        }
+        private Vector SetInputCenter(Vector[] Points) => (Points[0] + Points[1] + Points[2]) / 3.0;
 
         public IFigure Intersection(IFigure fig2)
         {
@@ -86,53 +66,52 @@ namespace GrRed.Geometry.Domain
 
         public bool IsIn(Vector p, double eps)
         {
-            Vector p1 = _Points.ElementAt(0);
-            Vector p2 = _Points.ElementAt(1);
-            Vector p3 = _Points.ElementAt(2);
-            Vector pa = p - p1;
-            Vector ab = p2 - p1;
-            Vector ac = p3 - p1;
-            double u = ScalarMult(pa, ab) / Math.Pow(VectorModul(ab), 2);
-            double v = ScalarMult(pa, ac) / Math.Pow(VectorModul(ac), 2);
+            Vector p1 = Points.ElementAt(0);
+            Vector p2 = Points.ElementAt(1);
+            Vector p3 = Points.ElementAt(2);
 
-            if (u < 0 || u > 1 || v < 0 || v > 1 || v + u > 1) return false;
+            double Sabc = (p2.X - p1.X) * (p3.Y - p1.Y) - (p3.X - p1.X) * (p2.Y - p1.Y);
+            double Sabp = (p2.X - p1.X) * (p.Y - p1.Y) - (p.X - p1.X) * (p2.Y - p1.Y);
+            double Sbcp = (p2.X - p.X) * (p3.Y - p.Y) - (p3.X - p.X) * (p2.Y - p.Y);
+            double Sacp = (p.X - p1.X) * (p3.Y - p1.Y) - (p3.X - p1.X) * (p.Y - p1.Y);
+            double sum = Sabp + Sbcp + Sacp;
+
+            if (Sabc - sum < eps) return false;
             else return true;
         }
 
         public IFigure Move(Vector delta)
         {
-            List<Vector> newPoints = new List<Vector>(3);
-            int i = 0;
-            foreach (Vector point in _Points)
+            Vector[] newPoints = new Vector[3];
+            for (int i = 0; i < newPoints.Count(); i++)
             {
-                newPoints[i] = point + delta;
-                i++;
+                newPoints[i] = Points[i] + delta;
             }
             return new Triangle(newPoints);
         }
 
         public IFigure Reflection(bool axe)
         {
-            List<Vector> newPoints = new List<Vector>();
-            newPoints.Add(_Points.ElementAt(0));
-            newPoints.Add(_Points.ElementAt(1));
-            newPoints.Add(_Points.ElementAt(2));
+            Vector[] newPoints = new Vector[3];
+            // newPoints.Add(_Points.ElementAt(0));
+            // newPoints.Add(_Points.ElementAt(1));
+            // newPoints.Add(_Points.ElementAt(2));
 
             if (axe) //Вертикальное
             {
-                for (int i = 0; i < newPoints.Count; i++)
+                for (int i = 0; i < newPoints.Count(); i++)
                 {
-                    if (newPoints[i].Y > Center.Y) newPoints[i] = new Vector(newPoints[i].Y, newPoints[i].Y - 2 * Center.Y);
-                    else if (newPoints[i].Y < Center.Y) newPoints[i] = new Vector(newPoints[i].Y, newPoints[i].Y + 2 * Center.Y);
+                    if (Points[i].Y > Center.Y) newPoints[i] = new Vector(Points[i].Y, Points[i].Y - 2 * Center.Y);
+                    else if (Points[i].Y < Center.Y) newPoints[i] = new Vector(newPoints[i].Y, newPoints[i].Y + 2 * Center.Y);
                 }
                 return new Triangle(newPoints);
             }
             else //Горизонтальное
             {
-                for (int i = 0; i < newPoints.Count; i++)
+                for (int i = 0; i < newPoints.Count(); i++)
                 {
-                    if (newPoints[i].X > Center.X) newPoints[i] = new Vector(newPoints[i].X - 2 * Center.X, newPoints[i].Y);
-                    else if (newPoints[i].X < Center.X) newPoints[i] = new Vector(newPoints[i].X + 2 * Center.X, newPoints[i].Y);
+                    if (Points[i].X > Center.X) newPoints[i] = new Vector(Points[i].X - 2 * Center.X, Points[i].Y);
+                    else if (Points[i].X < Center.X) newPoints[i] = new Vector(Points[i].X + 2 * Center.X, Points[i].Y);
                 }
                 return new Triangle(newPoints);
             }
@@ -140,17 +119,14 @@ namespace GrRed.Geometry.Domain
 
         public IFigure Rotate(double delta)
         {
-            double newAngle = Angle + delta;
-            Vector p1 = new Vector(_Points.ElementAt(0).X * Math.Cos(newAngle) - _Points.ElementAt(0).Y * Math.Sin(newAngle),
-            _Points.ElementAt(0).X * Math.Sin(newAngle) + _Points.ElementAt(0).Y * Math.Cos(newAngle));
-            Vector p2 = new Vector(_Points.ElementAt(1).X * Math.Cos(newAngle) - _Points.ElementAt(1).Y * Math.Sin(newAngle),
-            _Points.ElementAt(1).X * Math.Sin(newAngle) + _Points.ElementAt(1).Y * Math.Cos(newAngle));
-            Vector p3 = new Vector(_Points.ElementAt(2).X * Math.Cos(newAngle) - _Points.ElementAt(2).Y * Math.Sin(newAngle),
-            _Points.ElementAt(2).X * Math.Sin(newAngle) + _Points.ElementAt(2).Y * Math.Cos(newAngle));
-            List<Vector> newPoints = new List<Vector>();
-            newPoints.Add(p1);
-            newPoints.Add(p2);
-            newPoints.Add(p3);
+            double newAngle = (Angle + delta) % Math.PI;
+            Vector[] newPoints = new Vector[3];
+
+            for (int i = 0; i < newPoints.Count(); i++)
+            {
+                newPoints[i] = new Vector(Points[i].X * Math.Cos(newAngle) - Points[i].Y * Math.Sin(newAngle),
+                Points[i].X * Math.Sin(newAngle) + Points[i].Y * Math.Cos(newAngle));
+            }
             return new Triangle(newPoints);
         }
 
@@ -158,6 +134,11 @@ namespace GrRed.Geometry.Domain
         {
             Vector newScale = new(Scale.X + dx / 2, Scale.Y + dy / 2);
             return new Triangle(Angle, Center, newScale);
+            // Vector[] newPoints = new Vector[3];
+            // for (int i = 0; i < Points.Count(); i++)
+            // {
+            //     newPoints[i].X = Points[i].X 
+            // }
         }
 
         public IFigure Subtruct(IFigure fig2)

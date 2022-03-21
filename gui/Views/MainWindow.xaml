@@ -30,8 +30,8 @@
                     <MenuItem Header="Создать" Command=""></MenuItem>
                     <MenuItem Header="Открыть" Command=""></MenuItem>
                     <MenuItem Header="Сохранить" Command=""></MenuItem>
-                    <MenuItem Header="Сохранить как" Command=""></MenuItem>
-                    <MenuItem Header="Справка" Command=""></MenuItem>
+                    <MenuItem Header="Сохранить как" Command="{Binding SaveCommand}"></MenuItem>
+                    <MenuItem Header="Справка" Command="{Binding HelpCommand}"></MenuItem>
                 </MenuItem>
             </Menu>
             <Grid>
@@ -59,7 +59,7 @@
             <Button Command="{Binding SelectionCommand}" x:Name="YkazButton" Height="30" Width="30" Background="{x:Null}" BorderThickness="0">
                 <Image Source="../Resources/icons8-kursor-64.png" />
             </Button>
-            <Button Command="{Binding MysorButton}" x:Name="MysorButton" Height="30" Width="30" Background="{x:Null}" BorderThickness="0">
+            <Button Command="{Binding ClearCanvasCommand}" x:Name="MysorButton" Height="30" Width="30" Background="{x:Null}" BorderThickness="0">
                 <Image Source="../Resources/icons8-ochistit-korzinu-50.png" />
             </Button>
 
