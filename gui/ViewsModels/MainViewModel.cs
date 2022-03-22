@@ -57,6 +57,8 @@ namespace gui
         private ICommand clearCanvasCommand = null;
         private ICommand saveAsCommand;
         private ICommand helpCommand;
+        private ICommand undoCommand;
+        private ICommand redoCommand;
         //private ICommand loadCommand;
 
         //private ICommand YkazButton = null;
@@ -93,6 +95,20 @@ namespace gui
         //    List<IFigure> figureList = new();
         //    Dictionary<Path, IFigure> figureDict = figureList.
         //}
+
+        public ICommand UndoCommand => undoCommand = new ActionCommand(Undo, param => true);
+
+        private void Undo(object obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ICommand RedoCommand => undoCommand = new ActionCommand(Redo, param => true);
+
+        private void Redo(object obj)
+        {
+            throw new NotImplementedException();
+        }
 
         public ICommand SaveAsCommand => saveAsCommand = new ActionCommand(SaveAs, param => true);
 

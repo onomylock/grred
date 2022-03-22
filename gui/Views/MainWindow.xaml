@@ -35,10 +35,10 @@
                 </MenuItem>
             </Menu>
             <Grid>
-                <Button Command="{Binding BackButton}" x:Name="BackButton" Margin="4,0,0,0"  Width="30" Height="30" Background="{x:Null}" HorizontalAlignment="Left" BorderThickness="0">
+                <Button Command="{Binding UndoCommand}" x:Name="BackButton" Margin="4,0,0,0"  Width="30" Height="30" Background="{x:Null}" HorizontalAlignment="Left" BorderThickness="0">
                     <Image Source="../Resources/icons8nazad.png"/>
                 </Button>
-                <Button Command="{Binding NextButton}" x:Name="NextButton" Margin="28,0,0,0" Height="30" Width="30" Background="{x:Null}" Grid.Column="1" BorderThickness="0">
+                <Button Command="{Binding RedoCommand}" x:Name="NextButton" Margin="28,0,0,0" Height="30" Width="30" Background="{x:Null}" Grid.Column="1" BorderThickness="0">
                     <Image Source="../Resources/icons8vpered.png"/>
                 </Button>
             </Grid>
