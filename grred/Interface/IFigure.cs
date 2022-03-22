@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GrRed.Geometry.Factory;
 using System.Runtime.Serialization;
+using System.IO;
 
 namespace GrRed
 {
@@ -37,6 +38,12 @@ namespace GrRed
 
         public static Vector operator /(Vector a, double b)
             => new Vector(a.X / b, a.Y / b);
+
+        public static bool operator ==(Vector a, Vector b)
+            => a.X == b.X && a.Y == b.Y;
+
+        public static bool operator !=(Vector a, Vector b)
+            => a.X != b.X || a.Y != b.Y;
     }
 
     public interface IFigure
@@ -60,6 +67,10 @@ namespace GrRed
 
     public interface IGraphic
     {
+        object path { get; }
+        object conturColor { get; set; } 
+        object fillColor { get; set; }
+        double thickness { get; set; }
         void AddLines(IEnumerable<Vector> lines);
         void FillPolygon(object color);
         void AddPolyArc(IEnumerable<Vector> lines);// каждые 3 точки -- дуга окружности

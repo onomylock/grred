@@ -30,8 +30,8 @@
                     <MenuItem Header="Создать" Command=""></MenuItem>
                     <MenuItem Header="Открыть" Command=""></MenuItem>
                     <MenuItem Header="Сохранить" Command=""></MenuItem>
-                    <MenuItem Header="Сохранить как" Command=""></MenuItem>
-                    <MenuItem Header="Справка" Command=""></MenuItem>
+                    <MenuItem Header="Сохранить как" Command="{Binding SaveCommand}"></MenuItem>
+                    <MenuItem Header="Справка" Command="{Binding HelpCommand}"></MenuItem>
                 </MenuItem>
             </Menu>
             <Grid>
