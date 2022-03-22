@@ -60,6 +60,7 @@ namespace gui
         private ICommand helpCommand;
         private ICommand undoCommand;
         private ICommand redoCommand;
+        private ICommand createNewCanvCommand;
         //private ICommand loadCommand;
 
         //private ICommand ApproximationButton = null;
@@ -89,6 +90,21 @@ namespace gui
         //    List<IFigure> figureList = new();
         //    Dictionary<Path, IFigure> figureDict = figureList.
         //}
+
+        public ICommand CreateNewCanvCommand => createNewCanvCommand = new ActionCommand(CreateNewCanv, param => true);
+
+        private void CreateNewCanv(object obj)
+        {
+            if (paintingCanvas.Strokes != null)
+            {
+                SaveAs(obj);
+                СlearCanvas(obj);
+            }
+            else
+            {
+                СlearCanvas(obj);
+            }
+        }
 
         public ICommand UndoCommand => undoCommand = new ActionCommand(Undo, param => true);
 
@@ -225,7 +241,7 @@ namespace gui
         {
             get
             {
-                clearCanvasCommand = new ActionCommand(clearCanvas, param => true);
+                clearCanvasCommand = new ActionCommand(СlearCanvas, param => true);
                 return clearCanvasCommand;
             }
         }
@@ -262,8 +278,9 @@ namespace gui
             List<IFigure> ListFig = figureDict.Values.ToList();
             Io.Save(paintingCanvas, ListFig);
         }
-        private void clearCanvas(object obj)
+        private void СlearCanvas(object obj)
         {
+            paintingCanvas.Strokes.Clear();
             actionCommands.Clear();
             figureDict.Clear();
             selectedFigures.Clear();

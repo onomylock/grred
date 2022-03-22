@@ -27,7 +27,7 @@
                     <MenuItem.Icon>
                         <Image  Source="../Resources/activ_Menu.png" Margin="-3,-13,-14,-13" />
                     </MenuItem.Icon>
-                    <MenuItem Header="Создать" Command=""></MenuItem>
+                    <MenuItem Header="Создать" Command="{Binding CreateNewCanvCommand}"></MenuItem>
                     <MenuItem Header="Открыть" Command="{Binding LoadCommand}"></MenuItem>
                     <MenuItem Header="Сохранить" Command=""></MenuItem>
                     <MenuItem Header="Сохранить как" Command="{Binding SaveAsCommand}"></MenuItem>
