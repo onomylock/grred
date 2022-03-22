@@ -56,8 +56,11 @@ namespace gui
         private ICommand mouseMove = null;
         private ICommand selectionCommand = null;
         private ICommand clearCanvasCommand = null;
-        private ICommand saveCommand;
+        private ICommand saveAsCommand;
         private ICommand helpCommand;
+        private ICommand undoCommand;
+        private ICommand redoCommand;
+        //private ICommand loadCommand;
 
         //private ICommand ApproximationButton = null;
         //private ICommand DistanceButton = null;
@@ -77,8 +80,37 @@ namespace gui
                 PropertyChanged(this, new PropertyChangedEventArgs(prop));
         }
 
-        public ICommand SaveCommand => saveCommand = new ActionCommand(save, param => true);
+        //public ICommand LoadCommand => loadCommand = new ActionCommand(Load, param => true);
 
+        //private void Load(object obj)
+        //{
+        //    ClearCanvas(obj);
+        //    Io.Load();
+        //    List<IFigure> figureList = new();
+        //    Dictionary<Path, IFigure> figureDict = figureList.
+        //}
+
+        public ICommand UndoCommand => undoCommand = new ActionCommand(Undo, param => true);
+
+        private void Undo(object obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ICommand RedoCommand => undoCommand = new ActionCommand(Redo, param => true);
+
+        private void Redo(object obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ICommand SaveAsCommand => saveAsCommand = new ActionCommand(SaveAs, param => true);
+
+        private void SaveAs(object obj)
+        {
+            List<IFigure> ListFig = figureDict.Values.ToList();
+            Io.Save(paintingCanvas, ListFig);
+        }
 
         public ICommand HelpCommand => helpCommand = new ActionCommand(helpButton, param => true);
         
