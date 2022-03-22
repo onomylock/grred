@@ -55,8 +55,9 @@ namespace gui
         private ICommand mouseMove = null;
         private ICommand selectionCommand = null;
         private ICommand clearCanvasCommand = null;
-        private ICommand saveCommand;
+        private ICommand saveAsCommand;
         private ICommand helpCommand;
+        //private ICommand loadCommand;
 
         //private ICommand YkazButton = null;
         //private ICommand MysorButton = null;
@@ -83,9 +84,19 @@ namespace gui
                 PropertyChanged(this, new PropertyChangedEventArgs(prop));
         }
 
-        public ICommand SaveCommand => saveCommand = new ActionCommand(Save, param => true);
+        //public ICommand LoadCommand => loadCommand = new ActionCommand(Load, param => true);
 
-        private void Save(object obj)
+        //private void Load(object obj)
+        //{
+        //    ClearCanvas(obj);
+        //    Io.Load();
+        //    List<IFigure> figureList = new();
+        //    Dictionary<Path, IFigure> figureDict = figureList.
+        //}
+
+        public ICommand SaveAsCommand => saveAsCommand = new ActionCommand(SaveAs, param => true);
+
+        private void SaveAs(object obj)
         {
             List<IFigure> ListFig = figureDict.Values.ToList();
             Io.Save(paintingCanvas, ListFig);
