@@ -61,6 +61,11 @@ namespace gui
         private ICommand undoCommand;
         private ICommand redoCommand;
         private ICommand createNewCanvCommand;
+        private ICommand reflectionHorizontalCommand;
+        private ICommand reflectionVerticalCommand;
+
+        private IFigure currentSelectedFigure;
+
         //private ICommand loadCommand;
 
         //private ICommand ApproximationButton = null;
@@ -90,6 +95,120 @@ namespace gui
         //    List<IFigure> figureList = new();
         //    Dictionary<Path, IFigure> figureDict = figureList.
         //}
+
+        public ICommand ReflectionHorizontalCommand => reflectionHorizontalCommand = new ActionCommand(ReflectionHorizontal, param => true);
+
+        private void ReflectionHorizontal(object obj)
+        {
+            bool axe = false;
+            currentSelectedFigure = selectedFigures.Last();
+            var newFigure = currentSelectedFigure.Reflection(axe);
+
+            switch (currentSelectedFigure.TypeName)
+            {
+                case "Line":
+                    mode = Mode.Line;
+                    FigureFactory figureFactoryL = FigureFabric.GetFactory("Line");
+                    IFigure line = figureFactoryL.GetFigure(newFigure.Points);
+                    IGraphic graphicL = GraphicFabric.GetFactory(Enum.GetName(mode), paintingCanvas);
+                    line.Draw(graphicL);
+                    figureDict.Add((Path)graphicL.path, line);
+                    previousPath = (Path)graphicL.path;
+                    break;
+                case "Ellipse":
+                    mode = Mode.Ellipse;
+                    FigureFactory figureFactoryE = FigureFabric.GetFactory("Ellipse");
+                    IFigure ellipse = figureFactoryE.GetFigure(newFigure.Angle, newFigure.Center, newFigure.Scale);
+                    IGraphic graphicE = GraphicFabric.GetFactory(Enum.GetName(mode), paintingCanvas);
+                    ellipse.Draw(graphicE);
+                    figureDict.Add((Path)graphicE.path, ellipse);
+                    previousPath = (Path)graphicE.path;
+                    break;
+                case "Triangle":
+                    mode = Mode.Triangle;
+                    FigureFactory figureFactoryT = FigureFabric.GetFactory("Triangle");
+                    IFigure triangle = figureFactoryT.GetFigure(newFigure.Points);
+                    IGraphic graphicT = GraphicFabric.GetFactory(Enum.GetName(mode), paintingCanvas);
+                    triangle.Draw(graphicT);
+                    figureDict.Add((Path)graphicT.path, triangle);
+                    previousPath = (Path)graphicT.path;
+                    break;
+                case "Square":
+                    mode = Mode.Square;
+                    FigureFactory figureFactoryS = FigureFabric.GetFactory("Square");
+                    IFigure square = figureFactoryS.GetFigure(newFigure.Angle, newFigure.Center, newFigure.Scale);
+                    IGraphic graphicS = GraphicFabric.GetFactory(Enum.GetName(mode), paintingCanvas);
+                    square.Draw(graphicS);
+                    figureDict.Add((Path)graphicS.path, square);
+                    previousPath = (Path)graphicS.path;
+                    break;
+                default:
+                    break;
+            }
+            Dictionary<IFigure, Path> dictByFigure = figureDict.ToDictionary(keys => keys.Value, values => values.Key);
+            IFigure fig = currentSelectedFigure;
+            Path oldPath = dictByFigure.GetValueOrDefault(fig);
+            paintingCanvas.Children.Remove(oldPath);
+            figureDict.Remove(oldPath);
+        }
+
+        public ICommand ReflectionVerticalCommand => reflectionVerticalCommand = new ActionCommand(ReflectionVertical, param => true);
+
+        private void ReflectionVertical(object obj)
+        {
+            bool axe = true;
+            currentSelectedFigure = selectedFigures.Last();
+            currentSelectedFigure.Reflection(axe);
+
+            var newFigure = currentSelectedFigure.Reflection(axe);
+
+            switch (currentSelectedFigure.TypeName)
+            {
+                case "Line":
+                    mode = Mode.Line;
+                    FigureFactory figureFactoryL = FigureFabric.GetFactory("Line");
+                    IFigure line = figureFactoryL.GetFigure(newFigure.Points);
+                    IGraphic graphicL = GraphicFabric.GetFactory(Enum.GetName(mode), paintingCanvas);
+                    line.Draw(graphicL);
+                    figureDict.Add((Path)graphicL.path, line);
+                    previousPath = (Path)graphicL.path;
+                    break;
+                case "Ellipse":
+                    mode = Mode.Ellipse;
+                    FigureFactory figureFactoryE = FigureFabric.GetFactory("Ellipse");
+                    IFigure ellipse = figureFactoryE.GetFigure(newFigure.Angle, newFigure.Center, newFigure.Scale);
+                    IGraphic graphicE = GraphicFabric.GetFactory(Enum.GetName(mode), paintingCanvas);
+                    ellipse.Draw(graphicE);
+                    figureDict.Add((Path)graphicE.path, ellipse);
+                    previousPath = (Path)graphicE.path;
+                    break;
+                case "Triangle":
+                    mode = Mode.Triangle;
+                    FigureFactory figureFactoryT = FigureFabric.GetFactory("Triangle");
+                    IFigure triangle = figureFactoryT.GetFigure(newFigure.Points);
+                    IGraphic graphicT = GraphicFabric.GetFactory(Enum.GetName(mode), paintingCanvas);
+                    triangle.Draw(graphicT);
+                    figureDict.Add((Path)graphicT.path, triangle);
+                    previousPath = (Path)graphicT.path;
+                    break;
+                case "Square":
+                    mode = Mode.Square;
+                    FigureFactory figureFactoryS = FigureFabric.GetFactory("Square");
+                    IFigure square = figureFactoryS.GetFigure(newFigure.Angle, newFigure.Center, newFigure.Scale);
+                    IGraphic graphicS = GraphicFabric.GetFactory(Enum.GetName(mode), paintingCanvas);
+                    square.Draw(graphicS);
+                    figureDict.Add((Path)graphicS.path, square);
+                    previousPath = (Path)graphicS.path;
+                    break;
+                default:
+                    break;
+            }
+            Dictionary<IFigure, Path> dictByFigure = figureDict.ToDictionary(keys => keys.Value, values => values.Key);
+            IFigure fig = currentSelectedFigure;
+            Path oldPath = dictByFigure.GetValueOrDefault(fig);
+            paintingCanvas.Children.Remove(oldPath);
+            figureDict.Remove(oldPath);
+        }
 
         public ICommand CreateNewCanvCommand => createNewCanvCommand = new ActionCommand(CreateNewCanv, param => true);
 
@@ -273,11 +392,7 @@ namespace gui
             Process.Start(new ProcessStartInfo("https://gitlab.com/egorsukhinin/grred/-/wikis/Интерфейс-приложения") { UseShellExecute = true });
         }
 
-        private void save(object obj)
-        {
-            List<IFigure> ListFig = figureDict.Values.ToList();
-            Io.Save(paintingCanvas, ListFig);
-        }
+
         private void СlearCanvas(object obj)
         {
             paintingCanvas.Strokes.Clear();
