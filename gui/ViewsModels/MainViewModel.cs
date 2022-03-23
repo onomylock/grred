@@ -552,7 +552,7 @@ namespace gui
             {
                 IFigure figure;
                 IGraphic graphic = GraphicFabric.GetFactory(Enum.GetName(mode), paintingCanvas);
-                figure = createFigure(mousePos, scale);
+                figure = createFigure(scale, mousePos);
                 figure.Draw(graphic);
                 //figure.Draw(graphic, currentConturBrush, currentBrush);
                 figureDict.Add((Path)graphic.path, figure);
