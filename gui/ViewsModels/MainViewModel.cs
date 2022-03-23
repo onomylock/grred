@@ -131,7 +131,7 @@ namespace gui
                 createLineCommand = new ActionCommand(obj =>
                 {
                     mode = Mode.Line;
-                    status.Text = "Line";
+                    status.Text = "Линия";
                     paintingCanvas.EditingMode = InkCanvasEditingMode.None;
                 }, param => true);
                 return createLineCommand;
@@ -145,7 +145,7 @@ namespace gui
                 createTriangleCommand = new ActionCommand(obj =>
                 {
                     mode = Mode.Triangle;
-                    status.Text = "Triangle";
+                    status.Text = "Треугольник";
                     paintingCanvas.EditingMode = InkCanvasEditingMode.None;
                 }, param => true);
                 return createTriangleCommand;
@@ -160,7 +160,7 @@ namespace gui
                 createRectangleCommand = new ActionCommand(obj =>
                 {
                     mode = Mode.Square;
-                    status.Text = "Rectangle";
+                    status.Text = "Прямоугольник";
                     paintingCanvas.EditingMode = InkCanvasEditingMode.None;
                 }, param => true);
                 return createRectangleCommand;
@@ -175,7 +175,7 @@ namespace gui
                 createEllipseCommand = new ActionCommand(obj =>
                 {
                     mode = Mode.Ellipse;
-                    status.Text = "Ellipse";
+                    status.Text = "Эллипс";
                     paintingCanvas.EditingMode = InkCanvasEditingMode.None;
                 }, param => true);
                 return createEllipseCommand;
@@ -190,7 +190,7 @@ namespace gui
                 penButton = new ActionCommand(obj =>
                 {
                     mode = Mode.Pencil;
-                    status.Text = "Pen";
+                    status.Text = "Карандаш";
                 }, param => true);
                 return penButton;
             }
@@ -423,7 +423,7 @@ namespace gui
         private void changeColor(object obj)
         {
             mode = Mode.Brush;
-            status.Text = "Brush";
+            status.Text = "Заливка фигуры";
             string colorStr = obj.ToString();
             SolidColorBrush color = (SolidColorBrush)new BrushConverter().ConvertFromString(colorStr);
             currentBrush = color;
@@ -434,7 +434,7 @@ namespace gui
         private void changeConturColor(object obj)
         {
             mode = Mode.ConturBrush;
-            status.Text = "ConturBrush";
+            status.Text = "Заливка контура";
             string colorStr = obj.ToString();
             SolidColorBrush color = (SolidColorBrush)new BrushConverter().ConvertFromString(colorStr);
             currentConturBrush = color;
