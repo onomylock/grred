@@ -14,9 +14,9 @@ namespace GrRed.Geometry.Domain
         [JsonConstructor]
         public Triangle(double angle, Vector center, Vector scale)
         {
-            Center = center;
+            Center = scale;
             Angle = angle;
-            Scale = scale;
+            Scale = center;
             Points = SetInputPoints();
         }
 

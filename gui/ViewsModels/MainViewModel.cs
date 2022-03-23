@@ -160,7 +160,7 @@ namespace gui
         }
 
         public ICommand HelpCommand => helpCommand = new ActionCommand(helpButton, param => true);
-        
+
 
         public ICommand CreateLineCommand
         {
@@ -446,7 +446,7 @@ namespace gui
                     foreach (var fig in selectedFigures)
                     {
                         selectedPath = dictByFigure.GetValueOrDefault(fig);
-                       // selectedPath.Stroke = Brushes.Black;
+                        // selectedPath.Stroke = Brushes.Black;
                     }
                     selectedFigures.Clear();
                 }
@@ -526,7 +526,7 @@ namespace gui
             {
                 IFigure figure;
                 IGraphic graphic = GraphicFabric.GetFactory(Enum.GetName(mode), paintingCanvas);
-                figure = createFigure(mousePos, scale);
+                figure = createFigure(scale, mousePos);
                 figure.Draw(graphic);
                 //figure.Draw(graphic, currentConturBrush, currentBrush);
                 figureDict.Add((Path)graphic.path, figure);
