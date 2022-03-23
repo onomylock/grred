@@ -54,7 +54,7 @@ namespace GrRed.IO
             File.WriteAllText(filename, outstring);
         }
 
-        private static void CanvToPNG(Canvas canvas, string filename)
+        private static void CanvToPNG(InkCanvas canvas, string filename)
         {
             canvas.LayoutTransform = null;
 
@@ -76,33 +76,33 @@ namespace GrRed.IO
             }
         }
 
-        private static void CanvasToPDF(Canvas canvas, string filename)
+        private static void CanvasToPDF(InkCanvas canvas, string filename)
         {
-             RenderTargetBitmap renderBitmap = new RenderTargetBitmap((int)canvas.ActualWidth, (int)canvas.ActualHeight + 125, 96d, 96d, PixelFormats.Pbgra32);
-             renderBitmap.Render(canvas);
+            RenderTargetBitmap renderBitmap = new RenderTargetBitmap((int)canvas.ActualWidth + 70, (int)canvas.ActualHeight, 96d, 96d, PixelFormats.Pbgra32);
+            renderBitmap.Render(canvas);
 
-             PngBitmapEncoder encoder = new PngBitmapEncoder();
-             encoder.Frames.Add(BitmapFrame.Create(renderBitmap));
+            PngBitmapEncoder encoder = new PngBitmapEncoder();
+            encoder.Frames.Add(BitmapFrame.Create(renderBitmap));
 
-             byte[] bytes;
-             using (MemoryStream stream = new MemoryStream())
-             {
-                 encoder.Save(stream);
-                 bytes = stream.ToArray();
-             }
+            byte[] bytes;
+            using (MemoryStream stream = new MemoryStream())
+            {
+                encoder.Save(stream);
+                bytes = stream.ToArray();
+            }
 
-             var document = new iTextSharp.text.Document(new iTextSharp.text.Rectangle((float)canvas.ActualWidth, (float)canvas.ActualHeight), 0, 0, 0, 0);
-             iTextSharp.text.Image image = iTextSharp.text.Image.GetInstance(bytes);
-             image.SetAbsolutePosition(0, 0);
+            var document = new iTextSharp.text.Document(new iTextSharp.text.Rectangle((float)canvas.ActualWidth, (float)canvas.ActualHeight), 0, 0, 0, 0);
+            iTextSharp.text.Image image = iTextSharp.text.Image.GetInstance(bytes);
+            image.SetAbsolutePosition(-70, 0);
 
-             FileStream file = File.Create(filename);
-             PdfWriter.GetInstance(document, file);
-             document.Open();
-             document.Add(image);
-             document.Close();
+            FileStream file = File.Create(filename);
+            PdfWriter.GetInstance(document, file);
+            document.Open();
+            document.Add(image);
+            document.Close();
         }
 
-        public static void Save(Canvas canvas, List<IFigure> figureList)
+        public static void Save(InkCanvas canvas, List<IFigure> figureList)
         {
             Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
             dlg.FileName = "Canvas";

@@ -11,18 +11,24 @@ namespace gui
 {
     public class EllipseGrafic : IGraphic
     {
-        public readonly Path path;
-        private readonly InkCanvas canvas;
+        private readonly Path path;
         private Brush conturColor, fillColor;
         private double thickness;
-        public EllipseGrafic(InkCanvas canvas, Path path)
+        private readonly InkCanvas canvas;
+
+        object IGraphic.path => (Path)this.path;
+
+        object IGraphic.conturColor { get => (Brush)this.conturColor; set => this.conturColor = (Brush)value; }
+        object IGraphic.fillColor { get => (Brush)this.fillColor; set => this.fillColor = (Brush)value; }
+        double IGraphic.thickness { get => this.thickness; set => this.thickness = value; }
+
+        public EllipseGrafic(InkCanvas canvas)
         {
             this.canvas = canvas;
-            this.path = path;
-            //conturColor = curConturBrush;
-            //fillColor = curFillBrush;
-            //thickness = curThickness;
+            this.path = new Path();
+            conturColor = Brushes.Black;
         }
+
         public void AddLines(IEnumerable<GrRed.Vector> Ilines) { }
         public void AddPolyArc(IEnumerable<GrRed.Vector> Ilines)
         {
@@ -34,9 +40,6 @@ namespace gui
 
             pathFig.StartPoint = new Point(lines[0].X, lines[0].Y);
             arcSegment.Point = new Point(lines[2].X, lines[2].Y);
-            //pathFig.StartPoint = new Point(50, 50);
-            //arcSegment.Point = new Point(100, 50);
-            //Size size = new Size(25, 10);
             Point center = new Point(Math.Abs((lines[0].X + lines[2].X) / 2), Math.Abs((lines[0].Y + lines[2].Y) / 2));
             Size size = new Size(Math.Abs(lines[0].X + lines[1].X - 2 * center.X), Math.Abs(lines[0].Y + lines[1].Y - 2 * center.Y));
             arcSegment.Size = size;
@@ -45,30 +48,37 @@ namespace gui
 
             ArcSegment arcSegment1 = new ArcSegment();
             arcSegment1.Point = new Point(lines[0].X, lines[0].Y);
-            //arcSegment1.Point = new Point(50, 50);
             arcSegment1.Size = size;
             pathFig.Segments.Add(arcSegment1);
 
             path.Data = pathGeom;
-            path.Stroke = Brushes.Black;
-            //path.StrokeThickness = thickness;
-            //path.Fill = fillColor;
+            path.Stroke = conturColor;
+            path.StrokeThickness = thickness;
+            path.Fill = fillColor;
 
             canvas.Children.Add(path);
         }
         public void FillPolygon(object color) => path.Fill = (Brush)color;
+
     }
     public class TriangleGrafic : IGraphic
     {
+        private readonly Path path;
+        private Brush conturColor, fillColor;
+        private double thickness;
         private readonly InkCanvas canvas;
-        public readonly Path path;
-        public TriangleGrafic(InkCanvas canvas, Path path)
+
+        object IGraphic.path => (Path)this.path;
+
+        object IGraphic.conturColor { get => (Brush)this.conturColor; set => this.conturColor = (Brush)value; }
+        object IGraphic.fillColor { get => (Brush)this.fillColor; set => this.fillColor = (Brush)value; }
+        double IGraphic.thickness { get => this.thickness; set => this.thickness = value; }
+        public TriangleGrafic(InkCanvas canvas)
         {
             this.canvas = canvas;
-            this.path = path;
-            //conturColor = curConturBrush;
-            //fillColor = curFillBrush;
-            //thickness = curThickness;
+            this.path = new();
+            this.conturColor = Brushes.Black;
+            this.thickness = 1;
         }
         public void AddPolyArc(IEnumerable<GrRed.Vector> Ilines) { }
         public void AddLines(IEnumerable<GrRed.Vector> Ilines)
@@ -89,25 +99,34 @@ namespace gui
             pathGeom.Figures.Add(pathFig);
 
             path.Data = pathGeom;
-            path.Stroke = Brushes.Black;
-            //path.StrokeThickness = thickness;
-            //path.Fill = fillColor;
+            path.Stroke = conturColor;
+            path.StrokeThickness = thickness;
+            path.Fill = fillColor;
 
             canvas.Children.Add(path);
         }
         public void FillPolygon(object color) => path.Fill = (Brush)color;
+
     }
 
     public class LineGrafic : IGraphic
     {
+        private readonly Path path;
+        private Brush conturColor, fillColor;
+        private double thickness;
+
         private readonly InkCanvas canvas;
-        public readonly Path path;
+        object IGraphic.path => (Path)this.path;
+
+        object IGraphic.conturColor { get => (Brush)this.conturColor; set => this.conturColor = (Brush)value; }
+        object IGraphic.fillColor { get => (Brush)this.fillColor; set => this.fillColor = (Brush)value; }
+        double IGraphic.thickness { get => this.thickness; set => this.thickness = value; }
         public LineGrafic(InkCanvas canvas, Path path)
         {
             this.canvas = canvas;
-            this.path = path;
-            //conturColor = curConturBrush;
-            //thickness = curThickness;
+            this.path = new();
+            conturColor = Brushes.Black;
+            this.thickness = 1;
         }
         public void AddPolyArc(IEnumerable<GrRed.Vector> Ilines) { }
         public void AddLines(IEnumerable<GrRed.Vector> Ilines)
@@ -120,32 +139,38 @@ namespace gui
 
             pathFig.StartPoint = new Point(lines[0].X, lines[0].Y); //начальная точка
             polyLine.Points.Add(new Point(lines[1].X, lines[1].Y));
-            //pathFig.StartPoint = new Point(50, 50); //начальная точка
-            //polyLine.Points.Add(new Point(200, 200));
             pathFig.Segments.Add(polyLine);
 
             pathGeom.Figures.Add(pathFig);
 
-            //path.Data = pathGeom;
-            path.Stroke = Brushes.Black;
-            //path.StrokeThickness = thickness;
+            path.Stroke = conturColor;
+            path.StrokeThickness = thickness;
+            path.Fill = fillColor;
 
             canvas.Children.Add(path);
         }
         public void FillPolygon(object color) => path.Fill = (Brush)color;
+
     }
 
     public class RectangleGrafic : IGraphic
     {
+        private readonly Path path;
+        private Brush conturColor, fillColor;
+        private double thickness;
         private readonly InkCanvas canvas;
-        public readonly Path path;
-        public RectangleGrafic(InkCanvas canvas, Path path)
+        object IGraphic.path => (Path)this.path;
+
+        object IGraphic.conturColor { get => (Brush)this.conturColor; set => this.conturColor = (Brush)value; }
+        object IGraphic.fillColor { get => (Brush)this.fillColor; set => this.fillColor = (Brush)value; }
+        double IGraphic.thickness { get => this.thickness; set => this.thickness = value; }
+
+        public RectangleGrafic(InkCanvas canvas)
         {
             this.canvas = canvas;
-            this.path = path;
-            //conturColor = curConturBrush;
-            //fillColor = curFillBrush;
-            //thickness = curThickness;
+            this.path = new();
+            conturColor = Brushes.Black;
+            this.thickness = 1;
         }
         public void AddPolyArc(IEnumerable<GrRed.Vector> Ilines) { }
         public void AddLines(IEnumerable<GrRed.Vector> Ilines)
@@ -166,24 +191,25 @@ namespace gui
             pathGeom.Figures.Add(pathFig);
 
             path.Data = pathGeom;
-            path.Stroke = Brushes.Black;
-            //path.StrokeThickness = thickness;
-            path.Fill = Brushes.Red;
+            path.Stroke = conturColor;
+            path.StrokeThickness = thickness;
+            path.Fill = fillColor;
 
             canvas.Children.Add(path);
         }
         public void FillPolygon(object color) => path.Fill = (Brush)color;
+
     }
 
     public static class GraphicFabric
     {
-        public static IGraphic GetFactory(string name, InkCanvas canvas, Path path)
+        public static IGraphic GetFactory(string name, InkCanvas canvas)
         {
             return name switch
             {
-                "Ellipse" => new EllipseGrafic(canvas, path),
-                "Triangle" => new TriangleGrafic(canvas, path),
-                "Square" => new RectangleGrafic(canvas, path),
+                "Ellipse" => new EllipseGrafic(canvas),
+                "Triangle" => new TriangleGrafic(canvas),
+                "Square" => new RectangleGrafic(canvas),
                 _ => null,
             };
         }
