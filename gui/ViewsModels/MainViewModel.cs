@@ -39,6 +39,7 @@ namespace gui
         public Path previousPath;
         public Mode mode = Mode.Selection;
         public TextCoords bindingText = new TextCoords();
+        public double angelGui = 0;
 
         private bool isMouseDown = false;
         private ICommand lastCommand;
@@ -75,7 +76,8 @@ namespace gui
         private ICommand createNewCanvCommand;
         private ICommand verticalCommand;
         private ICommand horizontalCommand;
-      
+        private ICommand rotateCommand;
+
 
         public MainViewModel() { }
         public MainViewModel(InkCanvas canvas, TextBlock status, Rectangle rectColor, Rectangle rectConturColor)
@@ -151,7 +153,7 @@ namespace gui
         }
 
         public ICommand HelpCommand => helpCommand = new ActionCommand(helpButton, param => true);
-        
+
 
         public ICommand CreateLineCommand
         {
@@ -333,6 +335,25 @@ namespace gui
                     }
                 }, param => true);
                 return horizontalCommand;
+            }
+        }
+
+        //угол поворота лежит в глобальном double angelGui
+        public ICommand RotateCommand
+        {
+            get
+            {
+                rotateCommand = new ActionCommand(obj =>
+                {
+                    if (selectedFigures.Count == 1)
+                    {
+                        IFigure newFig = selectedFigures[0].Rotate(angelGui);
+                        Draw(new List<IFigure> { newFig }, new List<IFigure> { selectedFigures[0] });
+                        selectedFigures.Clear();
+                        selectedFigures.Add(newFig);
+                    }
+                }, param => true);
+                return rotateCommand;
             }
         }
 
