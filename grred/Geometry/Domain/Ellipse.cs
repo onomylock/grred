@@ -20,7 +20,7 @@ namespace GrRed.Geometry.Domain
         {
             Center = center;
             Angle = angle;
-            Scale = scale;
+            Scale = scale - center;
             Gabarit = (Center.X - Scale.X, Center.Y + Scale.Y, Center.X + Scale.X, Center.Y - Scale.Y);
             Points = SetInputPoints();
         }
@@ -71,10 +71,10 @@ namespace GrRed.Geometry.Domain
         {
             Vector[] newPoints = new Vector[4];
 
-            newPoints[0] = new Vector(Center.X - (Gabarit.l * Math.Cos(Angle) - Center.Y * Math.Sin(Angle)), Center.Y - (Gabarit.l * Math.Sin(Angle) + Center.Y * Math.Cos(Angle)));
-            newPoints[1] = new Vector(Center.X - (Center.X * Math.Cos(Angle) - Gabarit.t * Math.Sin(Angle)), Center.Y + (Center.X * Math.Sin(Angle) + Gabarit.t * Math.Cos(Angle)));
-            newPoints[2] = new Vector(Center.X + (Gabarit.r * Math.Cos(Angle) - Center.Y * Math.Sin(Angle)), Center.Y + (Gabarit.r * Math.Sin(Angle) + Center.Y * Math.Cos(Angle)));
-            newPoints[3] = new Vector(Center.X + (Center.X * Math.Cos(Angle) - Gabarit.b * Math.Sin(Angle)), Center.Y - (Center.X * Math.Sin(Angle) + Gabarit.b * Math.Cos(Angle)));
+            newPoints[0] = new Vector(Gabarit.l * Math.Cos(Angle) - Center.Y * Math.Sin(Angle), Gabarit.l * Math.Sin(Angle) + Center.Y * Math.Cos(Angle));
+            newPoints[1] = new Vector(Center.X * Math.Cos(Angle) - Gabarit.t * Math.Sin(Angle), Center.X * Math.Sin(Angle) + Gabarit.t * Math.Cos(Angle));
+            newPoints[2] = new Vector(Gabarit.r * Math.Cos(Angle) - Center.Y * Math.Sin(Angle), Gabarit.r * Math.Sin(Angle) + Center.Y * Math.Cos(Angle));
+            newPoints[3] = new Vector(Center.X * Math.Cos(Angle) - Gabarit.b * Math.Sin(Angle), Center.X * Math.Sin(Angle) + Gabarit.b * Math.Cos(Angle));
             return newPoints;
         }
 
