@@ -215,39 +215,17 @@
                     <TextBlock Text="X"  />
                 </StackPanel>
                 <StackPanel x:Name="PrimitiveLocation1" Grid.Column="1">
-                    <TextBox Background="{x:Null}" TextAlignment="Center"/>
+                    <TextBlock x:Name="LocX" Text=""/>
                 </StackPanel>
                 <StackPanel x:Name="PrimitiveLocationY1" Grid.Column="2" Margin="10,0,0,0">
                     <TextBlock Text="Y" />
                 </StackPanel>
                 <StackPanel x:Name="PrimitiveLocation2" Grid.Column="3">
-                    <TextBox Background="{x:Null}" TextAlignment="Center" />
+                    <TextBlock x:Name="LocY" Text=""/>
                 </StackPanel>
             </Grid>
             
-            <Line X1="0" Y1="0" X2="140" Y2="0" Stroke="Black" Margin="0,10,0,0" />
             
-            <TextBlock Text="Размер примитива" Margin="8,10,0,0" FontSize="11" FontWeight="DemiBold"/>
-            <Grid Margin="8,10,8,0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.3*"/>
-                    <ColumnDefinition Width="0.7*"/>
-                    <ColumnDefinition Width="0.5*"/>
-                    <ColumnDefinition Width="0.7*"/>
-                </Grid.ColumnDefinitions>
-                <StackPanel x:Name="PrimitiveSizeH1" Grid.Column="0">
-                    <TextBlock Text="В"  />
-                </StackPanel>
-                <StackPanel x:Name="PrimitiveSize1" Grid.Column="1">
-                    <TextBox Background="{x:Null}" TextAlignment="Center"  />
-                </StackPanel>
-                <StackPanel x:Name="PrimitiveSizeW1" Grid.Column="2" Margin="10,0,0,0">
-                    <TextBlock Text="Ш" />
-                </StackPanel>
-                <StackPanel x:Name="PrimitiveSize2" Grid.Column="3">
-                    <TextBox Background="{x:Null}" TextAlignment="Center"/>
-                </StackPanel>
-            </Grid>
             
             <Line X1="0" Y1="0" X2="140" Y2="0" Stroke="Black" Margin="0,10,0,0" />
             
