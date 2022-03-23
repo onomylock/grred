@@ -191,12 +191,12 @@
                     <ColumnDefinition></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <StackPanel x:Name="PrimitiveRotation1" Grid.Column="0">
-                    <Button x:Name="VerticallyButton"  ToolTip="Вертикально расположить примитив" Margin="20,5,20,0" Background="{x:Null}" BorderThickness="0">
+                    <Button x:Name="VerticallyButton"  ToolTip="Вертикально расположить примитив" Margin="20,5,20,0" Background="{x:Null}" BorderThickness="0" Command="{Binding VerticalCommand}">
                         <Image Source="../Resources/VertButton.png" Width="25" />
                     </Button>
                 </StackPanel>
                 <StackPanel x:Name="PrimitiveRotation2" Grid.Column="1">
-                    <Button x:Name="HorizontallyButton"  ToolTip="Горизонтально расположить примитив" Margin="0,5,40,0" Background="{x:Null}" BorderThickness="0">
+                    <Button x:Name="HorizontallyButton"  ToolTip="Горизонтально расположить примитив" Margin="0,5,40,0" Background="{x:Null}" BorderThickness="0" Command="{Binding HorizontalCommand}">
                         <Image Source="../Resources/HorButton.png" Width="25" />
                     </Button>
                 </StackPanel>
