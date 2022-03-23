@@ -30,7 +30,7 @@ namespace gui
             curFillBrush = Brushes.White;
             curThickness = 1;
             InitializeComponent();
-            DataContext = new MainViewModel(PaintingCanvas);
+            DataContext = new MainViewModel(PaintingCanvas, Status, Color, ColorContur);
 
             //List<GrRed.Vector> lines = new List<GrRed.Vector>();
         }

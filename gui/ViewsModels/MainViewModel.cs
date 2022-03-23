@@ -23,7 +23,8 @@ namespace gui
         Ellipse,
         Triangle,
         Pencil,
-        Brush
+        Brush,
+        ConturBrush
     }
 
     public partial class MainViewModel : INotifyPropertyChanged
@@ -32,16 +33,23 @@ namespace gui
         public event PropertyChangedEventHandler PropertyChanged;
 
         public Dictionary<Path, IFigure> figureDict = new Dictionary<Path, IFigure>();
+        public Stack<ICommand> actionCommands = new Stack<ICommand>();
         public Path previousPath;
+        public Mode mode = Mode.Selection;
 
-        private Mode mode = Mode.Selection;
         private bool isMouseDown = false;
         private ICommand lastCommand;
+        private IFigure lastFigure;
 
-        private Stack<ICommand> actionCommands = new Stack<ICommand>();
         private InkCanvas paintingCanvas;
+        private TextBlock status;
+        private Rectangle rectColor;
+        private Rectangle rectConturColor;
         private List<IFigure> selectedFigures = new List<IFigure>();
-        private Brush currentBrush;
+        private Brush currentBrush = Brushes.Black;
+        private Brush currentContour = Brushes.Black;
+        private double currentThickness = 1;
+        private Brush currentConturBrush;
         private GrRed.Vector previousPostition;
 
         private ICommand createLineCommand = null;
@@ -52,6 +60,7 @@ namespace gui
         private ICommand mouseDown = null;
         private ICommand selectField = null;
         private ICommand selectColor = null;
+        private ICommand selectConturColor = null;
         private ICommand mouseUp = null;
         private ICommand mouseMove = null;
         private ICommand selectionCommand = null;
@@ -60,6 +69,7 @@ namespace gui
         private ICommand helpCommand;
         private ICommand undoCommand;
         private ICommand redoCommand;
+        private ICommand createNewCanvCommand;
         //private ICommand loadCommand;
 
         //private ICommand ApproximationButton = null;
@@ -68,9 +78,12 @@ namespace gui
         //private ICommand BackButton = null;       
 
         public MainViewModel() { }
-        public MainViewModel(InkCanvas canvas)
+        public MainViewModel(InkCanvas canvas, TextBlock status, Rectangle rectColor, Rectangle rectConturColor)
         {
             this.paintingCanvas = canvas;
+            this.status = status;
+            this.rectColor = rectColor;
+            this.rectConturColor = rectConturColor;
         }
 
 
@@ -90,18 +103,52 @@ namespace gui
         //    Dictionary<Path, IFigure> figureDict = figureList.
         //}
 
+        public ICommand CreateNewCanvCommand => createNewCanvCommand = new ActionCommand(CreateNewCanv, param => true);
+
+        private void CreateNewCanv(object obj)
+        {
+            if (paintingCanvas.Strokes != null)
+            {
+                SaveAs(obj);
+                СlearCanvas(obj);
+            }
+            else
+            {
+                СlearCanvas(obj);
+            }
+        }
+
         public ICommand UndoCommand => undoCommand = new ActionCommand(Undo, param => true);
 
+        bool Undocheck = false;     //на undo нажимаем только один раз
         private void Undo(object obj)
         {
-            throw new NotImplementedException();
+            if (Undocheck == false)
+            {
+                if (lastCommand == createTriangleCommand || lastCommand == createRectangleCommand || lastCommand == createLineCommand || lastCommand == createEllipseCommand)
+                {
+                    Dictionary<IFigure, Path> dictByFigure = figureDict.ToDictionary(keys => keys.Value, values => values.Key);
+                    IFigure fig = lastFigure;
+                    Path oldPath = dictByFigure.GetValueOrDefault(fig);
+                    paintingCanvas.Children.Remove(oldPath);
+                    figureDict.Remove(oldPath);
+                    Undocheck = true;
+                }
+            }
         }
 
         public ICommand RedoCommand => undoCommand = new ActionCommand(Redo, param => true);
 
         private void Redo(object obj)
         {
-            throw new NotImplementedException();
+            if (Undocheck == true)
+            {
+                IFigure fig = lastFigure;
+                IGraphic graphic = GraphicFabric.GetFactory(fig.TypeName, paintingCanvas);
+                fig.Draw(graphic);
+                figureDict.Add((Path)graphic.path, fig);
+                Undocheck = false;
+            }
         }
 
         public ICommand SaveAsCommand => saveAsCommand = new ActionCommand(SaveAs, param => true);
@@ -122,6 +169,7 @@ namespace gui
                 createLineCommand = new ActionCommand(obj =>
                 {
                     mode = Mode.Line;
+                    status.Text = "Линия";
                     paintingCanvas.EditingMode = InkCanvasEditingMode.None;
                 }, param => true);
                 return createLineCommand;
@@ -135,6 +183,7 @@ namespace gui
                 createTriangleCommand = new ActionCommand(obj =>
                 {
                     mode = Mode.Triangle;
+                    status.Text = "Треугольник";
                     paintingCanvas.EditingMode = InkCanvasEditingMode.None;
                 }, param => true);
                 return createTriangleCommand;
@@ -149,6 +198,7 @@ namespace gui
                 createRectangleCommand = new ActionCommand(obj =>
                 {
                     mode = Mode.Square;
+                    status.Text = "Прямоугольник";
                     paintingCanvas.EditingMode = InkCanvasEditingMode.None;
                 }, param => true);
                 return createRectangleCommand;
@@ -163,6 +213,7 @@ namespace gui
                 createEllipseCommand = new ActionCommand(obj =>
                 {
                     mode = Mode.Ellipse;
+                    status.Text = "Эллипс";
                     paintingCanvas.EditingMode = InkCanvasEditingMode.None;
                 }, param => true);
                 return createEllipseCommand;
@@ -177,6 +228,7 @@ namespace gui
                 penButton = new ActionCommand(obj =>
                 {
                     mode = Mode.Pencil;
+                    status.Text = "Карандаш";
                 }, param => true);
                 return penButton;
             }
@@ -211,6 +263,14 @@ namespace gui
                 return selectColor;
             }
         }
+        public ICommand SelectConturColor
+        {
+            get
+            {
+                selectConturColor = new ActionCommand(changeConturColor, param => true);
+                return selectConturColor;
+            }
+        }
 
         public ICommand MouseUp
         {
@@ -225,7 +285,7 @@ namespace gui
         {
             get
             {
-                clearCanvasCommand = new ActionCommand(clearCanvas, param => true);
+                clearCanvasCommand = new ActionCommand(СlearCanvas, param => true);
                 return clearCanvasCommand;
             }
         }
@@ -262,12 +322,15 @@ namespace gui
             List<IFigure> ListFig = figureDict.Values.ToList();
             Io.Save(paintingCanvas, ListFig);
         }
-        private void clearCanvas(object obj)
+        private void СlearCanvas(object obj)
         {
+            paintingCanvas.Strokes.Clear();
+            paintingCanvas.Children.Clear();
             actionCommands.Clear();
             figureDict.Clear();
             selectedFigures.Clear();
             paintingCanvas.Children.Clear();
+            paintingCanvas.Strokes.Clear();
         }
 
         private IFigure createFigure(GrRed.Vector start, GrRed.Vector scale)
@@ -280,11 +343,21 @@ namespace gui
                     return createEllipse(start, scale);
                 case Mode.Triangle:
                     return createTriangle(start, scale);
+                case Mode.Line:
+                    return createLine(start, scale);
                 default:
                     break;
             }
             return null;
         }
+        private IFigure createLine(GrRed.Vector start, GrRed.Vector scale)
+        {
+            FigureFactory figureFactory = FigureFabric.GetFactory("Line");
+            IFigure line = figureFactory.GetFigure(0, scale, start);
+            lastCommand = createLineCommand;
+            return line;
+        }
+
         private IFigure createTriangle(GrRed.Vector start, GrRed.Vector scale)
         {
             FigureFactory figureFactory = FigureFabric.GetFactory("Triangle");
@@ -297,14 +370,6 @@ namespace gui
         {
             FigureFactory figureFactory = FigureFabric.GetFactory("Square");
             IFigure square = figureFactory.GetFigure(0, start, scale);
-            lastCommand = createRectangleCommand;
-            return square;
-        }
-
-        private IFigure createRectangle(GrRed.Vector[] points)
-        {
-            FigureFactory figureFactory = FigureFabric.GetFactory("Square");
-            IFigure square = figureFactory.GetFigure(points);
             lastCommand = createRectangleCommand;
             return square;
         }
@@ -330,7 +395,6 @@ namespace gui
         {
             isMouseDown = true;
             Point position = Mouse.GetPosition(paintingCanvas);
-            GrRed.Vector mousePos = new GrRed.Vector(position.X, position.Y);
             switch (mode)
             {
                 case Mode.Selection:
@@ -343,9 +407,17 @@ namespace gui
                     if (figureDict.Count != 0)
                     {
                         IFigure selected = FindFigure(new GrRed.Vector(position.X, position.Y));
+                        if (selected != null)
+                            Draw(new List<IFigure> { selected }, new List<IFigure> { selected });
+                    }
+                    break;
+                case Mode.ConturBrush:
+                    if (figureDict.Count != 0)
+                    {
+                        IFigure selected = FindFigure(new GrRed.Vector(position.X, position.Y));
                         IGraphic graphic = GraphicFabric.GetFactory(selected.TypeName, paintingCanvas);
                         selected.Draw(graphic);
-                        graphic.FillPolygon(currentBrush);
+                        graphic.FillContur(currentConturBrush);
                     }
                     break;
                 default:
@@ -374,7 +446,7 @@ namespace gui
                     foreach (var fig in selectedFigures)
                     {
                         selectedPath = dictByFigure.GetValueOrDefault(fig);
-                        selectedPath.Stroke = Brushes.Black;
+                       // selectedPath.Stroke = Brushes.Black;
                     }
                     selectedFigures.Clear();
                 }
@@ -392,9 +464,22 @@ namespace gui
         private void changeColor(object obj)
         {
             mode = Mode.Brush;
+            status.Text = "Заливка фигуры";
             string colorStr = obj.ToString();
             SolidColorBrush color = (SolidColorBrush)new BrushConverter().ConvertFromString(colorStr);
             currentBrush = color;
+            rectColor.Fill = color;
+            paintingCanvas.DefaultDrawingAttributes.Color = (Color)ColorConverter.ConvertFromString(colorStr);
+        }
+
+        private void changeConturColor(object obj)
+        {
+            mode = Mode.ConturBrush;
+            status.Text = "Заливка контура";
+            string colorStr = obj.ToString();
+            SolidColorBrush color = (SolidColorBrush)new BrushConverter().ConvertFromString(colorStr);
+            currentConturBrush = color;
+            rectConturColor.Fill = color;
             paintingCanvas.DefaultDrawingAttributes.Color = (Color)ColorConverter.ConvertFromString(colorStr);
         }
 
@@ -430,11 +515,12 @@ namespace gui
                 paintingCanvas.Children.Remove(previousPath);
                 mousePos = figureDict.GetValueOrDefault(previousPath).Center;
                 figureDict.Remove(previousPath);
+                Debug.WriteLine("yes");
             }
-            mouseMoveSwitch(mousePos, scale);
+            mouseMoveAction(mousePos, scale);
         }
 
-        private void mouseMoveSwitch(GrRed.Vector mousePos, GrRed.Vector scale)
+        private void mouseMoveAction(GrRed.Vector mousePos, GrRed.Vector scale)
         {
             if (mode != Mode.Selection && mode != Mode.Brush && mode != Mode.Pencil)
             {
@@ -442,8 +528,10 @@ namespace gui
                 IGraphic graphic = GraphicFabric.GetFactory(Enum.GetName(mode), paintingCanvas);
                 figure = createFigure(mousePos, scale);
                 figure.Draw(graphic);
+                //figure.Draw(graphic, currentConturBrush, currentBrush);
                 figureDict.Add((Path)graphic.path, figure);
                 previousPath = (Path)graphic.path;
+                lastFigure = figure;
             }
             else
             {
@@ -455,23 +543,42 @@ namespace gui
         {
             if (selectedFigures.Count > 0)
             {
-                Dictionary<IFigure, Path> dictByFigure = figureDict.ToDictionary(keys => keys.Value, values => values.Key);
+                List<IFigure> newSelectedFigures = new List<IFigure>();
                 for (int i = 0; i < selectedFigures.Count; i++)
                 {
                     IFigure fig = selectedFigures[i];
                     IFigure newFig = fig.Move(mousePos - previousPostition);
+                    newSelectedFigures.Add(newFig);
                     previousPostition = mousePos;
-                    Path oldPath = dictByFigure.GetValueOrDefault(fig);
-                    paintingCanvas.Children.Remove(oldPath);
-                    figureDict.Remove(oldPath);
-                    IGraphic graphic = GraphicFabric.GetFactory(newFig.TypeName, paintingCanvas);
-                    graphic.conturColor = Brushes.Aqua;
-                    newFig.Draw(graphic);
-                    figureDict.Add((Path)graphic.path, newFig);
-                    selectedFigures.Remove(fig);
-                    selectedFigures.Add(newFig);
                 }
+                Draw(newSelectedFigures, selectedFigures, true);
+                selectedFigures = newSelectedFigures;
             }
+        }
+
+        private void Draw(List<IFigure> newFigures, List<IFigure> oldFigures, bool redraw = false)
+        {
+            Dictionary<IFigure, Path> dictByFigure = figureDict.ToDictionary(keys => keys.Value, values => values.Key);
+            for (int i = 0; i < newFigures.Count; i++)
+            {
+                IGraphic graphic = GraphicFabric.GetFactory(newFigures[i].TypeName, paintingCanvas);
+                Path oldPath = dictByFigure.GetValueOrDefault(oldFigures[i]);
+                paintingCanvas.Children.Remove(oldPath);
+                figureDict.Remove(oldPath);
+                if (redraw)
+                    setGraphicParams(graphic, oldPath.Fill, oldPath.Stroke, oldPath.StrokeThickness);
+                else
+                    setGraphicParams(graphic, this.currentBrush, this.currentContour, this.currentThickness);
+                newFigures[i].Draw(graphic);
+                figureDict.Add((Path)graphic.path, newFigures[i]);
+            }
+        }
+
+        private void setGraphicParams(IGraphic graphic, Brush fill, Brush contour, double thickness)
+        {
+            graphic.conturColor = contour;
+            graphic.fillColor = fill;
+            graphic.thickness = thickness;
         }
     }
 }

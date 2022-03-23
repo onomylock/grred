@@ -52,6 +52,14 @@ namespace GrRed.Geometry.Domain
             graphic.AddPolyArc(new ArraySegment<Vector>(Points, 0, 3));
         }
 
+
+        //public void Draw(IGraphic graphic, object o, object oo)
+        //{
+        //    graphic.AddLines(Points);
+        //    graphic.conturColor = o;
+        //    graphic.fillColor = oo;
+        //}
+
         private double SetInputAngle()
         {
             if (Points[1].X <= Center.X) return Math.Asin((this.Points[1].Y - Center.Y) / VectorModul(this.Points[1] - this.Center));

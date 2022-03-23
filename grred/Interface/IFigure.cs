@@ -63,6 +63,7 @@ namespace GrRed
         IFigure Union(IFigure fig2);
         IFigure Subtruct(IFigure fig2);
         void Draw(IGraphic graphic);
+        //void Draw(IGraphic graphic, object o, object oo);
     }
 
     public interface IGraphic
@@ -73,6 +74,7 @@ namespace GrRed
         double thickness { get; set; }
         void AddLines(IEnumerable<Vector> lines);
         void FillPolygon(object color);
+        void FillContur(object color);
         void AddPolyArc(IEnumerable<Vector> lines);// каждые 3 точки -- дуга окружности
     }
 

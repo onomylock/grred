@@ -57,6 +57,13 @@ namespace GrRed.Geometry.Domain
             //graphic.FillPolygon(brush2);
         }
 
+        //public void Draw(IGraphic graphic, object o, object oo)
+        //{
+        //    graphic.AddLines(Points);
+        //    graphic.conturColor = o;
+        //    graphic.fillColor = oo;
+        //}
+
         private Vector[] SetInputPoints()
         {
             Vector[] newPoints = new Vector[3];
@@ -86,13 +93,13 @@ namespace GrRed.Geometry.Domain
             Vector p2 = Points[1];
             Vector p3 = Points[2];
 
-            double Sabc = (p2.X - p1.X) * (p3.Y - p1.Y) - (p3.X - p1.X) * (p2.Y - p1.Y);
-            double Sabp = (p2.X - p1.X) * (p.Y - p1.Y) - (p.X - p1.X) * (p2.Y - p1.Y);
-            double Sbcp = (p2.X - p.X) * (p3.Y - p.Y) - (p3.X - p.X) * (p2.Y - p.Y);
-            double Sacp = (p.X - p1.X) * (p3.Y - p1.Y) - (p3.X - p1.X) * (p.Y - p1.Y);
+            double Sabc = Math.Abs((p2.X - p1.X) * (p3.Y - p1.Y) - (p3.X - p1.X) * (p2.Y - p1.Y));
+            double Sabp = Math.Abs((p2.X - p1.X) * (p.Y - p1.Y) - (p.X - p1.X) * (p2.Y - p1.Y));
+            double Sbcp = Math.Abs((p2.X - p.X) * (p3.Y - p.Y) - (p3.X - p.X) * (p2.Y - p.Y));
+            double Sacp = Math.Abs((p.X - p1.X) * (p3.Y - p1.Y) - (p3.X - p1.X) * (p.Y - p1.Y));
             double sum = Sabp + Sbcp + Sacp;
 
-            if (Math.Abs(Sabc - sum) < eps || Sabc > sum) return true;
+            if (Math.Abs(Sabc - sum) < eps) return true;
             else return false;
         }
 

@@ -40,6 +40,13 @@ namespace GrRed.Geometry.Domain
             graphic.AddLines(Points);
         }
 
+        //public void Draw(IGraphic graphic, object o, object oo)
+        //{
+        //    graphic.AddLines(Points);
+        //    graphic.conturColor = o;
+        //    //graphic.fillColor = oo;
+        //}
+
         private double SetInputAngle(Vector[] Points)
         {
             if (Points[1].Y >= Points[0].Y) return Math.Acos((Points[1].X - Points[0].X) / VectorModul(Points[1] - Points[0]));
