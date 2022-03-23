@@ -92,16 +92,42 @@ namespace gui
 
         public ICommand UndoCommand => undoCommand = new ActionCommand(Undo, param => true);
 
+        bool Undocheck = false;
         private void Undo(object obj)
         {
-            throw new NotImplementedException();
+            if (Undocheck == false)
+            {
+                Dictionary<IFigure, Path> dictByFigure = figureDict.ToDictionary(keys => keys.Value, values => values.Key);
+                for (int i = 0; i < selectedFigures.Count; i++)
+                {
+                    IFigure fig = selectedFigures[i];
+                    Path oldPath = dictByFigure.GetValueOrDefault(fig);
+                    paintingCanvas.Children.Remove(oldPath);
+                    figureDict.Remove(oldPath);
+                }
+                Undocheck = true;
+            }
+
         }
 
         public ICommand RedoCommand => undoCommand = new ActionCommand(Redo, param => true);
 
         private void Redo(object obj)
         {
-            throw new NotImplementedException();
+            if (Undocheck == true)
+            {
+                for (int i = 0; i < selectedFigures.Count; i++)
+                {
+                    IFigure fig = selectedFigures[i];
+                    IGraphic graphic = GraphicFabric.GetFactory(fig.TypeName, paintingCanvas);
+                    graphic.conturColor = Brushes.Aqua;
+                    fig.Draw(graphic);
+                    figureDict.Add((Path)graphic.path, fig);
+                    selectedFigures.Remove(fig);
+                    selectedFigures.Add(fig);
+                }
+                Undocheck = false;
+            }
         }
 
         public ICommand SaveAsCommand => saveAsCommand = new ActionCommand(SaveAs, param => true);
