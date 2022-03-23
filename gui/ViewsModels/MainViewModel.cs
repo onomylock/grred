@@ -37,6 +37,7 @@ namespace gui
         private Mode mode = Mode.Selection;
         private bool isMouseDown = false;
         private ICommand lastCommand;
+        private IFigure lastFigure;
 
         private Stack<ICommand> actionCommands = new Stack<ICommand>();
         private InkCanvas paintingCanvas;
@@ -92,22 +93,21 @@ namespace gui
 
         public ICommand UndoCommand => undoCommand = new ActionCommand(Undo, param => true);
 
-        bool Undocheck = false;
+        bool Undocheck = false;     //на undo нажимаем только один раз
         private void Undo(object obj)
         {
             if (Undocheck == false)
             {
-                Dictionary<IFigure, Path> dictByFigure = figureDict.ToDictionary(keys => keys.Value, values => values.Key);
-                for (int i = 0; i < selectedFigures.Count; i++)
+                if (lastCommand == createTriangleCommand || lastCommand == createRectangleCommand || lastCommand == createLineCommand || lastCommand == createEllipseCommand)
                 {
-                    IFigure fig = selectedFigures[i];
+                    Dictionary<IFigure, Path> dictByFigure = figureDict.ToDictionary(keys => keys.Value, values => values.Key);
+                    IFigure fig = lastFigure;
                     Path oldPath = dictByFigure.GetValueOrDefault(fig);
                     paintingCanvas.Children.Remove(oldPath);
                     figureDict.Remove(oldPath);
+                    Undocheck = true;
                 }
-                Undocheck = true;
             }
-
         }
 
         public ICommand RedoCommand => undoCommand = new ActionCommand(Redo, param => true);
@@ -470,6 +470,7 @@ namespace gui
                 figure.Draw(graphic);
                 figureDict.Add((Path)graphic.path, figure);
                 previousPath = (Path)graphic.path;
+                lastFigure = figure;
             }
             else
             {
