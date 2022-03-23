@@ -23,7 +23,8 @@ namespace gui
         Ellipse,
         Triangle,
         Pencil,
-        Brush
+        Brush,
+        ConturBrush
     }
 
     public partial class MainViewModel : INotifyPropertyChanged
@@ -40,8 +41,10 @@ namespace gui
 
         private Stack<ICommand> actionCommands = new Stack<ICommand>();
         private InkCanvas paintingCanvas;
+        private TextBlock status;
         private List<IFigure> selectedFigures = new List<IFigure>();
         private Brush currentBrush;
+        private Brush currentConturBrush;
         private GrRed.Vector previousPostition;
 
         private ICommand createLineCommand = null;
@@ -52,6 +55,7 @@ namespace gui
         private ICommand mouseDown = null;
         private ICommand selectField = null;
         private ICommand selectColor = null;
+        private ICommand selectConturColor = null;
         private ICommand mouseUp = null;
         private ICommand mouseMove = null;
         private ICommand selectionCommand = null;
@@ -68,9 +72,10 @@ namespace gui
         //private ICommand BackButton = null;       
 
         public MainViewModel() { }
-        public MainViewModel(InkCanvas canvas)
+        public MainViewModel(InkCanvas canvas, TextBlock status)
         {
             this.paintingCanvas = canvas;
+            this.status = status;
         }
 
 
@@ -122,6 +127,7 @@ namespace gui
                 createLineCommand = new ActionCommand(obj =>
                 {
                     mode = Mode.Line;
+                    status.Text = "Line";
                     paintingCanvas.EditingMode = InkCanvasEditingMode.None;
                 }, param => true);
                 return createLineCommand;
@@ -135,6 +141,7 @@ namespace gui
                 createTriangleCommand = new ActionCommand(obj =>
                 {
                     mode = Mode.Triangle;
+                    status.Text = "Triangle";
                     paintingCanvas.EditingMode = InkCanvasEditingMode.None;
                 }, param => true);
                 return createTriangleCommand;
@@ -149,6 +156,7 @@ namespace gui
                 createRectangleCommand = new ActionCommand(obj =>
                 {
                     mode = Mode.Square;
+                    status.Text = "Rectangle";
                     paintingCanvas.EditingMode = InkCanvasEditingMode.None;
                 }, param => true);
                 return createRectangleCommand;
@@ -163,6 +171,7 @@ namespace gui
                 createEllipseCommand = new ActionCommand(obj =>
                 {
                     mode = Mode.Ellipse;
+                    status.Text = "Ellipse";
                     paintingCanvas.EditingMode = InkCanvasEditingMode.None;
                 }, param => true);
                 return createEllipseCommand;
@@ -177,6 +186,7 @@ namespace gui
                 penButton = new ActionCommand(obj =>
                 {
                     mode = Mode.Pencil;
+                    status.Text = "Pen";
                 }, param => true);
                 return penButton;
             }
@@ -209,6 +219,14 @@ namespace gui
             {
                 selectColor = new ActionCommand(changeColor, param => true);
                 return selectColor;
+            }
+        }
+        public ICommand SelectConturColor
+        {
+            get
+            {
+                selectConturColor = new ActionCommand(changeConturColor, param => true);
+                return selectConturColor;
             }
         }
 
@@ -348,6 +366,15 @@ namespace gui
                         graphic.FillPolygon(currentBrush);
                     }
                     break;
+                case Mode.ConturBrush:
+                    if (figureDict.Count != 0)
+                    {
+                        IFigure selected = FindFigure(new GrRed.Vector(position.X, position.Y));
+                        IGraphic graphic = GraphicFabric.GetFactory(selected.TypeName, paintingCanvas);
+                        selected.Draw(graphic);
+                        graphic.FillContur(currentConturBrush);
+                    }
+                    break;
                 default:
                     break;
             }
@@ -374,7 +401,7 @@ namespace gui
                     foreach (var fig in selectedFigures)
                     {
                         selectedPath = dictByFigure.GetValueOrDefault(fig);
-                        selectedPath.Stroke = Brushes.Black;
+                       // selectedPath.Stroke = Brushes.Black;
                     }
                     selectedFigures.Clear();
                 }
@@ -392,10 +419,20 @@ namespace gui
         private void changeColor(object obj)
         {
             mode = Mode.Brush;
+            status.Text = "Brush";
             string colorStr = obj.ToString();
             SolidColorBrush color = (SolidColorBrush)new BrushConverter().ConvertFromString(colorStr);
             currentBrush = color;
             paintingCanvas.DefaultDrawingAttributes.Color = (Color)ColorConverter.ConvertFromString(colorStr);
+        }
+
+        private void changeConturColor(object obj)
+        {
+            mode = Mode.ConturBrush;
+            status.Text = "ConturBrush";
+            string colorStr = obj.ToString();
+            SolidColorBrush color = (SolidColorBrush)new BrushConverter().ConvertFromString(colorStr);
+            currentConturBrush = color;
         }
 
         private void onMouseUp(object obj)
@@ -442,6 +479,7 @@ namespace gui
                 IGraphic graphic = GraphicFabric.GetFactory(Enum.GetName(mode), paintingCanvas);
                 figure = createFigure(mousePos, scale);
                 figure.Draw(graphic);
+                //figure.Draw(graphic, currentConturBrush, currentBrush);
                 figureDict.Add((Path)graphic.path, figure);
                 previousPath = (Path)graphic.path;
             }

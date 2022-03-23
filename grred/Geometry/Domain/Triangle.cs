@@ -55,6 +55,13 @@ namespace GrRed.Geometry.Domain
             //graphic.FillPolygon(brush2);
         }
 
+        //public void Draw(IGraphic graphic, object o, object oo)
+        //{
+        //    graphic.AddLines(Points);
+        //    graphic.conturColor = o;
+        //    graphic.fillColor = oo;
+        //}
+
         private Vector[] SetInputPoints()
         {
             Vector[] newPoints = new Vector[3];

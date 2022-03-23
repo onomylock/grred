@@ -65,6 +65,13 @@ namespace GrRed.Geometry.Domain
             graphic.AddLines(Points);
         }
 
+        //public void Draw(IGraphic graphic, object o, object oo)
+        //{
+        //    graphic.AddLines(Points);
+        //    graphic.conturColor = o;
+        //    graphic.fillColor = oo;
+        //}
+
         // Методы задания параметров класса
 
         private Vector[] SetInputPoints()
