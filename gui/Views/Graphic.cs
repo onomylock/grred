@@ -121,11 +121,11 @@ namespace gui
         object IGraphic.conturColor { get => (Brush)this.conturColor; set => this.conturColor = (Brush)value; }
         object IGraphic.fillColor { get => (Brush)this.fillColor; set => this.fillColor = (Brush)value; }
         double IGraphic.thickness { get => this.thickness; set => this.thickness = value; }
-        public LineGrafic(InkCanvas canvas, Path path)
+        public LineGrafic(InkCanvas canvas)
         {
             this.canvas = canvas;
             this.path = new();
-            conturColor = Brushes.Black;
+            this.conturColor = Brushes.Black;
             this.thickness = 1;
         }
         public void AddPolyArc(IEnumerable<GrRed.Vector> Ilines) { }
@@ -140,9 +140,11 @@ namespace gui
             pathFig.StartPoint = new Point(lines[0].X, lines[0].Y); //начальная точка
             polyLine.Points.Add(new Point(lines[1].X, lines[1].Y));
             pathFig.Segments.Add(polyLine);
+            pathFig.IsClosed = true;
 
             pathGeom.Figures.Add(pathFig);
 
+            path.Data = pathGeom;
             path.Stroke = conturColor;
             path.StrokeThickness = thickness;
             path.Fill = fillColor;
@@ -210,6 +212,7 @@ namespace gui
                 "Ellipse" => new EllipseGrafic(canvas),
                 "Triangle" => new TriangleGrafic(canvas),
                 "Square" => new RectangleGrafic(canvas),
+                "Line" => new LineGrafic(canvas),
                 _ => null,
             };
         }

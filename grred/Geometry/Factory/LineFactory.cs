@@ -6,7 +6,7 @@ namespace GrRed.Geometry.Factory
 {
     public class LineFactory : FigureFactory
     {
-        public override int NumOfVertex => 4;
+        public override int NumOfVertex => 2;
 
         public override IFigure GetFigure(IEnumerable<Vector> Points)
         {
@@ -17,7 +17,9 @@ namespace GrRed.Geometry.Factory
 
         public override IFigure GetFigure(double Angle, Vector Center, Vector Scale)
         {
-            throw new System.NotImplementedException();
+            Vector[] points = new Vector[2];
+            points[1] = Scale; points[0] = Center;
+            return new Line(points);
         }
     }
 }

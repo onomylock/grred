@@ -32,13 +32,13 @@ namespace gui
         public event PropertyChangedEventHandler PropertyChanged;
 
         public Dictionary<Path, IFigure> figureDict = new Dictionary<Path, IFigure>();
+        public Stack<ICommand> actionCommands = new Stack<ICommand>();
         public Path previousPath;
+        public Mode mode = Mode.Selection;
 
-        private Mode mode = Mode.Selection;
         private bool isMouseDown = false;
         private ICommand lastCommand;
 
-        private Stack<ICommand> actionCommands = new Stack<ICommand>();
         private InkCanvas paintingCanvas;
         private List<IFigure> selectedFigures = new List<IFigure>();
         private Brush currentBrush;
@@ -280,11 +280,21 @@ namespace gui
                     return createEllipse(start, scale);
                 case Mode.Triangle:
                     return createTriangle(start, scale);
+                case Mode.Line:
+                    return createLine(start, scale);
                 default:
                     break;
             }
             return null;
         }
+        private IFigure createLine(GrRed.Vector start, GrRed.Vector scale)
+        {
+            FigureFactory figureFactory = FigureFabric.GetFactory("Line");
+            IFigure line = figureFactory.GetFigure(0, start, scale);
+            lastCommand = createLineCommand;
+            return line;
+        }
+
         private IFigure createTriangle(GrRed.Vector start, GrRed.Vector scale)
         {
             FigureFactory figureFactory = FigureFabric.GetFactory("Triangle");
@@ -297,14 +307,6 @@ namespace gui
         {
             FigureFactory figureFactory = FigureFabric.GetFactory("Square");
             IFigure square = figureFactory.GetFigure(0, start, scale);
-            lastCommand = createRectangleCommand;
-            return square;
-        }
-
-        private IFigure createRectangle(GrRed.Vector[] points)
-        {
-            FigureFactory figureFactory = FigureFabric.GetFactory("Square");
-            IFigure square = figureFactory.GetFigure(points);
             lastCommand = createRectangleCommand;
             return square;
         }
@@ -330,7 +332,7 @@ namespace gui
         {
             isMouseDown = true;
             Point position = Mouse.GetPosition(paintingCanvas);
-            GrRed.Vector mousePos = new GrRed.Vector(position.X, position.Y);
+            //GrRed.Vector mousePos = new GrRed.Vector(position.X, position.Y);
             switch (mode)
             {
                 case Mode.Selection:
@@ -342,10 +344,18 @@ namespace gui
                 case Mode.Brush:
                     if (figureDict.Count != 0)
                     {
+                        Dictionary<IFigure, Path> dictByFigure = figureDict.ToDictionary(keys => keys.Value, values => values.Key);
                         IFigure selected = FindFigure(new GrRed.Vector(position.X, position.Y));
-                        IGraphic graphic = GraphicFabric.GetFactory(selected.TypeName, paintingCanvas);
-                        selected.Draw(graphic);
-                        graphic.FillPolygon(currentBrush);
+                        if (selected != null)
+                        {
+                            Path oldPath = dictByFigure.GetValueOrDefault(selected);
+                            IGraphic graphic = GraphicFabric.GetFactory(selected.TypeName, paintingCanvas);
+                            paintingCanvas.Children.Remove(oldPath);
+                            figureDict.Remove(oldPath);
+                            selected.Draw(graphic);
+                            figureDict.Add((Path)graphic.path, selected);
+                            graphic.FillPolygon(currentBrush);
+                        }
                     }
                     break;
                 default:
@@ -466,6 +476,7 @@ namespace gui
                     figureDict.Remove(oldPath);
                     IGraphic graphic = GraphicFabric.GetFactory(newFig.TypeName, paintingCanvas);
                     graphic.conturColor = Brushes.Aqua;
+                    graphic.fillColor = oldPath.Fill;
                     newFig.Draw(graphic);
                     figureDict.Add((Path)graphic.path, newFig);
                     selectedFigures.Remove(fig);
