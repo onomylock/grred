@@ -399,7 +399,7 @@
             <Grid Margin="8,10,0,0">
                 <StackPanel VerticalAlignment="Bottom">
                     <TextBlock Text="Состояние системы:" FontSize="10" FontWeight="DemiBold"/>
-                    <TextBlock x:Name="Status" Text="NO" FontSize="10" Margin="0,5,0,0"/>
+                    <TextBlock x:Name="Status" Text="Нет ошибок" FontSize="10" Margin="0,5,0,0"/>
                 </StackPanel>
             </Grid>
 
