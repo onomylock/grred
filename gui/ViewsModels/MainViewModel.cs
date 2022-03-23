@@ -41,7 +41,9 @@ namespace gui
 
         private InkCanvas paintingCanvas;
         private List<IFigure> selectedFigures = new List<IFigure>();
-        private Brush currentBrush;
+        private Brush currentBrush = Brushes.Black;
+        private Brush currentContour = Brushes.Black;
+        private double currentThickness = 1;
         private GrRed.Vector previousPostition;
 
         private ICommand createLineCommand = null;
@@ -281,6 +283,7 @@ namespace gui
         private void СlearCanvas(object obj)
         {
             paintingCanvas.Strokes.Clear();
+            paintingCanvas.Children.Clear();
             actionCommands.Clear();
             figureDict.Clear();
             selectedFigures.Clear();
@@ -307,7 +310,7 @@ namespace gui
         private IFigure createLine(GrRed.Vector start, GrRed.Vector scale)
         {
             FigureFactory figureFactory = FigureFabric.GetFactory("Line");
-            IFigure line = figureFactory.GetFigure(0, start, scale);
+            IFigure line = figureFactory.GetFigure(0, scale, start);
             lastCommand = createLineCommand;
             return line;
         }
@@ -349,7 +352,6 @@ namespace gui
         {
             isMouseDown = true;
             Point position = Mouse.GetPosition(paintingCanvas);
-            //GrRed.Vector mousePos = new GrRed.Vector(position.X, position.Y);
             switch (mode)
             {
                 case Mode.Selection:
@@ -361,18 +363,9 @@ namespace gui
                 case Mode.Brush:
                     if (figureDict.Count != 0)
                     {
-                        Dictionary<IFigure, Path> dictByFigure = figureDict.ToDictionary(keys => keys.Value, values => values.Key);
                         IFigure selected = FindFigure(new GrRed.Vector(position.X, position.Y));
                         if (selected != null)
-                        {
-                            Path oldPath = dictByFigure.GetValueOrDefault(selected);
-                            IGraphic graphic = GraphicFabric.GetFactory(selected.TypeName, paintingCanvas);
-                            paintingCanvas.Children.Remove(oldPath);
-                            figureDict.Remove(oldPath);
-                            selected.Draw(graphic);
-                            figureDict.Add((Path)graphic.path, selected);
-                            graphic.FillPolygon(currentBrush);
-                        }
+                            Draw(new List<IFigure> { selected }, new List<IFigure> { selected });
                     }
                     break;
                 default:
@@ -457,11 +450,12 @@ namespace gui
                 paintingCanvas.Children.Remove(previousPath);
                 mousePos = figureDict.GetValueOrDefault(previousPath).Center;
                 figureDict.Remove(previousPath);
+                Debug.WriteLine("yes");
             }
-            mouseMoveSwitch(mousePos, scale);
+            mouseMoveAction(mousePos, scale);
         }
 
-        private void mouseMoveSwitch(GrRed.Vector mousePos, GrRed.Vector scale)
+        private void mouseMoveAction(GrRed.Vector mousePos, GrRed.Vector scale)
         {
             if (mode != Mode.Selection && mode != Mode.Brush && mode != Mode.Pencil)
             {
@@ -482,24 +476,42 @@ namespace gui
         {
             if (selectedFigures.Count > 0)
             {
-                Dictionary<IFigure, Path> dictByFigure = figureDict.ToDictionary(keys => keys.Value, values => values.Key);
+                List<IFigure> newSelectedFigures = new List<IFigure>();
                 for (int i = 0; i < selectedFigures.Count; i++)
                 {
                     IFigure fig = selectedFigures[i];
                     IFigure newFig = fig.Move(mousePos - previousPostition);
+                    newSelectedFigures.Add(newFig);
                     previousPostition = mousePos;
-                    Path oldPath = dictByFigure.GetValueOrDefault(fig);
-                    paintingCanvas.Children.Remove(oldPath);
-                    figureDict.Remove(oldPath);
-                    IGraphic graphic = GraphicFabric.GetFactory(newFig.TypeName, paintingCanvas);
-                    graphic.conturColor = Brushes.Aqua;
-                    graphic.fillColor = oldPath.Fill;
-                    newFig.Draw(graphic);
-                    figureDict.Add((Path)graphic.path, newFig);
-                    selectedFigures.Remove(fig);
-                    selectedFigures.Add(newFig);
                 }
+                Draw(newSelectedFigures, selectedFigures, true);
+                selectedFigures = newSelectedFigures;
             }
+        }
+
+        private void Draw(List<IFigure> newFigures, List<IFigure> oldFigures, bool redraw = false)
+        {
+            Dictionary<IFigure, Path> dictByFigure = figureDict.ToDictionary(keys => keys.Value, values => values.Key);
+            for (int i = 0; i < newFigures.Count; i++)
+            {
+                IGraphic graphic = GraphicFabric.GetFactory(newFigures[i].TypeName, paintingCanvas);
+                Path oldPath = dictByFigure.GetValueOrDefault(oldFigures[i]);
+                paintingCanvas.Children.Remove(oldPath);
+                figureDict.Remove(oldPath);
+                if (redraw)
+                    setGraphicParams(graphic, oldPath.Fill, oldPath.Stroke, oldPath.StrokeThickness);
+                else
+                    setGraphicParams(graphic, this.currentBrush, this.currentContour, this.currentThickness);
+                newFigures[i].Draw(graphic);
+                figureDict.Add((Path)graphic.path, newFigures[i]);
+            }
+        }
+
+        private void setGraphicParams(IGraphic graphic, Brush fill, Brush contour, double thickness)
+        {
+            graphic.conturColor = contour;
+            graphic.fillColor = fill;
+            graphic.thickness = thickness;
         }
     }
 }
