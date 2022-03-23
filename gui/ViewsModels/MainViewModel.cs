@@ -125,16 +125,10 @@ namespace gui
         {
             if (Undocheck == true)
             {
-                for (int i = 0; i < selectedFigures.Count; i++)
-                {
-                    IFigure fig = selectedFigures[i];
-                    IGraphic graphic = GraphicFabric.GetFactory(fig.TypeName, paintingCanvas);
-                    graphic.conturColor = Brushes.Aqua;
-                    fig.Draw(graphic);
-                    figureDict.Add((Path)graphic.path, fig);
-                    selectedFigures.Remove(fig);
-                    selectedFigures.Add(fig);
-                }
+                IFigure fig = lastFigure;
+                IGraphic graphic = GraphicFabric.GetFactory(fig.TypeName, paintingCanvas);
+                fig.Draw(graphic);
+                figureDict.Add((Path)graphic.path, fig);
                 Undocheck = false;
             }
         }
