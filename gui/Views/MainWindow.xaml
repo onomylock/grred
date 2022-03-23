@@ -372,19 +372,19 @@
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
                 <StackPanel x:Name="Contour21" Grid.Column="0">
-                    <Button x:Name="BlackContourButton"  Background="Black" Height="13" Width="13" BorderThickness="0"/>
+                    <Button x:Name="BlackContourButton" Command="{Binding SelectConturColor}"  CommandParameter="Black"  Background="Black" Height="13" Width="13" BorderThickness="0"/>
                 </StackPanel>
                 <StackPanel x:Name="Contour22" Grid.Column="1">
-                    <Button x:Name="WhiteContourButton"  Background="White" Height="13" Width="13" BorderThickness="0"/>
+                    <Button x:Name="WhiteContourButton" Command="{Binding SelectConturColor}"  CommandParameter="White"  Background="White" Height="13" Width="13" BorderThickness="0"/>
                 </StackPanel>
                 <StackPanel x:Name="Contour23" Grid.Column="2">
-                    <Button x:Name="RedContourButton"  Background="Red" Height="13" Width="13" BorderThickness="0"/>
+                    <Button x:Name="RedContourButton" Command="{Binding SelectConturColor}"  CommandParameter="Red"  Background="Red" Height="13" Width="13" BorderThickness="0"/>
                 </StackPanel>
                 <StackPanel x:Name="Contour24" Grid.Column="3">
-                    <Button x:Name="OrangeContourButton"  Background="Orange" Height="13" Width="13" BorderThickness="0"/>
+                    <Button x:Name="OrangeContourButton" Command="{Binding SelectConturColor}"  CommandParameter="Orange"  Background="Orange" Height="13" Width="13" BorderThickness="0"/>
                 </StackPanel>
                 <StackPanel x:Name="Contour25" Grid.Column="4">
-                    <Button x:Name="YellowContourButton"  Background="Yellow" Height="13" Width="13" BorderThickness="0"/>
+                    <Button x:Name="YellowContourButton" Command="{Binding SelectConturColor}"  CommandParameter="Yellow"  Background="Yellow" Height="13" Width="13" BorderThickness="0"/>
                 </StackPanel>
             </Grid>
             <Grid Margin="8,10,0,0">
@@ -396,31 +396,31 @@
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
                 <StackPanel x:Name="Contour31" Grid.Column="0">
-                    <Button x:Name="GreenContourButton"  Background="Green" Height="13" Width="13" BorderThickness="0"/>
+                    <Button x:Name="GreenContourButton" Command="{Binding SelectConturColor}"  CommandParameter="Green"  Background="Green" Height="13" Width="13" BorderThickness="0"/>
                 </StackPanel>
                 <StackPanel x:Name="Contour32" Grid.Column="1">
-                    <Button x:Name="BlueContourButton"  Background="Blue" Height="13" Width="13" BorderThickness="0"/>
+                    <Button x:Name="BlueContourButton" Command="{Binding SelectConturColor}"  CommandParameter="Blue"  Background="Blue" Height="13" Width="13" BorderThickness="0"/>
                 </StackPanel>
                 <StackPanel x:Name="Contour33" Grid.Column="2">
-                    <Button x:Name="DarkBlueContourButton"  Background="DarkBlue" Height="13" Width="13" BorderThickness="0"/>
+                    <Button x:Name="DarkBlueContourButton" Command="{Binding SelectConturColor}"  CommandParameter="DarkBlue"  Background="DarkBlue" Height="13" Width="13" BorderThickness="0"/>
                 </StackPanel>
                 <StackPanel x:Name="Contour34" Grid.Column="3">
-                    <Button x:Name="PurpleContourButton"  Background="Purple" Height="13" Width="13" BorderThickness="0"/>
+                    <Button x:Name="PurpleContourButton" Command="{Binding SelectConturColor}"  CommandParameter="Purple"  Background="Purple" Height="13" Width="13" BorderThickness="0"/>
                 </StackPanel>
                 <StackPanel x:Name="Contour35" Grid.Column="4">
-                    <Button x:Name="PinkContourButton"  Background="Pink" Height="13" Width="13" BorderThickness="0"/>
+                    <Button x:Name="PinkContourButton" Command="{Binding SelectConturColor}"  CommandParameter="Pink"  Background="Pink" Height="13" Width="13" BorderThickness="0"/>
                 </StackPanel>
             </Grid>
             
             <Line X1="0" Y1="0" X2="140" Y2="0" Stroke="Black" Margin="0,10,0,0" />
 
             <Grid Margin="8,10,0,0">
-                <StackPanel>
+                <StackPanel VerticalAlignment="Bottom">
                     <TextBlock Text="Состояние системы:" FontSize="10" FontWeight="DemiBold"/>
-                    <TextBlock Text="Треугольник" FontSize="10" Margin="0,5,0,0"/>
+                    <TextBlock x:Name="Status" Text="NO" FontSize="10" Margin="0,5,0,0"/>
                 </StackPanel>
-            </Grid> 
-            
+            </Grid>
+
         </StackPanel>
     </Grid>
 </Window>

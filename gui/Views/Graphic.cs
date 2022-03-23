@@ -26,7 +26,8 @@ namespace gui
         {
             this.canvas = canvas;
             this.path = new Path();
-            conturColor = Brushes.Black;
+            this.conturColor = Brushes.Black;
+            this.thickness = 1;
         }
 
         public void AddLines(IEnumerable<GrRed.Vector> Ilines) { }
@@ -59,6 +60,7 @@ namespace gui
             canvas.Children.Add(path);
         }
         public void FillPolygon(object color) => path.Fill = (Brush)color;
+        public void FillContur(object color) => path.Stroke = (Brush)color;
 
     }
     public class TriangleGrafic : IGraphic
@@ -106,7 +108,7 @@ namespace gui
             canvas.Children.Add(path);
         }
         public void FillPolygon(object color) => path.Fill = (Brush)color;
-
+        public void FillContur(object color) => path.Stroke = (Brush)color;
     }
 
     public class LineGrafic : IGraphic
@@ -150,7 +152,7 @@ namespace gui
             canvas.Children.Add(path);
         }
         public void FillPolygon(object color) => path.Fill = (Brush)color;
-
+        public void FillContur(object color) => path.Stroke = (Brush)color;
     }
 
     public class RectangleGrafic : IGraphic
@@ -198,7 +200,7 @@ namespace gui
             canvas.Children.Add(path);
         }
         public void FillPolygon(object color) => path.Fill = (Brush)color;
-
+        public void FillContur(object color) => path.Stroke = (Brush)color;
     }
 
     public static class GraphicFabric
