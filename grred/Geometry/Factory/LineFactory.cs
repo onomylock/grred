@@ -17,9 +17,7 @@ namespace GrRed.Geometry.Factory
 
         public override IFigure GetFigure(double Angle, Vector Center, Vector Scale)
         {
-            Vector[] points = new Vector[2];
-            points[1] = Scale; points[0] = Center;
-            return new Line(points);
+            return new Line(Angle, Center, Scale);
         }
     }
 }

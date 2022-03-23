@@ -14,17 +14,19 @@ namespace GrRed.Geometry.Domain
         [JsonConstructor]
         public Triangle(double angle, Vector center, Vector scale)
         {
-            Center = center;
+            Center = scale;
             Angle = angle;
-            Scale = scale;
+            Scale = center;
             Points = SetInputPoints();
         }
 
         public Triangle(IEnumerable<Vector> Points)
         {
             this.Points = Points.ToArray();
-            Scale = new Vector(this.Points[2].X - this.Points[0].X, this.Points[1].Y - this.Points[2].Y);
-            Center = SetInputCenter(this.Points);
+            Scale = this.Points[1];
+            Center = this.Points[0];
+            //Scale = new Vector(this.Points[2].X - this.Points[0].X, this.Points[1].Y - this.Points[2].Y);
+            //Center = SetInputCenter(this.Points);
             Angle = SetInputAngle(this.Points);
         }
 
@@ -122,8 +124,8 @@ namespace GrRed.Geometry.Domain
             {
                 for (int i = 0; i < newPoints.Count(); i++)
                 {
-                    if (Points[i].Y > Center.Y) newPoints[i] = new Vector(Points[i].Y, Points[i].Y - 2 * Center.Y);
-                    else if (Points[i].Y < Center.Y) newPoints[i] = new Vector(newPoints[i].Y, newPoints[i].Y + 2 * Center.Y);
+                    if (Points[i].Y > Center.Y) newPoints[i] = new Vector(Points[i].X, Points[i].Y - 2 * Center.Y);
+                    else newPoints[i] = new Vector(newPoints[i].X, newPoints[i].Y + 2 * Center.Y);
                 }
                 return new Triangle(newPoints);
             }
@@ -132,7 +134,7 @@ namespace GrRed.Geometry.Domain
                 for (int i = 0; i < newPoints.Count(); i++)
                 {
                     if (Points[i].X > Center.X) newPoints[i] = new Vector(Points[i].X - 2 * Center.X, Points[i].Y);
-                    else if (Points[i].X < Center.X) newPoints[i] = new Vector(Points[i].X + 2 * Center.X, Points[i].Y);
+                    else newPoints[i] = new Vector(Points[i].X + 2 * Center.X, Points[i].Y);
                 }
                 return new Triangle(newPoints);
             }
