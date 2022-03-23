@@ -9,6 +9,15 @@ namespace GrRed.Geometry.Domain
 {
     class Line : IFigure
     {
+        public Line(double angle, Vector center, Vector scale)
+        {
+            Center = center;
+            Angle = angle;
+            Scale = scale;
+            Points = new Vector[] { Center, Scale };
+            // Points[0] = Center;
+            // Points[1] = Scale;
+        }
         public Line(IEnumerable<Vector> Points)
         {
             this.Points = Points.ToArray();
@@ -46,14 +55,14 @@ namespace GrRed.Geometry.Domain
         public bool IsIn(Vector p, double eps)
         {
             Vector div = new Vector(Points[1] - Points[0]);
-            if (Angle % Math.PI / 2 < eps * 10e-5)
-                if (Math.Abs(p.X - Center.X) < eps) return true;
-                else return false;
+            if (Math.Abs((p.X - Points[0].X) / div.X - (p.Y - Points[0].Y) / div.Y) < eps)
+                return true;
             else if (Angle % Math.PI < eps * 10e-5)
                 if (Math.Abs(p.Y - Center.Y) < eps) return true;
                 else return false;
-            else if (Math.Abs((p.X - Points[0].X) / div.X - (p.Y - Points[0].Y) / div.Y) < eps)
-                return true;
+            else if (Angle % Math.PI / 2 < eps * 10e-5)
+                if (Math.Abs(p.X - Center.X) < eps) return true;
+                else return false;
             else return false;
         }
 

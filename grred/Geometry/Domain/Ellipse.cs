@@ -77,35 +77,9 @@ namespace GrRed.Geometry.Domain
 
         public bool IsIn(Vector p, double eps)
         {
-            // double AxisX;
-            // double AxisY;
-
-            // // Вычисляем полуоси повёрнутого эллипса
-            // if (Math.Abs(Angle) % Math.PI / 2.0 <= eps) // Случай, когда угол кратен пи/2 
-            // {
-            //     AxisY = Scale.X;
-            //     AxisX = Scale.Y;
-            // }
-            // else                                      // Любой другой случай
-            // {
-            //     AxisX = Scale.X / Math.Cos(Angle);
-            //     AxisY = Scale.Y / Math.Cos(Angle);
-            // }
-
-            // // Проверяем (x-x0)^2/a^2 + (y-y0)^2/b^2 +- eps <= 1, но для повёрнутого эллипса (немного другая формула для более общего случая)
-
-            // double IsInCheck = Math.Pow((p.X - Center.X) * Math.Cos(Angle) + (p.Y - Center.Y) * Math.Sin(Angle), 2) / (AxisX * AxisX) + Math.Pow((-p.X + Center.X) * Math.Sin(Angle) + (p.Y - Center.Y) * Math.Cos(Angle), 2) / (AxisY * AxisY);
-
-            // if (IsInCheck + eps <= 1.0 || IsInCheck - eps <= 1.0)
-            //     return true;
-            // else
-            //     return false;
-
             Vector RotatePoint = new Vector(p.X * Math.Cos(Angle) + p.Y * Math.Sin(Angle), -p.X * Math.Sin(Angle) + p.Y * Math.Cos(Angle));
             double a = Math.Sqrt(Math.Pow(Center.X - Points[0].X, 2) + Math.Pow(Center.Y - Points[0].Y, 2));
             double b = Math.Sqrt(Math.Pow(Center.X - Points[1].X, 2) + Math.Pow(Center.Y - Points[1].Y, 2));
-            //double a = Scale.X;
-            //double b = Scale.Y;
             double ellipseEq = Math.Pow(RotatePoint.X / a, 2) + Math.Pow(RotatePoint.Y / b, 2);
 
             if (ellipseEq - 1 <= eps) return true;

@@ -47,21 +47,6 @@ namespace GrRed.Geometry.Domain
 
         public void Draw(IGraphic graphic)
         {
-            // List<Vector> vector1 = new List<GrRed.Vector>();
-            // double h_X = Center.X + Scale.X * Math.Cos(Angle);
-            // double h_Y = Center.Y - Scale.X * Math.Sin(Angle);
-            // double v_X = Center.X + Scale.Y * Math.Sin(Angle);
-            // double v_Y = Center.Y + Scale.Y * Math.Cos(Angle);
-            // vector1.Add(new Vector(h_X, h_Y));
-            // vector1.Add(new Vector(v_X, v_Y));
-            // vector1.Add(new Vector(Center.X - Math.Abs(Center.X - h_X), Center.Y - Math.Abs(Center.Y - h_Y)));
-            // vector1.Add(new Vector(Center.X - Math.Abs(Center.X - v_X), Center.Y - Math.Abs(Center.Y - v_Y)));
-            // graphic.AddLines(vector1);
-            // List<Vector> vec = new List<Vector>();
-            // vec.Add(Points[0]);
-            // vec.Add(Points[1]);
-            // vec.Add(Points[2]);
-            // vec.Add(Points[3]);
             graphic.AddLines(Points);
         }
 
