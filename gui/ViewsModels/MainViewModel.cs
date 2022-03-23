@@ -42,6 +42,8 @@ namespace gui
         private Stack<ICommand> actionCommands = new Stack<ICommand>();
         private InkCanvas paintingCanvas;
         private TextBlock status;
+        private Rectangle rectColor;
+        private Rectangle rectConturColor;
         private List<IFigure> selectedFigures = new List<IFigure>();
         private Brush currentBrush;
         private Brush currentConturBrush;
@@ -72,10 +74,12 @@ namespace gui
         //private ICommand BackButton = null;       
 
         public MainViewModel() { }
-        public MainViewModel(InkCanvas canvas, TextBlock status)
+        public MainViewModel(InkCanvas canvas, TextBlock status, Rectangle rectColor, Rectangle rectConturColor)
         {
             this.paintingCanvas = canvas;
             this.status = status;
+            this.rectColor = rectColor;
+            this.rectConturColor = rectConturColor;
         }
 
 
@@ -423,6 +427,7 @@ namespace gui
             string colorStr = obj.ToString();
             SolidColorBrush color = (SolidColorBrush)new BrushConverter().ConvertFromString(colorStr);
             currentBrush = color;
+            rectColor.Fill = color;
             paintingCanvas.DefaultDrawingAttributes.Color = (Color)ColorConverter.ConvertFromString(colorStr);
         }
 
@@ -433,6 +438,8 @@ namespace gui
             string colorStr = obj.ToString();
             SolidColorBrush color = (SolidColorBrush)new BrushConverter().ConvertFromString(colorStr);
             currentConturBrush = color;
+            rectConturColor.Fill = color;
+            paintingCanvas.DefaultDrawingAttributes.Color = (Color)ColorConverter.ConvertFromString(colorStr);
         }
 
         private void onMouseUp(object obj)
