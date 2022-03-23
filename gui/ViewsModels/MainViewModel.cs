@@ -15,6 +15,8 @@ using System.Linq;
 
 namespace gui
 {
+    public struct TextCoords { string x;  string y; string w; string h; }
+
     public enum Mode
     {
         Selection,
@@ -35,6 +37,7 @@ namespace gui
         public Stack<ICommand> actionCommands = new Stack<ICommand>();
         public Path previousPath;
         public Mode mode = Mode.Selection;
+        public TextCoords bindingText = new TextCoords();
 
         private bool isMouseDown = false;
         private ICommand lastCommand;
@@ -63,12 +66,9 @@ namespace gui
         private ICommand undoCommand;
         private ICommand redoCommand;
         private ICommand createNewCanvCommand;
-        //private ICommand loadCommand;
-
-        //private ICommand ApproximationButton = null;
-        //private ICommand DistanceButton = null;
-        //private ICommand NextButton = null;
-        //private ICommand BackButton = null;       
+        private ICommand verticalCommand;
+        private ICommand horizontalCommand;
+      
 
         public MainViewModel() { }
         public MainViewModel(InkCanvas canvas)
@@ -83,15 +83,6 @@ namespace gui
                 PropertyChanged(this, new PropertyChangedEventArgs(prop));
         }
 
-        //public ICommand LoadCommand => loadCommand = new ActionCommand(Load, param => true);
-
-        //private void Load(object obj)
-        //{
-        //    ClearCanvas(obj);
-        //    Io.Load();
-        //    List<IFigure> figureList = new();
-        //    Dictionary<Path, IFigure> figureDict = figureList.
-        //}
 
         public ICommand CreateNewCanvCommand => createNewCanvCommand = new ActionCommand(CreateNewCanv, param => true);
 
@@ -267,6 +258,38 @@ namespace gui
                     paintingCanvas.EditingMode = InkCanvasEditingMode.None;
                 }, param => true);
                 return selectionCommand;
+            }
+        }
+
+        public ICommand VerticalCommand
+        {
+            get
+            {
+                verticalCommand = new ActionCommand(obj =>
+                {
+                    if (selectedFigures.Count == 1)
+                    {
+                        IFigure newFig = selectedFigures[0].Reflection(true);
+                        Draw(new List<IFigure> { newFig }, new List<IFigure> { selectedFigures[0] });
+                    }
+                }, param => true);
+                return verticalCommand;
+            }
+        }
+
+        public ICommand HorizontalCommand
+        {
+            get
+            {
+                horizontalCommand = new ActionCommand(obj =>
+                {
+                    if (selectedFigures.Count == 1)
+                    {
+                        IFigure newFig = selectedFigures[0].Reflection(false);
+                        Draw(new List<IFigure> { newFig }, new List<IFigure> { selectedFigures[0] });
+                    }
+                }, param => true);
+                return horizontalCommand;
             }
         }
 
