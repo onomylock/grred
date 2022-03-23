@@ -22,44 +22,34 @@
         </Grid.ColumnDefinitions>
 
         <StackPanel x:Name="ToolBar" Grid.Column="0" Background="#688AE8">
-            <Menu Margin="0,5,0,0" Background="#688AE8" Width="30" Height="30">
+            <Menu ToolTip="Меню" Margin="0,5,0,0" Background="#688AE8" Width="30" Height="30">
                 <MenuItem Height="28" Width="28" >
                     <MenuItem.Icon>
                         <Image  Source="../Resources/activ_Menu.png" Margin="-3,-13,-14,-13" />
                     </MenuItem.Icon>
                     <MenuItem Header="Создать" Command=""></MenuItem>
-                    <MenuItem Header="Открыть" Command="{Binding LoadCommand}"></MenuItem>
                     <MenuItem Header="Сохранить" Command=""></MenuItem>
                     <MenuItem Header="Сохранить как" Command="{Binding SaveAsCommand}"></MenuItem>
                     <MenuItem Header="Справка" Command="{Binding HelpCommand}"></MenuItem>
                 </MenuItem>
             </Menu>
             <Grid>
-                <Button Command="{Binding UndoCommand}" x:Name="BackButton" Margin="4,0,0,0"  Width="30" Height="30" Background="{x:Null}" HorizontalAlignment="Left" BorderThickness="0">
+                <Button Command="{Binding UndoCommand}" x:Name="BackButton" ToolTip="Назад" Margin="4,0,0,0"  Width="30" Height="30" Background="{x:Null}" HorizontalAlignment="Left" BorderThickness="0">
                     <Image Source="../Resources/icons8nazad.png"/>
                 </Button>
-                <Button Command="{Binding RedoCommand}" x:Name="NextButton" Margin="28,0,0,0" Height="30" Width="30" Background="{x:Null}" Grid.Column="1" BorderThickness="0">
+                <Button Command="{Binding RedoCommand}" x:Name="NextButton" ToolTip="Вперед"   Margin="28,0,0,0" Height="30" Width="30" Background="{x:Null}" Grid.Column="1" BorderThickness="0">
                     <Image Source="../Resources/icons8vpered.png"/>
                 </Button>
             </Grid>
-            <Grid>
-                <Button Command="{Binding DistanceButton}" x:Name="Distance" Margin="30,0,0,0"  Height="30" Width="30" Background="{x:Null}" BorderThickness="0">
-                    <Image Source="../Resources/ymen.png"/>
-                </Button>
-                <Button Command="{Binding ApproximationButton}" x:Name="ApproximationButton" Margin="0,0,30,0"  Height="30" Width="30" Background="{x:Null}" BorderThickness="0">
-                    <Image Source="../Resources/pribliz.png"/>
-                </Button>
-            </Grid>
-            <Button Command="{Binding PenButton}" x:Name="PenButton" Height="30" Width="30" Background="{x:Null}" BorderThickness="0">
+
+            <Button Command="{Binding PenButton}" x:Name="PenButton" ToolTip="Карандаш"  Height="30" Width="30" Background="{x:Null}" BorderThickness="0">
                 <Image Source="../Resources/icons8karand.png" />
             </Button>
-            <Button Command="{Binding FillButton}" x:Name="FillButton" Height="30" Width="30" Background="{x:Null}" BorderThickness="0">
-                <Image Source="../Resources/icons8zalivka.png" />
-            </Button>
-            <Button Command="{Binding SelectionCommand}" x:Name="YkazButton" Height="30" Width="30" Background="{x:Null}" BorderThickness="0">
+
+            <Button Command="{Binding SelectionCommand}" x:Name="YkazButton"  ToolTip="Курсор" Height="30" Width="30" Background="{x:Null}" BorderThickness="0">
                 <Image Source="../Resources/icons8-kursor-64.png" />
             </Button>
-            <Button Command="{Binding ClearCanvasCommand}" x:Name="MysorButton" Height="30" Width="30" Background="{x:Null}" BorderThickness="0">
+            <Button Command="{Binding ClearCanvasCommand}" x:Name="MysorButton" ToolTip="Очистить полотно"  Height="30" Width="30" Background="{x:Null}" BorderThickness="0">
                 <Image Source="../Resources/icons8-ochistit-korzinu-50.png" />
             </Button>
 
@@ -142,7 +132,7 @@
             <!--</Grid>
             </Grid>-->
 
-            <ComboBox SelectionChanged="ComboBox_SelectionChanged">
+            <ComboBox SelectionChanged="ComboBox_SelectionChanged" ToolTip="Меню примитивов">
                 <ComboBox.ItemContainerStyle>
                     <Style TargetType="ComboBoxItem">
                         <Setter Property="Background" Value="#688AE8"/>
@@ -151,7 +141,7 @@
                 </ComboBox.ItemContainerStyle>
                 <ComboBoxItem>
                     <Button Command="{Binding CreateLineCommand}">
-                        <Image x:Name="temp" Source="../Resources/linePrimitiv.png" Width="35" />
+                        <Image x:Name="temp" Source="../Resources/linePrimitiv.png" Width="35"/>
                     </Button>
                 </ComboBoxItem>
                 <ComboBoxItem>
