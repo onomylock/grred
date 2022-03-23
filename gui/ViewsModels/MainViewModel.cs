@@ -495,6 +495,7 @@ namespace gui
                     graphic.conturColor = Brushes.Aqua;
                     newFig.Draw(graphic);
                     figureDict.Add((Path)graphic.path, newFig);
+                    lastFigure = newFig;
                     selectedFigures.Remove(fig);
                     selectedFigures.Add(newFig);
                 }
