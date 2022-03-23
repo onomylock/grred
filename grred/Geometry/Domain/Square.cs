@@ -19,9 +19,9 @@ namespace GrRed.Geometry.Domain
         [JsonConstructor]
         public Square(double angle, Vector center, Vector scale)
         {
-            Center = center;
+            Center = scale;
             Angle = angle;
-            Scale = scale;
+            Scale = center - scale;
             Gabarit = (Center.X - Scale.X, Center.Y + Scale.Y, Center.X + Scale.X, Center.Y - Scale.Y);
             Points = SetInputPoints();
         }
