@@ -46,6 +46,8 @@ namespace gui
 
         private InkCanvas paintingCanvas;
         private TextBlock status;
+        private TextBlock LocX;
+        private TextBlock LocY;
         private Rectangle rectColor;
         private Rectangle rectConturColor;
         private List<IFigure> selectedFigures = new List<IFigure>();
@@ -533,6 +535,8 @@ namespace gui
         {
             Point position = Mouse.GetPosition(paintingCanvas);
             GrRed.Vector mousePos = new GrRed.Vector(position.X, position.Y);
+            //LocX.Text = position.X.ToString();
+            //LocY.Text = position.Y.ToString();
             GrRed.Vector scale = mousePos;
             if (previousPostition.X == -1)
                 previousPostition = mousePos;
