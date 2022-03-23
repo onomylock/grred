@@ -379,7 +379,7 @@ namespace gui
         private IFigure createLine(GrRed.Vector start, GrRed.Vector scale)
         {
             FigureFactory figureFactory = FigureFabric.GetFactory("Line");
-            IFigure line = figureFactory.GetFigure(0, scale, start);
+            IFigure line = figureFactory.GetFigure(0, start, scale);
             lastCommand = createLineCommand;
             return line;
         }
