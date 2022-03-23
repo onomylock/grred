@@ -310,6 +310,7 @@ namespace gui
             figureDict.Clear();
             selectedFigures.Clear();
             paintingCanvas.Children.Clear();
+            paintingCanvas.Strokes.Clear();
         }
 
         private IFigure createFigure(GrRed.Vector start, GrRed.Vector scale)
