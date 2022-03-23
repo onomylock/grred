@@ -671,7 +671,7 @@ namespace TestProject
         {
             Vector[] points = new Vector[2];
             points[0] = new Vector(0, 0);
-            points[1] = new Vector(10, 0);
+            points[1] = new Vector(10, 10);
 
             var line = new LineFactory().GetFigure(0, points[0], points[1]);
 

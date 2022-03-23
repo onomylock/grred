@@ -12,10 +12,10 @@ namespace GrRed.Geometry.Domain
         public Line(double angle, Vector center, Vector scale)
         {
             Center = center;
-            Angle = angle;
+            //Angle = angle;
             Scale = scale;
             Points = new Vector[2] { Center, Scale };
-            //Angle = SetInputAngle(this.Points);
+            Angle = SetInputAngle(this.Points);
 
             // Points[0] = Center;
             // Points[1] = Scale;
@@ -53,9 +53,9 @@ namespace GrRed.Geometry.Domain
 
         private double SetInputAngle(Vector[] Points)
         {
-            // if (Points[1].Y >= Points[0].Y) return Math.Acos((Points[1].X - Points[0].X) / VectorModul(Points[1] - Points[0]));
-            // else return -Math.Acos((Points[1].X - Points[0].X) / VectorModul(Points[1] - Points[0]));
-            return Math.Asin((Points[1].Y - Points[0].Y) / VectorModul(Points[1] - Points[0]));
+            if (Points[1].Y >= Points[0].Y) return Math.Acos((Points[1].X - Points[0].X) / VectorModul(Points[1] - Points[0]));
+            else return -Math.Acos((Points[1].X - Points[0].X) / VectorModul(Points[1] - Points[0]));
+            //return Math.Asin((Points[1].Y - Points[0].Y) / VectorModul(Points[1] - Points[0]));
         }
         private double VectorModul(Vector a) => Math.Sqrt(Math.Pow(a.X, 2) + Math.Pow(a.Y, 2));
 
@@ -87,19 +87,21 @@ namespace GrRed.Geometry.Domain
 
             if (axe) // Вертикально
             {
-                newAngle = -2 * Angle;
+                newAngle = (-2 * Angle) % 2 * Math.PI;
                 newPoints[0] = Points[0];
 
-                newPoints[1] = new Vector(Points[1].X * Math.Cos(newAngle) - Points[1].Y * Math.Sin(newAngle),
-                Points[1].X * Math.Sin(newAngle) + Points[1].Y * Math.Cos(newAngle));
+                // newPoints[1] = new Vector(Points[1].X * Math.Cos(newAngle) - Points[1].Y * Math.Sin(newAngle),
+                // Points[1].X * Math.Sin(newAngle) + Points[1].Y * Math.Cos(newAngle));
+                newPoints[1] = new Vector(Points[0].X + (Points[1].X - Points[0].X) * Math.Cos(newAngle) - (Points[1].Y - Points[0].Y) * Math.Sin(newAngle),
+                Points[0].Y + (Points[1].X - Points[0].X) * Math.Sin(newAngle) + (Points[1].Y - Points[0].Y) * Math.Cos(newAngle));
             }
             else // Горизонтально
             {
-                newAngle = 2 * Angle;
+                newAngle = (2 * Angle) % 2 * Math.PI;
 
                 newPoints[0] = Points[0];
-                newPoints[1] = new Vector(Points[1].X * Math.Cos(newAngle) - Points[1].Y * Math.Sin(newAngle),
-                Points[1].X * Math.Sin(newAngle) + Points[1].Y * Math.Cos(newAngle));
+                newPoints[1] = new Vector(Points[0].X + (Points[1].X - Points[0].X) * Math.Cos(newAngle) - (Points[1].Y - Points[0].Y) * Math.Sin(newAngle),
+                Points[0].Y + (Points[1].X - Points[0].X) * Math.Sin(newAngle) + (Points[1].Y - Points[0].Y) * Math.Cos(newAngle));
             }
 
             return new Line(newAngle, newPoints[0], newPoints[1]);
