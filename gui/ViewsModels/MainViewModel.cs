@@ -430,7 +430,7 @@ namespace gui
 
         private void selectFigure(Point position)
         {
-            if (figureDict.Count != 0)
+            if (figureDict.Count > 0 && figureDict.Count < 2)
             {
                 Dictionary<IFigure, Path> dictByFigure = figureDict.ToDictionary(keys => keys.Value, values => values.Key);
                 Path selectedPath = null;
@@ -449,7 +449,7 @@ namespace gui
                     foreach (var fig in selectedFigures)
                     {
                         selectedPath = dictByFigure.GetValueOrDefault(fig);
-                       // selectedPath.Stroke = Brushes.Black;
+                        selectedPath.Stroke = Brushes.Black;
                     }
                     selectedFigures.Clear();
                 }
