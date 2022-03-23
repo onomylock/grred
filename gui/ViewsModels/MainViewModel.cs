@@ -306,6 +306,7 @@ namespace gui
                 selectionCommand = new ActionCommand(obj =>
                 {
                     mode = Mode.Selection;
+                    status.Text = "Выбор фигуры";
                     paintingCanvas.EditingMode = InkCanvasEditingMode.None;
                 }, param => true);
                 return selectionCommand;
@@ -331,6 +332,8 @@ namespace gui
             selectedFigures.Clear();
             paintingCanvas.Children.Clear();
             paintingCanvas.Strokes.Clear();
+            lastCommand = null;
+            status.Text = "Очистка";
         }
 
         private IFigure createFigure(GrRed.Vector start, GrRed.Vector scale)
@@ -541,7 +544,7 @@ namespace gui
 
         private void moveSelectedFigures(GrRed.Vector mousePos)
         {
-            if (selectedFigures.Count > 0)
+            if (selectedFigures.Count > 0 && mode != Mode.Pencil)
             {
                 List<IFigure> newSelectedFigures = new List<IFigure>();
                 for (int i = 0; i < selectedFigures.Count; i++)
