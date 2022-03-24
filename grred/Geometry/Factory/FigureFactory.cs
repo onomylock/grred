@@ -7,6 +7,6 @@ namespace GrRed.Geometry.Factory
     {
         public abstract int NumOfVertex { get; }
         public abstract IFigure GetFigure(double Angle, Vector Center, Vector Scale);
-        public abstract IFigure GetFigure(IEnumerable<Vector> Points);
+        public abstract IFigure GetFigure(IEnumerable<Vector> Points, double Angle);
     }
 }

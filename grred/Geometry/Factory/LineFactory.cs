@@ -8,10 +8,10 @@ namespace GrRed.Geometry.Factory
     {
         public override int NumOfVertex => 2;
 
-        public override IFigure GetFigure(IEnumerable<Vector> Points)
+        public override IFigure GetFigure(IEnumerable<Vector> Points, double Angle)
         {
             if (Points.Count() == NumOfVertex)
-                return new Line(Points);
+                return new Line(Points, Angle);
             else return null;
         }
 

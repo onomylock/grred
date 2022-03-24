@@ -25,7 +25,7 @@ namespace GrRed.Geometry.Domain
             Points = SetInputPoints();
         }
 
-        public Ellipse(IEnumerable<Vector> Points)
+        public Ellipse(IEnumerable<Vector> Points, double Angle)
         {
             this.Points = Points.ToArray();
             Scale = new Vector(Math.Abs(this.Points[0].X), Math.Abs(this.Points[1].Y));
@@ -86,9 +86,10 @@ namespace GrRed.Geometry.Domain
         public bool IsIn(Vector p, double eps)
         {
             Vector RotatePoint = new Vector(p.X * Math.Cos(Angle) + p.Y * Math.Sin(Angle), -p.X * Math.Sin(Angle) + p.Y * Math.Cos(Angle));
+
             double a = Math.Sqrt(Math.Pow(Center.X - Points[0].X, 2) + Math.Pow(Center.Y - Points[0].Y, 2));
             double b = Math.Sqrt(Math.Pow(Center.X - Points[1].X, 2) + Math.Pow(Center.Y - Points[1].Y, 2));
-            double ellipseEq = Math.Pow(RotatePoint.X / a, 2) + Math.Pow(RotatePoint.Y / b, 2);
+            double ellipseEq = Math.Pow((RotatePoint.X - Center.X) / a, 2) + Math.Pow((RotatePoint.Y - Center.Y) / b, 2);
 
             if (ellipseEq - 1 <= eps) return true;
             else return false;
@@ -96,8 +97,11 @@ namespace GrRed.Geometry.Domain
 
         public IFigure Move(Vector delta)
         {
-            Vector deltaCenter = Center + delta;
-            return new Ellipse(Angle, deltaCenter, Scale);
+            for (int i = 0; i < 4; i++)
+            {
+                Points[i] += delta;
+            }
+            return new Ellipse(Points, Angle);
         }
 
         public IFigure Reflection(bool axe)

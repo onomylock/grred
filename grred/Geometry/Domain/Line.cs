@@ -12,22 +12,22 @@ namespace GrRed.Geometry.Domain
         public Line(double angle, Vector center, Vector scale)
         {
             Center = center;
-            //Angle = angle;
+            Angle = angle;
             Scale = scale;
             Points = new Vector[2] { Center, Scale };
-            Angle = SetInputAngle(this.Points);
+            //Angle = SetInputAngle(this.Points);
 
             // Points[0] = Center;
             // Points[1] = Scale;
         }
-        public Line(IEnumerable<Vector> Points)
+        public Line(IEnumerable<Vector> Points, double Angle)
         {
             this.Points = Points.ToArray();
             // Center = new Vector(this.Points[0] + (this.Points[1] - this.Points[0]) / 2);
             // Scale = new Vector(Center - this.Points[0]);
             Center = this.Points[0];
             Scale = this.Points[1];
-            Angle = SetInputAngle(this.Points);
+            this.Angle = Angle;
         }
         public string TypeName => "Line";
 
@@ -51,10 +51,17 @@ namespace GrRed.Geometry.Domain
         //    //graphic.fillColor = oo;
         //}
 
-        private double SetInputAngle(Vector[] Points)
+        private double SetInputAngle(Vector[] Points, bool axe)
         {
-            if (Points[1].Y >= Points[0].Y) return Math.Acos((Points[1].X - Points[0].X) / VectorModul(Points[1] - Points[0]));
-            else return -Math.Acos((Points[1].X - Points[0].X) / VectorModul(Points[1] - Points[0]));
+            if (axe)
+                if (Points[1].Y >= Points[0].Y) return Math.Acos((Math.Abs(Points[1].Y - Points[0].Y)) / VectorModul(Points[1] - Points[0]));
+                else return -Math.Acos((Math.Abs(Points[1].Y - Points[0].Y)) / VectorModul(Points[1] - Points[0]));
+            else
+                if (Points[1].X >= Points[0].X) return Math.Asin((Points[1].Y - Points[0].Y) / VectorModul(Points[1] - Points[0]));
+                else return -Math.Asin((Points[1].Y - Points[0].Y) / VectorModul(Points[1] - Points[0]));
+
+            //if (Points[1].X >= Points[0].X) return Math.Asin((Points[1].Y - Points[0].Y) / VectorModul(Points[1] - Points[0]));
+            //else return -Math.Asin((Points[1].Y - Points[0].Y) / VectorModul(Points[1] - Points[0]));
             //return Math.Asin((Points[1].Y - Points[0].Y) / VectorModul(Points[1] - Points[0]));
         }
         private double VectorModul(Vector a) => Math.Sqrt(Math.Pow(a.X, 2) + Math.Pow(a.Y, 2));
@@ -77,27 +84,31 @@ namespace GrRed.Geometry.Domain
         public IFigure Move(Vector delta)
         {
             Vector[] newPoints = new Vector[2] { (Points[0] + delta), (Points[1] + delta) };
-            return new Line(newPoints);
+            return new Line(newPoints, Angle);
         }
 
         public IFigure Reflection(bool axe)
         {
-            double newAngle;
+            double newAngle = SetInputAngle(Points, axe);
             Vector[] newPoints = new Vector[2];
 
             if (axe) // Вертикально
             {
-                newAngle = (-2 * Angle) % 2 * Math.PI;
+                if (Points[0].Y >= Points[1].Y && Points[0].X >= Points[1].X) newAngle = -2 * newAngle;
+                else if (Points[0].Y >= Points[1].Y && Points[0].X < Points[1].X) newAngle = 2 * newAngle;
+                else if (Points[0].Y < Points[1].Y && Points[0].X < Points[1].X) newAngle = 2 * newAngle;
+                else newAngle = - 2 * newAngle;
+
+
                 newPoints[0] = Points[0];
 
-                // newPoints[1] = new Vector(Points[1].X * Math.Cos(newAngle) - Points[1].Y * Math.Sin(newAngle),
-                // Points[1].X * Math.Sin(newAngle) + Points[1].Y * Math.Cos(newAngle));
+               
                 newPoints[1] = new Vector(Points[0].X + (Points[1].X - Points[0].X) * Math.Cos(newAngle) - (Points[1].Y - Points[0].Y) * Math.Sin(newAngle),
                 Points[0].Y + (Points[1].X - Points[0].X) * Math.Sin(newAngle) + (Points[1].Y - Points[0].Y) * Math.Cos(newAngle));
             }
             else // Горизонтально
             {
-                newAngle = (2 * Angle) % 2 * Math.PI;
+                newAngle = 2 * Math.PI - 2 * newAngle;
 
                 newPoints[0] = Points[0];
                 newPoints[1] = new Vector(Points[0].X + (Points[1].X - Points[0].X) * Math.Cos(newAngle) - (Points[1].Y - Points[0].Y) * Math.Sin(newAngle),
@@ -117,7 +128,7 @@ namespace GrRed.Geometry.Domain
             newPoints[1] = new Vector(Points[1].X * Math.Cos(newAngle) + Points[1].Y * Math.Sin(newAngle),
             Points[1].X * Math.Sin(newAngle) + Points[1].Y * Math.Cos(newAngle));
 
-            return new Line(newPoints);
+            return new Line(newPoints, Angle);
         }
 
         public IFigure SetScale(double dx, double dy)

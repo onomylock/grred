@@ -7,10 +7,10 @@ namespace GrRed.Geometry.Factory
     {
         public override int NumOfVertex => 3;
 
-        public override IFigure GetFigure(IEnumerable<Vector> Points)
+        public override IFigure GetFigure(IEnumerable<Vector> Points, double Angle)
         {
             if (Points.Count() == NumOfVertex)
-                return new Triangle(Points);
+                return new Triangle(Points, Angle);
             else return null;
         }
 
