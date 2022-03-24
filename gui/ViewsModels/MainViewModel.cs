@@ -518,5 +518,21 @@ namespace gui
                 }
             }
         }
+
+        protected bool SetProperty<T>(ref T field, T newValue, [CallerMemberName] string propertyName = null)
+        {
+            if (!Equals(field, newValue))
+            {
+                field = newValue;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+                return true;
+            }
+
+            return false;
+        }
+
+        private object selectedPrimitive;
+
+        public object SelectedPrimitive { get => selectedPrimitive; set => SetProperty(ref selectedPrimitive, value); }
     }
 }
