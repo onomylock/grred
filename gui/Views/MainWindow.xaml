@@ -226,10 +226,10 @@
                     <Image Source="../Resources/angle.png" Margin="0,3,3,0" />
                 </StackPanel>
                 <StackPanel x:Name="PrimitiveRotationAngle2" Grid.Column="1">
-                    <TextBox Background="{x:Null}" TextAlignment="Center"/>
+                    <TextBox x:Name="roter" Background="{x:Null}" TextAlignment="Center" Text="0"/>
                 </StackPanel>
                 <StackPanel x:Name="RotationAngle" Grid.Column="2">
-                    <Button x:Name="RotationAngleButton" ToolTip="Поворот примитива" Background="#D9EBFF" BorderThickness="0">
+                    <Button x:Name="RotationAngleButton" ToolTip="Поворот примитива" Background="#D9EBFF" Command="{Binding RotateCommand}" BorderThickness="0">
                         <Image Source="../Resources/rotateButton.png" Width="15" />
                     </Button>
                 </StackPanel>

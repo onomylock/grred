@@ -49,6 +49,7 @@ namespace gui
         private TextBlock status;
         private TextBlock locX;
         private TextBlock locY;
+        private TextBox roter;
         private Rectangle rectColor;
         private Rectangle rectConturColor;
         private List<IFigure> selectedFigures = new List<IFigure>();
@@ -82,7 +83,7 @@ namespace gui
 
 
         public MainViewModel() { }
-        public MainViewModel(InkCanvas canvas, TextBlock status, Rectangle rectColor, Rectangle rectConturColor, TextBlock locX, TextBlock locY)
+        public MainViewModel(InkCanvas canvas, TextBlock status, Rectangle rectColor, Rectangle rectConturColor, TextBlock locX, TextBlock locY, TextBox roter)
         {
             this.paintingCanvas = canvas;
             this.status = status;
@@ -90,6 +91,8 @@ namespace gui
             this.rectConturColor = rectConturColor;
             this.locX = locX;
             this.locY = locY;
+            this.roter = roter;
+
         }
 
 
@@ -355,6 +358,7 @@ namespace gui
                 {
                     if (selectedFigures.Count == 1)
                     {
+                        angelGui = Convert.ToDouble(roter.Text);
                         IFigure newFig = selectedFigures[0].Rotate(angelGui);
                         Draw(new List<IFigure> { newFig }, new List<IFigure> { selectedFigures[0] }, true);
                         selectedFigures.Clear();
