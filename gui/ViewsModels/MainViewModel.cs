@@ -356,7 +356,7 @@ namespace gui
                     if (selectedFigures.Count == 1)
                     {
                         IFigure newFig = selectedFigures[0].Rotate(angelGui);
-                        Draw(new List<IFigure> { newFig }, new List<IFigure> { selectedFigures[0] });
+                        Draw(new List<IFigure> { newFig }, new List<IFigure> { selectedFigures[0] }, true);
                         selectedFigures.Clear();
                         selectedFigures.Add(newFig);
                     }
