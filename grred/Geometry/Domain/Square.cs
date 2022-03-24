@@ -75,7 +75,9 @@ namespace GrRed.Geometry.Domain
 
             return newPoints;
         }
-        private Vector SetInputScale(Vector[] Points) => new Vector(Center.X - (Points[1] - Points[0]).X / 2, (Points[2] - Points[1]).Y / 2 - Center.Y);
+        
+        private Vector SetInputScale(Vector[] Points) => new Vector((Center.X ) * Math.Cos(Angle) - (Center.Y) * Math.Sin(Angle),
+                (Center.X) * Math.Sin(Angle) + (Center.Y) * Math.Cos(Angle));
         //private double SetInputAngle(Vector[] Points) => Math.Acos((Points[3].X - Points[0].X) / VectorModul(Points[1] - Points[0]));
 
         private double SetInputAngle(Vector[] Points, bool axe)
@@ -185,13 +187,17 @@ namespace GrRed.Geometry.Domain
             //     newScale = new(Scale.X * Math.Cos(newAngle), Scale.Y * Math.Cos(newAngle));
             //     return new Square(newAngle, Center, newScale);
             // }
+            Vector[] newPoints = new Vector[4];
             double newAngle = (Angle + delta) % (2 * Math.PI);
+            for (int i = 0; i < 4; i++)
+                newPoints[i] = new Vector(Points[i].X + (Points[i].X - Center.X) * Math.Cos(newAngle) - (Points[i].Y - Center.Y) * Math.Sin(newAngle),
+                Points[i].Y + (Points[i].X - Center.X) * Math.Sin(newAngle) + (Points[i].Y - Center.Y) * Math.Cos(newAngle));
             //if (Math.Abs(newAngle) > 2 * Math.PI) newAngle = newAngle % (2 * Math.PI);
             //else if (Math.Abs(newAngle) == 2 * Math.PI) return new Square(Angle, Center, Scale);
-            Vector newScale = new Vector(Scale.X * Math.Cos(newAngle) + Scale.Y * Math.Sin(newAngle),
-            Scale.X * Math.Sin(newAngle) + Scale.Y * Math.Cos(newAngle));
+            //Vector newScale = new Vector(Scale.X * Math.Cos(newAngle) + Scale.Y * Math.Sin(newAngle),
+            //Scale.X * Math.Sin(newAngle) + Scale.Y * Math.Cos(newAngle));
 
-            return new Square(newAngle, Center, newScale);
+            return new Square(newPoints, Angle);
         }
 
         public IFigure SetScale(double dx, double dy)

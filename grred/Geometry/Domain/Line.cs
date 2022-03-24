@@ -122,11 +122,12 @@ namespace GrRed.Geometry.Domain
         {
             Vector[] newPoints = new Vector[2];
             double newAngle = (Angle + delta) % Math.PI;
-            newPoints[0] = new Vector(Points[0].X * Math.Cos(newAngle) + Points[0].Y * Math.Sin(newAngle),
-            Points[0].X * Math.Sin(newAngle) + Points[0].Y * Math.Cos(newAngle));
+            //newPoints[0] = new Vector(Points[0].X * Math.Cos(newAngle) + Points[0].Y * Math.Sin(newAngle),
+            //Points[0].X * Math.Sin(newAngle) + Points[0].Y * Math.Cos(newAngle));
+            newPoints[0] = Points[0];
 
-            newPoints[1] = new Vector(Points[1].X * Math.Cos(newAngle) + Points[1].Y * Math.Sin(newAngle),
-            Points[1].X * Math.Sin(newAngle) + Points[1].Y * Math.Cos(newAngle));
+            newPoints[1] = new Vector(Points[0].X + (Points[1].X - Points[0].X) * Math.Cos(newAngle) - (Points[1].Y - Points[0].Y) * Math.Sin(newAngle),
+            Points[0].Y + (Points[1].X - Points[0].X) * Math.Sin(newAngle) + (Points[1].Y - Points[0].Y) * Math.Cos(newAngle));
 
             return new Line(newPoints, Angle);
         }
