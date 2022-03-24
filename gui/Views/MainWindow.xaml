@@ -140,11 +140,11 @@
                         <Image Source="../Resources/trianglePrimitiv.png" Width="35"/>
                     </Button>
 
-            <Button ToolTip="Выбор четырехугольник"  Height="30" Width="30" Background="{x:Null}" BorderThickness="0" Command="{Binding CreateRectangleCommand}">
+            <Button ToolTip="Выбор четырехугольника"  Height="30" Width="30" Background="{x:Null}" BorderThickness="0" Command="{Binding CreateRectangleCommand}">
                         <Image Source="../Resources/squarePrimitiv.png" Width="35"/>
                     </Button>
 
-            <Button ToolTip="В"  Height="30" Width="30" Background="{x:Null}" BorderThickness="0" Command="{Binding CreateEllipseCommand}">
+            <Button ToolTip="Выбор круга :)"  Height="30" Width="30" Background="{x:Null}" BorderThickness="0" Command="{Binding CreateEllipseCommand}">
                         <Image Source="../Resources/circlePrimitiv.png" Width="35" />
                     </Button>
 
