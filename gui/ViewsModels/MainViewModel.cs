@@ -305,9 +305,23 @@ namespace gui
             {
                 selectionCommand = new ActionCommand(obj =>
                 {
-                    mode = Mode.Selection;
-                    status.Text = "Выбор фигуры";
-                    paintingCanvas.EditingMode = InkCanvasEditingMode.None;
+                    if (selectedFigures.Count == 1)
+                    {
+                        
+                        status.Text = "Выбранные фигуры больше не выбраны ";
+                        IFigure fig = selectedFigures[0];
+                        Dictionary<IFigure, Path> dictByFigure = figureDict.ToDictionary(keys => keys.Value, values => values.Key);
+                        Path selectedPath =  dictByFigure.GetValueOrDefault(fig);
+                        selectedPath.Stroke = Brushes.Black;
+                        selectedFigures.Clear();
+                    }
+                    else
+                    {
+                        mode = Mode.Selection;
+                        status.Text = "Выбор фигуры";
+                        paintingCanvas.EditingMode = InkCanvasEditingMode.None;
+                    }
+                    
                 }, param => true);
                 return selectionCommand;
             }
@@ -502,6 +516,7 @@ namespace gui
                 }
                 else
                 {
+                    //
                     foreach (var fig in selectedFigures)
                     {
                         selectedPath = dictByFigure.GetValueOrDefault(fig);
