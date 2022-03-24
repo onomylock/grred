@@ -229,7 +229,7 @@
                     <TextBox Background="{x:Null}" TextAlignment="Center"/>
                 </StackPanel>
                 <StackPanel x:Name="RotationAngle" Grid.Column="2">
-                    <Button x:Name="RotationAngleButton" ToolTip="Поворот примитива" Background="{x:Null}" BorderThickness="0">
+                    <Button x:Name="RotationAngleButton" ToolTip="Поворот примитива" Background="#D9EBFF" BorderThickness="0">
                         <Image Source="../Resources/rotateButton.png" Width="15" />
                     </Button>
                 </StackPanel>

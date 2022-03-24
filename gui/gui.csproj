@@ -34,6 +34,7 @@
     <None Remove="Resources\PipButton.png" />
     <None Remove="Resources\pri.png" />
     <None Remove="Resources\pribliz.png" />
+    <None Remove="Resources\rotateButton.png" />
     <None Remove="Resources\squarePrimitiv.png" />
     <None Remove="Resources\strelka.png" />
     <None Remove="Resources\SubtractionButton.png" />
@@ -80,6 +81,7 @@
     <Resource Include="Resources\PipButton.png" />
     <Resource Include="Resources\pri.png" />
     <Resource Include="Resources\pribliz.png" />
+    <Resource Include="Resources\rotateButton.png" />
     <Resource Include="Resources\squarePrimitiv.png" />
     <Resource Include="Resources\strelka.png" />
     <Resource Include="Resources\SubtractionButton.png" />
