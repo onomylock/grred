@@ -22,15 +22,16 @@ namespace GrRed.Geometry.Domain
             Center = center;
             Angle = angle;
             Scale = scale - center;
+            //Scale = scale;
             Gabarit = (Center.X - Scale.X, Center.Y + Scale.Y, Center.X + Scale.X, Center.Y - Scale.Y);
             Points = SetInputPoints();
         }
 
-        public Square(IEnumerable<Vector> Points)
+        public Square(IEnumerable<Vector> Points, double Angle)
         {
             this.Points = Points.ToArray();
             Center = SetInputCenter(this.Points);
-            Angle = SetInputAngle(this.Points);
+            this.Angle = Angle;
             Scale = SetInputScale(this.Points);
             Gabarit = (Center.X - Scale.X, Center.Y + Scale.Y, Center.X + Scale.X, Center.Y - Scale.Y);
         }
@@ -77,10 +78,14 @@ namespace GrRed.Geometry.Domain
         private Vector SetInputScale(Vector[] Points) => new Vector(Center.X - (Points[1] - Points[0]).X / 2, (Points[2] - Points[1]).Y / 2 - Center.Y);
         //private double SetInputAngle(Vector[] Points) => Math.Acos((Points[3].X - Points[0].X) / VectorModul(Points[1] - Points[0]));
 
-        private double SetInputAngle(Vector[] Points)
+        private double SetInputAngle(Vector[] Points, bool axe)
         {
-            if (Points[3].Y >= Points[0].Y) return Math.Acos((Points[3].X - Points[0].X) / VectorModul(Points[3] - Points[0]));
-            else return -Math.Acos((Points[3].X - Points[0].X) / VectorModul(Points[3] - Points[0]));
+            if (axe)
+                if (Points[1].Y >= Points[0].Y) return Math.Acos((Math.Abs(Points[1].Y - Points[0].Y)) / VectorModul(Points[1] - Points[0]));
+                else return -Math.Acos((Math.Abs(Points[1].Y - Points[0].Y)) / VectorModul(Points[1] - Points[0]));
+            else
+                if (Points[1].X >= Points[0].X) return Math.Asin((Points[1].Y - Points[0].Y) / VectorModul(Points[1] - Points[0]));
+            else return -Math.Asin((Points[1].Y - Points[0].Y) / VectorModul(Points[1] - Points[0]));
         }
         private double VectorModul(Vector a) => Math.Sqrt(Math.Pow(a.X, 2) + Math.Pow(a.Y, 2));
         private Vector SetInputCenter(Vector[] Points)
@@ -126,47 +131,43 @@ namespace GrRed.Geometry.Domain
 
         public IFigure Move(Vector delta)
         {
-            Vector deltaCenter = Center + delta;
-            return new Square(Angle, deltaCenter, Scale);
+            for (int i = 0; i < 4; i++)
+            {
+                Points[i] += delta;
+            }
+            return new Square(Points, Angle);
+            //return new Square(Angle, Center + delta, Scale);
         }
 
         public IFigure Reflection(bool axe)
         {
-            // double newAngle = 0;
-            // if (axe) // Вертикально
-            // {
-            //     //newAngle = (Angle - Math.PI / 2) % Math.PI;
-            //     newAngle = -Angle % Math.PI;
-            // }
-            // else // Горизонтально
-            // {
-            //     newAngle = (Math.PI - Angle) % (Math.PI);
-            // }
-            // Vector newScale = new Vector(Scale.X * Math.Cos(newAngle) + Scale.Y * Math.Sin(newAngle),
-            // Scale.X * Math.Sin(newAngle) + Scale.Y * Math.Cos(newAngle));
 
-            // return new Square(newAngle, Center, newScale);
-
-            double newAngle = 0;
+            double newAngle = SetInputAngle(Points, axe);
             Vector[] newPoints = new Vector[4];
             if (axe) // Вертикально
             {
-                newAngle = -Angle % Math.PI;
-                // if (Angle % (Math.PI / 2) == 0) newAngle = - Angle;
-                // newAngle = (-3 * Math.PI / 2 - Angle) % Math.PI;
-                for (int i = 0; i < 4; i++)
-                    newPoints[i] = new Vector(Points[i].X, Points[i].Y * Math.Cos(newAngle));
+                if (Points[0].Y >= Points[1].Y && Points[0].X >= Points[3].X) newAngle = -2 * newAngle;
+                else if (Points[0].Y >= Points[1].Y && Points[0].X < Points[3].X) newAngle = 2 * newAngle;
+                else if (Points[0].Y < Points[1].Y && Points[0].X < Points[3].X) newAngle = 2 * newAngle;
+                else newAngle = -2 * newAngle;
+                for (int i = 2; i < 4; i++)
+                    newPoints[i] = new Vector(Points[i].X + (Points[i].X - Points[0].X) * Math.Cos(newAngle) - (Points[i].Y - Points[0].Y) * Math.Sin(newAngle),
+                    Points[0].Y + (Points[1].X - Points[0].X) * Math.Sin(newAngle) + (Points[1].Y - Points[0].Y) * Math.Cos(newAngle));
             }
             else // Горизонтально
             {
-                newAngle = (Math.PI - Angle) % Math.PI;
-                for (int i = 0; i < 4; i++)
-                    newPoints[i] = new Vector(Points[i].X * Math.Cos(newAngle), Points[i].Y);
+                if (Points[0].Y >= Points[1].Y) newAngle = -Math.PI;
+                else newAngle = Math.PI;
+                newPoints[0] = Points[0];
+                newPoints[3] = Points[3];
+                newPoints[2] = new Vector(Points[2].X + (Points[2].X - Points[3].X) * Math.Cos(newAngle) - (Points[2].Y - Points[3].Y) * Math.Sin(newAngle),
+                    Points[2].Y + (Points[2].X - Points[3].X) * Math.Sin(newAngle) + (Points[3].Y - Points[2].Y) * Math.Cos(newAngle));
+                newPoints[1] = new Vector(Points[1].X + (Points[1].X - Points[0].X) * Math.Cos(newAngle) - (Points[1].Y - Points[0].Y) * Math.Sin(newAngle),
+                    Points[1].Y + (Points[1].X - Points[0].X) * Math.Sin(newAngle) + (Points[0].Y - Points[1].Y) * Math.Cos(newAngle));
             }
-            Vector newScale = new Vector(Scale.X * Math.Cos(newAngle) + Scale.Y * Math.Sin(newAngle),
-            Scale.X * Math.Sin(newAngle) + Scale.Y * Math.Cos(newAngle));
 
-            return new Square(newPoints);
+
+            return new Square(newPoints, Angle);
         }
 
         public IFigure Rotate(double delta)

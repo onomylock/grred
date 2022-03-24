@@ -313,7 +313,9 @@ namespace gui
                     if (selectedFigures.Count == 1)
                     {
                         IFigure newFig = selectedFigures[0].Reflection(true);
-                        Draw(new List<IFigure> { newFig }, new List<IFigure> { selectedFigures[0] });
+                        Draw(new List<IFigure> { newFig }, new List<IFigure> { selectedFigures[0] }, true);
+                        selectedFigures.Clear();
+                        selectedFigures.Add(newFig);
                     }
                 }, param => true);
                 return verticalCommand;
@@ -329,7 +331,9 @@ namespace gui
                     if (selectedFigures.Count == 1)
                     {
                         IFigure newFig = selectedFigures[0].Reflection(false);
-                        Draw(new List<IFigure> { newFig }, new List<IFigure> { selectedFigures[0] });
+                        Draw(new List<IFigure> { newFig }, new List<IFigure> { selectedFigures[0] }, true);
+                        selectedFigures.Clear();
+                        selectedFigures.Add(newFig);
                     }
                 }, param => true);
                 return horizontalCommand;

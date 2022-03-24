@@ -20,7 +20,7 @@ namespace GrRed.Geometry.Domain
             Points = SetInputPoints();
         }
 
-        public Triangle(IEnumerable<Vector> Points)
+        public Triangle(IEnumerable<Vector> Points, double Angle)
         {
             this.Points = Points.ToArray();
             Scale = this.Points[1];
@@ -110,7 +110,7 @@ namespace GrRed.Geometry.Domain
             {
                 newPoints[i] = Points[i] + delta;
             }
-            return new Triangle(newPoints);
+            return new Triangle(newPoints, Angle);
         }
 
         public IFigure Reflection(bool axe)
@@ -127,7 +127,7 @@ namespace GrRed.Geometry.Domain
                     if (Points[i].Y > Center.Y) newPoints[i] = new Vector(Points[i].X, Points[i].Y - 2 * Center.Y);
                     else newPoints[i] = new Vector(newPoints[i].X, newPoints[i].Y + 2 * Center.Y);
                 }
-                return new Triangle(newPoints);
+                return new Triangle(newPoints, Angle);
             }
             else //Горизонтальное
             {
@@ -136,8 +136,9 @@ namespace GrRed.Geometry.Domain
                     if (Points[i].X > Center.X) newPoints[i] = new Vector(Points[i].X - 2 * Center.X, Points[i].Y);
                     else newPoints[i] = new Vector(Points[i].X + 2 * Center.X, Points[i].Y);
                 }
-                return new Triangle(newPoints);
+                return new Triangle(newPoints, Angle);
             }
+
         }
 
         public IFigure Rotate(double delta)
@@ -150,7 +151,7 @@ namespace GrRed.Geometry.Domain
                 newPoints[i] = new Vector(Points[i].X * Math.Cos(newAngle) - Points[i].Y * Math.Sin(newAngle),
                 Points[i].X * Math.Sin(newAngle) + Points[i].Y * Math.Cos(newAngle));
             }
-            return new Triangle(newPoints);
+            return new Triangle(newPoints, Angle);
         }
 
         public IFigure SetScale(double dx, double dy)
