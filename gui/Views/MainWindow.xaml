@@ -204,7 +204,7 @@
             
             <Line X1="0" Y1="0" X2="140" Y2="0" Stroke="Black" Margin="0,10,0,0" />
             
-            <TextBlock Text="Координаты примитива" Margin="8,10,0,0" FontSize="11" FontWeight="DemiBold"/>
+            <!--<TextBlock Text="Координаты примитива" Margin="8,10,0,0" FontSize="11" FontWeight="DemiBold"/>
             <Grid Margin="8,10,8,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="0.3*"/>
@@ -248,7 +248,7 @@
                 <StackPanel x:Name="PrimitiveSize2" Grid.Column="3">
                     <TextBox Background="{x:Null}" TextAlignment="Center"/>
                 </StackPanel>
-            </Grid>
+            </Grid>-->
             
             <Line X1="0" Y1="0" X2="140" Y2="0" Stroke="Black" Margin="0,10,0,0" />
             
@@ -263,8 +263,8 @@
                 <StackPanel x:Name="PrimitiveRotationAngle1" Grid.Column="0">
                     <Image Source="../Resources/angle.png" Margin="0,3,3,0" />
                 </StackPanel>
-                <StackPanel x:Name="PrimitiveRotationAngle2" Grid.Column="1">
-                    <TextBox Background="{x:Null}" TextAlignment="Center"/>
+                <StackPanel x:Name="PrimitiveRotationAngle" Grid.Column="1">
+                    <TextBox Text="0" Background="{x:Null}" TextAlignment="Center"/>
                 </StackPanel>
             </Grid>
             

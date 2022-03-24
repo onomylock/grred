@@ -44,6 +44,7 @@ namespace gui
         private TextBlock status;
         private Rectangle rectColor;
         private Rectangle rectConturColor;
+        private TextBlock primitiveRotationAngle;
         private List<IFigure> selectedFigures = new List<IFigure>();
         private Brush currentBrush;
         private Brush currentConturBrush;
@@ -74,12 +75,13 @@ namespace gui
         //private ICommand BackButton = null;       
 
         public MainViewModel() { }
-        public MainViewModel(InkCanvas canvas, TextBlock status, Rectangle rectColor, Rectangle rectConturColor)
+        public MainViewModel(InkCanvas canvas, TextBlock status, Rectangle rectColor, Rectangle rectConturColor, TextBlock PrimitiveRotationAngle)
         {
             this.paintingCanvas = canvas;
             this.status = status;
             this.rectColor = rectColor;
             this.rectConturColor = rectConturColor;
+            this.primitiveRotationAngle = PrimitiveRotationAngle; //ConvertTo.double(primitiveRotationAngle.Text) для угла
         }
 
 
