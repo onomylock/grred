@@ -64,8 +64,8 @@ namespace GrRed.IO
 
             Size size = canvas.RenderSize;
             RenderTargetBitmap image = new RenderTargetBitmap((int)(size.Width * scale), (int)(size.Height * scale), dpi, dpi, PixelFormats.Pbgra32);
-            canvas.Measure(size);
-            canvas.Arrange(new Rect(size));
+            //canvas.Measure(size);
+            //canvas.Arrange(new Rect(size));
             image.Render(canvas);
             PngBitmapEncoder encoder = new PngBitmapEncoder();
             encoder.Frames.Add(BitmapFrame.Create(image));
