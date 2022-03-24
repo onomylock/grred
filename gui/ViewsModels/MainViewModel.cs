@@ -47,8 +47,8 @@ namespace gui
 
         private InkCanvas paintingCanvas;
         private TextBlock status;
-        private TextBlock LocX;
-        private TextBlock LocY;
+        private TextBlock locX;
+        private TextBlock locY;
         private Rectangle rectColor;
         private Rectangle rectConturColor;
         private List<IFigure> selectedFigures = new List<IFigure>();
@@ -82,12 +82,14 @@ namespace gui
 
 
         public MainViewModel() { }
-        public MainViewModel(InkCanvas canvas, TextBlock status, Rectangle rectColor, Rectangle rectConturColor)
+        public MainViewModel(InkCanvas canvas, TextBlock status, Rectangle rectColor, Rectangle rectConturColor, TextBlock locX, TextBlock locY)
         {
             this.paintingCanvas = canvas;
             this.status = status;
             this.rectColor = rectColor;
             this.rectConturColor = rectConturColor;
+            this.locX = locX;
+            this.locY = locY;
         }
 
 
@@ -556,8 +558,8 @@ namespace gui
         {
             Point position = Mouse.GetPosition(paintingCanvas);
             GrRed.Vector mousePos = new GrRed.Vector(position.X, position.Y);
-            //LocX.Text = position.X.ToString();
-            //LocY.Text = position.Y.ToString();
+            locX.Text = ((int)position.X).ToString();
+            locY.Text = ((int)position.Y).ToString();
             GrRed.Vector scale = mousePos;
             if (previousPostition.X == -1)
                 previousPostition = mousePos;
