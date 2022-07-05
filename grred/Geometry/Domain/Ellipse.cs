@@ -10,9 +10,6 @@ namespace GrRed.Geometry.Domain
     [DataContract]
     class Ellipse : IFigure
     {
-        // private readonly Vector _Center = new(1.0, 1.0);
-        // private readonly double _Angle = 0.0;
-        // private readonly Vector _Scale = new(1.0, 1.0);
         public Ellipse() { }
 
         [JsonConstructor]
